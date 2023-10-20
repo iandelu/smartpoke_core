@@ -14,14 +14,17 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
 import java.io.IOException;
+import java.util.Arrays;
+import java.util.List;
 
 @Service
 public class OpenFoodFactsService {
 
 
-    private final IProductService productService;
+//    @Autowired
+//    private Product productService;
+    private List<String> supermarkets = Arrays.asList("mercadona", "aldi", "carrefour");
     private Logger logger = LoggerFactory.getLogger(OpenFoodFactsService.class);
-    private String
 
     private final RestTemplate restTemplate = new RestTemplate();
     private final OkHttpClient client = new OkHttpClient();
@@ -32,25 +35,22 @@ public class OpenFoodFactsService {
     @Value("${openfoodfacts.supermarket-url}")
     private String supermarketUrl;
 
-    @Autowired
-    public OpenFoodFactsService(IProductService productService) {
-        this.productService = productService;
-    }
 
+
+    public void syncProducts() {
+        for (String supermarket : supermarkets){
+            OpenFoodFactsResponse response = fetchProductsFromStore(supermarket, 1);
+        }
+    }
     public OpenFoodFactsResponse fetchProductsFromStore(String store, int page) {
         String url = String.format(supermarketUrl,store,filter,page);
         return restTemplate.getForObject(url, OpenFoodFactsResponse.class);
     }
 
-    public void syncProducts() {
-
-        OpenFoodFactsResponse response = fetchProductsFromStore();
-    }
-
 
     public String fetchProductDetails(String barcode) throws RuntimeException, IOException {
         OkHttpClient client = new OkHttpClient();
-        //String url = GET_PRODUCT.concat(barcode).concat(filter).concat(".json");
+        String url = productUrl.concat(barcode).concat(filter).concat(".json");
 
         Request request = new Request.Builder()
                 .url(url)
