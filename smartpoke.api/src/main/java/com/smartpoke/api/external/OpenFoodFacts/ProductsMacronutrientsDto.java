@@ -1,4 +1,4 @@
-package com.smartpoke.api.dto;
+package com.smartpoke.api.external.OpenFoodFacts;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;

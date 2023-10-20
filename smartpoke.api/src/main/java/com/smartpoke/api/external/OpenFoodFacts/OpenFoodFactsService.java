@@ -1,4 +1,4 @@
-package com.smartpoke.api.external;
+package com.smartpoke.api.external.OpenFoodFacts;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.smartpoke.api.model.products.Product;
@@ -11,38 +11,46 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestTemplate;
 
 import java.io.IOException;
 
 @Service
 public class OpenFoodFactsService {
 
-    Logger logger = LoggerFactory.getLogger(OpenFoodFactsService.class);
-    private final OkHttpClient client = new OkHttpClient();
-    private static final String GET_PRODUCT = "https://world.openfoodfacts.org/api/v2/product/";
-    private final String FILTER = "?fields=product_name,code,allergens_tags,allergens,image_front_url,brands,id,ingredients_tags,ingredients_text,nutriments,countries,labels,nutrition_grades,categories,categories_tags,generic_name,image_front_small_url,ingredients_hierarchy,ingredients_tags,ingredients_original_tags,ingredients_text_es,quantity";
 
     private final IProductService productService;
+    private Logger logger = LoggerFactory.getLogger(OpenFoodFactsService.class);
+    private String
+
+    private final RestTemplate restTemplate = new RestTemplate();
+    private final OkHttpClient client = new OkHttpClient();
+    @Value("${openfoodfacts.product-url}")
+    private String productUrl;
+    @Value("${openfoodfacts.filter}")
+    private String filter;
+    @Value("${openfoodfacts.supermarket-url}")
+    private String supermarketUrl;
 
     @Autowired
     public OpenFoodFactsService(IProductService productService) {
         this.productService = productService;
     }
 
+    public OpenFoodFactsResponse fetchProductsFromStore(String store, int page) {
+        String url = String.format(supermarketUrl,store,filter,page);
+        return restTemplate.getForObject(url, OpenFoodFactsResponse.class);
+    }
+
     public void syncProducts() {
 
-        String barcode = "3274080005003";
-
-        try {
-            String jsonProduct = fetchProductDetails(barcode);
-        } catch (IOException | RuntimeException e) {
-            logger.info("{}", e.getMessage());
-        }
+        OpenFoodFactsResponse response = fetchProductsFromStore();
     }
+
+
     public String fetchProductDetails(String barcode) throws RuntimeException, IOException {
         OkHttpClient client = new OkHttpClient();
-
-        String url = GET_PRODUCT.concat(barcode).concat(FILTER);
+        //String url = GET_PRODUCT.concat(barcode).concat(filter).concat(".json");
 
         Request request = new Request.Builder()
                 .url(url)
