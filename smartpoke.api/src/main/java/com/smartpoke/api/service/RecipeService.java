@@ -41,7 +41,7 @@ public class RecipeService implements IRecipeService{
     }
 
     @Override
-    public Recipe updateUser(Long id, Recipe recipe) {
+    public Recipe updateRecipe(Long id, Recipe recipe) {
         if (recipeRepository.existsById(id)) {
             recipe.setId(id);
             return recipeRepository.save(recipe);

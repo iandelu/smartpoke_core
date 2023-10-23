@@ -10,7 +10,7 @@ public interface IRecipeService{
     Recipe createRecipe(Recipe recipe);
     Set<Recipe> getAllRecipes();
     Recipe findById(Long l);
-    Recipe updateUser(Long id, Recipe recipe);
+    Recipe updateRecipe(Long id, Recipe recipe);
 
 
     void deleteRecipe(Long id);

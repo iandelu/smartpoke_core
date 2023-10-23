@@ -16,6 +16,7 @@ public class Product {
 
     private String ean;
     private String name;
+    private String amount;
     private String nutriscore;
     private String description;
     private String brand;
@@ -24,10 +25,17 @@ public class Product {
     private String preservation;
     private String picture;
 
-    @OneToOne(cascade = CascadeType.ALL)
+    @OneToOne(mappedBy = "product", cascade = CascadeType.ALL)
     private ProductMacronutrients productMacronutrients;
 
-    @ManyToMany(mappedBy = "products")
+    @ManyToMany(cascade = {
+            CascadeType.PERSIST,
+            CascadeType.MERGE})
+    @JoinTable(
+            name = "ingredients_products",
+            joinColumns = {@JoinColumn(name = "product_id")},
+            inverseJoinColumns = {@JoinColumn(name = "ingredient_id")}
+    )
     private List<Ingredient> aliments;
 
     @ManyToMany(cascade = {

@@ -18,7 +18,6 @@ public class Recipe {
     private String name;
     private String description;
     private Integer prepTime;
-    private Integer creatorId;
     private Double price;
     private Integer diners;
     private String picture;
@@ -37,12 +36,5 @@ public class Recipe {
     @ManyToOne
     @JoinColumn(name = "creatorId", referencedColumnName = "id", insertable = false, updatable = false)
     private User user;
-
-//    @OneToMany(cascade = CascadeType.ALL, mappedBy = "recipe")
-//    private Set<Ingredient> ingredients = new HashSet<>();
-//    @OneToMany(mappedBy = "recipe")
-//    private List<DietRecipe> recipes = new ArrayList<>();
-//    @ManyToMany(mappedBy = "recipes")
-//    private List<AlimentCategory> ingredients;
 
 }

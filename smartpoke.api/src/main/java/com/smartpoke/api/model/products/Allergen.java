@@ -16,4 +16,8 @@ public class Allergen {
 
     @ManyToMany(mappedBy = "allergens")
     private Set<Product> products = new HashSet<>();
+
+    public Allergen(String name) {
+        this.name = name;
+    }
 }

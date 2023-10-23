@@ -35,7 +35,7 @@ public class RecipeController {
 
     @PutMapping("/{id}")
     public ResponseEntity<Recipe> updateUser(@PathVariable Long id, @RequestBody Recipe recipe) {
-        return ResponseEntity.ok().body(recipeService.updateUser(id, recipe));
+        return ResponseEntity.ok().body(recipeService.updateRecipe(id, recipe));
     }
 
     @DeleteMapping("/{id}")

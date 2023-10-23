@@ -9,22 +9,14 @@ import java.util.Set;
 @Entity
 @Data
 public class Ingredient {
-    @Id
-    private Long idCategory;
 
+    @Id
+    private Long id;
+    
     private String name;
-    private Integer type;
+    private String language;
 
     @ManyToMany(mappedBy = "ingredients")
     private Set<Product> products = new HashSet<>();
 
-//    @ManyToMany(cascade = {
-//            CascadeType.PERSIST,
-//            CascadeType.MERGE})
-//    @JoinTable(
-//            name = "categories_recipes",
-//            joinColumns = @JoinColumn(name = "category_id"),
-//            inverseJoinColumns = @JoinColumn(name = "recipe_id")
-//    )
-//    private List<Recipe> recipes = new ArrayList<>();
 }
