@@ -7,7 +7,7 @@ import lombok.Data;
 @Data
 public class ProductMacronutrients {
     @Id
-    private Long id;
+    private String ean;
     private Integer amount;
     private Integer calories;
     private Double fats;
@@ -16,8 +16,4 @@ public class ProductMacronutrients {
     private Double protein;
     private Double salt;
 
-    @OneToOne
-    @MapsId
-    @JoinColumn(name = "id")
-    private Product product;
 }

@@ -28,7 +28,7 @@ public class ProductController{
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Product> getRecipe(@PathVariable Long id){
+    public ResponseEntity<Product> getRecipe(@PathVariable String id){
         return ResponseEntity.ok().body(productService.findById(id));
     }
 
@@ -38,17 +38,22 @@ public class ProductController{
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Product> updateUser(@PathVariable Long id, @RequestBody Product product){
+    public ResponseEntity<Product> updateUser(@PathVariable String id, @RequestBody Product product){
         return ResponseEntity.ok().body(productService.updateProduct(id, product));
     }
 
     @DeleteMapping("/{id}")
-    public void deleteUser(@PathVariable Long id){productService.deleteUser(id);}
+    public void deleteUser(@PathVariable String id){productService.deleteUser(id);}
 
     @GetMapping("/syncOpenFoodFacts")
     public ResponseEntity<String> syncOpenFoodFacts(){
         openFoodFactsService.syncProducts();
         return ResponseEntity.ok().body("Initializing Sync openfoodfacts data manually");
+    }
+
+    @GetMapping("/fetchProductInfo/{barcode}")
+    public ResponseEntity<Product> fetchProductInfo(@PathVariable String barcode){
+        return ResponseEntity.ok().body(openFoodFactsService.fetchProductDetails(barcode));
     }
 
 }

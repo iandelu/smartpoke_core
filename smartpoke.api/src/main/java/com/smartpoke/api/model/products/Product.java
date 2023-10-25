@@ -3,6 +3,8 @@ package com.smartpoke.api.model.products;//package com.raccoon.smartpoke.model.p
 import jakarta.persistence.*;
 import lombok.Data;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -11,21 +13,21 @@ import java.util.Set;
 @Data
 public class Product {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-
     private String ean;
     private String name;
     private String amount;
     private String nutriscore;
     private String description;
     private String brand;
+    @Column(columnDefinition = "text")
     private String ingredientsText;
     private String origin;
     private String preservation;
     private String picture;
+    private LocalDateTime lastUpdate;
 
-    @OneToOne(mappedBy = "product", cascade = CascadeType.ALL)
+    @OneToOne(cascade=CascadeType.ALL)
+    @PrimaryKeyJoinColumn(name = "ean")
     private ProductMacronutrients productMacronutrients;
 
     @ManyToMany(cascade = {
@@ -36,7 +38,7 @@ public class Product {
             joinColumns = {@JoinColumn(name = "product_id")},
             inverseJoinColumns = {@JoinColumn(name = "ingredient_id")}
     )
-    private List<Ingredient> aliments;
+    private List<Ingredient> ingredients;
 
     @ManyToMany(cascade = {
             CascadeType.PERSIST,
@@ -46,20 +48,10 @@ public class Product {
             joinColumns = {@JoinColumn(name = "allergen_id")},
             inverseJoinColumns = {@JoinColumn(name = "product_id")}
     )
-    private Set<Allergen> allergens = new HashSet<>();
+    private Set<Allergen> allergens;
 
-    @ManyToMany(cascade = {
-            CascadeType.PERSIST,
-            CascadeType.MERGE})
-    @JoinTable(
-            name = "ingredients_products",
-            joinColumns = {@JoinColumn(name = "ingredient_id")},
-            inverseJoinColumns = {@JoinColumn(name = "product_id")}
-    )
-    private Set<Ingredient> ingredients = new HashSet<>();
 
-//    @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
-//    private List<ProductSupermarket> productSupermarkets;
+
 
 
 }

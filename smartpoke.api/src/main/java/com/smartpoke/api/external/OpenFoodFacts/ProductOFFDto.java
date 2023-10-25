@@ -6,8 +6,12 @@ import com.smartpoke.api.dto.ProductDto;
 import com.smartpoke.api.model.products.Allergen;
 import com.smartpoke.api.model.products.Ingredient;
 import com.smartpoke.api.model.products.Product;
+import com.smartpoke.api.model.products.ProductMacronutrients;
 import lombok.Data;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -16,7 +20,7 @@ import java.util.Set;
 public class ProductOFFDto implements ProductDto {
     @JsonProperty("code")
     private String ean;
-    @JsonProperty("generic_name")
+    @JsonProperty("product_name")
     private String name;
     @JsonProperty("quantity")
     private String amount;
@@ -44,18 +48,24 @@ public class ProductOFFDto implements ProductDto {
     public Product toEntity() {
         Product entity = new Product();
         entity.setEan(this.ean);
-        entity.setBrand(this.ean);
-        entity.setName(this.ean);
+        entity.setBrand(this.brand);
+        entity.setName(this.name);
         entity.setAmount(this.amount);
-        entity.setName(this.nutriscore);
+        entity.setName(this.name);
         entity.setDescription(this.description);
         entity.setIngredientsText(this.ingredients);
         entity.setOrigin(this.origin);
         entity.setPreservation(this.preservation);
         entity.setPicture(this.picture);
-        entity.setProductMacronutrients(this.informationMacronutrient.toEntity());
+        entity.setNutriscore(this.nutriscore);
+        entity.setLastUpdate(LocalDateTime.now());
+        if (this.informationMacronutrient != null) {
+            ProductMacronutrients macronutrientesEntity = this.informationMacronutrient.toEntity();
+            macronutrientesEntity.setEan(this.ean);
+            entity.setProductMacronutrients(macronutrientesEntity);
+        }
 
-        Set<Ingredient> ingredientSet = new HashSet<>();
+        List<Ingredient> ingredientSet = new ArrayList<>();
         if(this.ingredientsList != null && !this.ingredientsList.isEmpty()){
             this.ingredientsList.forEach(ingredient -> ingredientSet.add(ingredient.toEntity()));
         }

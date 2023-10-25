@@ -7,7 +7,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Set;
 
 @Service
 public class ProductService implements IProductService{
@@ -21,9 +20,9 @@ public class ProductService implements IProductService{
     }
 
     @Override
-    public Product updateProduct(Long id, Product product) {
-        if (productRepository.existsById(id)) {
-            product.setId(id);
+    public Product updateProduct(String ean, Product product) {
+        if (productRepository.existsById(ean)) {
+            product.setEan(ean);
             return productRepository.save(product);
         } else {
             return null;
@@ -41,12 +40,12 @@ public class ProductService implements IProductService{
     }
 
     @Override
-    public Product findById(Long id) {
+    public Product findById(String id) {
         return productRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Product not found"));
     }
 
     @Override
-    public void deleteUser(Long id) {productRepository.deleteById(id);}
+    public void deleteUser(String id) {productRepository.deleteById(id);}
 
 
 }

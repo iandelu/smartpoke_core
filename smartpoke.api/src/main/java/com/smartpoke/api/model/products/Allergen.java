@@ -2,10 +2,12 @@ package com.smartpoke.api.model.products;
 
 import jakarta.persistence.*;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.util.HashSet;
 import java.util.Set;
 
+@NoArgsConstructor
 @Data
 @Entity
 public class Allergen {

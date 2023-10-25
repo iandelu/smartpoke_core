@@ -24,7 +24,6 @@ public class IngredientOFFDto {
 
     public Ingredient toEntity(){
         Ingredient ingredient = new Ingredient();
-
         ingredient.setLanguage(this.language);
         ingredient.setName(this.name);
 

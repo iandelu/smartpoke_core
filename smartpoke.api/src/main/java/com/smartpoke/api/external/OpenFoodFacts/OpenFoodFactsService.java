@@ -1,6 +1,7 @@
 package com.smartpoke.api.external.OpenFoodFacts;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.smartpoke.api.exceptions.ResourceNotFoundException;
 import com.smartpoke.api.model.products.Product;
 import com.smartpoke.api.service.ProductService;
 import com.squareup.okhttp.OkHttpClient;
@@ -45,7 +46,10 @@ public class OpenFoodFactsService {
             productsStore.addAll(fetchProductsFromStore(store));
         }
         List<Product> productsEntity = new ArrayList<>();
-        productsStore.forEach( p -> productsEntity.add(p.toEntity()));
+        productsStore.forEach( p -> {
+            productsEntity.add(p.toEntity());
+            logger.info("Created or updated new product: {}", p);
+        });
         productService.saveAll(productsEntity);
 
     }
@@ -65,7 +69,7 @@ public class OpenFoodFactsService {
             if (page >= response.getPage_size()) {
                 break;
             }
-            logger.info("Inserted new Products: {}", products);
+            logger.info("Get new Products: {}", products);
             page++;
         }
 
@@ -73,26 +77,15 @@ public class OpenFoodFactsService {
     }
 
 
-    public String fetchProductDetails(String barcode) throws RuntimeException, IOException {
-        OkHttpClient client = new OkHttpClient();
-        String url = productUrl.concat(barcode).concat(filter).concat(".json");
+    public Product fetchProductDetails(String barcode){
+        String url = String.format(productUrl, barcode, filter);
+        ProductResponseOFF response = restTemplate.getForObject(url, ProductResponseOFF.class);
+        if (response == null) throw new ResourceNotFoundException("Product not exist in OpenFoodFacts database");
+        Product productEntity = response.getProduct().toEntity();
 
-        Request request = new Request.Builder()
-                .url(url)
-                .build();
-
-        Response response = client.newCall(request).execute();
-        if (!response.isSuccessful()) {
-            throw new RuntimeException("Failed to fetch data: " + response);
-        }
-
-        return response.body().string();
+        //Save product once it's fetch from OpenFoodFacts
+        productService.createProduct(productEntity);
+        return productEntity;
     }
 
-
-    public Product parseJsonToProduct(String json) throws IOException {
-        ObjectMapper mapper = new ObjectMapper();
-        Product product = mapper.readValue(json, Product.class);
-        return product;
-    }
 }

@@ -7,10 +7,12 @@ import java.util.Set;
 
 public interface IProductService {
     Product createProduct(Product product);
-    Product updateProduct(Long id, Product product);
+
+    Product updateProduct(String ean, Product product);
+
     List<Product> getAll();
     List<Product> saveAll(List<Product> products);
-    Product findById(Long id);
+    Product findById(String id);
 
-    void deleteUser(Long id);
+    void deleteUser(String id);
 }
