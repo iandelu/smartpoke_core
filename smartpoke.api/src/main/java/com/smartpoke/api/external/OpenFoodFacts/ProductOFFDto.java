@@ -26,7 +26,7 @@ public class ProductOFFDto implements ProductDto {
     private String amount;
     @JsonProperty("nutrition_grades")
     private String nutriscore;
-    @JsonProperty("product_name")
+    @JsonProperty("generic_name")
     private String description;
     @JsonProperty("brands")
     private String brand;
