@@ -29,7 +29,7 @@ public class OpenFoodFactsService {
 
     @Autowired
     private ProductService productService;
-    private List<String> stores = Arrays.asList("mercadona");
+    private List<String> stores = Arrays.asList("mercadona", "aldi", "carrefour");
     private Logger logger = LoggerFactory.getLogger(OpenFoodFactsService.class);
 
     private final RestTemplate restTemplate = new RestTemplate();

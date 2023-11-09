@@ -14,15 +14,19 @@ import java.util.Set;
 public class Product {
     @Id
     private String ean;
+    @Column(columnDefinition = "text")
     private String name;
     private String amount;
     private String nutriscore;
+    @Column(columnDefinition = "text")
     private String description;
+    @Column(length = 1000)
     private String brand;
     @Column(columnDefinition = "text")
     private String ingredientsText;
     private String origin;
     private String preservation;
+    @Column(columnDefinition = "text")
     private String picture;
     private LocalDateTime lastUpdate;
 
