@@ -20,7 +20,7 @@ public class Product {
     private String nutriscore;
     @Column(columnDefinition = "text")
     private String description;
-    @Column(length = 1000)
+    @Column(columnDefinition = "text")
     private String brand;
     @Column(columnDefinition = "text")
     private String ingredientsText;
@@ -50,7 +50,12 @@ public class Product {
     @JoinTable(
             name = "allergens_products",
             joinColumns = {@JoinColumn(name = "allergen_id")},
-            inverseJoinColumns = {@JoinColumn(name = "product_id")}
+            inverseJoinColumns = {
+                    @JoinColumn(
+                            name = "allergen_name", referencedColumnName = "name"),
+                    @JoinColumn(
+                            name = "allergen_lan", referencedColumnName = "lan")
+            }
     )
     private Set<Allergen> allergens;
 

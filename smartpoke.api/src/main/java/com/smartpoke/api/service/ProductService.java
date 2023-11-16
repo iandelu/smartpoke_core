@@ -5,6 +5,8 @@ import com.smartpoke.api.model.products.Product;
 import com.smartpoke.api.repository.products.ProductRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -35,6 +37,7 @@ public class ProductService implements IProductService{
     }
 
     @Override
+    @Transactional(propagation = Propagation.REQUIRES_NEW)
     public List<Product> saveAll(List<Product> thisProducts) {
         return productRepository.saveAll(thisProducts);
     }

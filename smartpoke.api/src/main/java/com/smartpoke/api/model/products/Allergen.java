@@ -11,15 +11,15 @@ import java.util.Set;
 @Data
 @Entity
 public class Allergen {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-    private String name;
+    @EmbeddedId
+    private AllergenKey id;
 
     @ManyToMany(mappedBy = "allergens")
     private Set<Product> products = new HashSet<>();
 
     public Allergen(String name) {
-        this.name = name;
+        id = new AllergenKey();
+        id.setLan(name.substring(0,2));
+        id.setName(name.substring(4,name.length()));
     }
 }

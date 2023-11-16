@@ -1,27 +1,19 @@
 package com.smartpoke.api.external.OpenFoodFacts;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.smartpoke.api.exceptions.ResourceNotFoundException;
 import com.smartpoke.api.model.products.Product;
 import com.smartpoke.api.service.ProductService;
 import com.squareup.okhttp.OkHttpClient;
-import com.squareup.okhttp.Request;
-import com.squareup.okhttp.Response;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.MediaType;
-import org.springframework.http.converter.HttpMessageConverter;
-import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 
 @Service
@@ -29,7 +21,7 @@ public class OpenFoodFactsService {
 
     @Autowired
     private ProductService productService;
-    private List<String> stores = Arrays.asList("mercadona", "aldi", "carrefour");
+    private List<String> stores = Arrays.asList("mercadona", "carrefour");
     private Logger logger = LoggerFactory.getLogger(OpenFoodFactsService.class);
 
     private final RestTemplate restTemplate = new RestTemplate();
