@@ -21,10 +21,7 @@ public class RecipeIngredients {
     private Recipe recipe;
 
     @ManyToOne
-    @JoinColumns({
-            @JoinColumn(name = "ingredient_lan", referencedColumnName = "lan"),
-            @JoinColumn(name = "ingredient_name", referencedColumnName = "name")
-    })
+    @JoinColumn(name = "ingredient_id")
     private Ingredient ingredient;
 
 }

@@ -33,6 +33,8 @@ public class OpenFoodFactsService {
     @Value("${openfoodfacts.supermarket-url}")
     private String supermarketUrl;
 
+
+
     @Scheduled(cron = "0 0 0 ? * SUN")
     public void syncProducts() {
         List<ProductOFFDto> productsStore = new ArrayList<ProductOFFDto>();
