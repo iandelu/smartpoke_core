@@ -19,7 +19,13 @@ public class Allergen {
 
     public Allergen(String name) {
         id = new AllergenKey();
-        id.setLan(name.substring(0,2));
-        id.setName(name.substring(4,name.length()));
+
+        String[] parts = name.split(":");
+        if (parts.length != 2) {
+            throw new IllegalArgumentException("Formato de ingrediente inválido");
+        }
+
+        id.setLan(parts[0].trim());
+        id.setName(parts[1].trim());
     }
 }

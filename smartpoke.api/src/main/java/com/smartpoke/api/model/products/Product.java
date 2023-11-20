@@ -34,13 +34,14 @@ public class Product {
     @PrimaryKeyJoinColumn(name = "ean")
     private ProductMacronutrients productMacronutrients;
 
-    @ManyToMany(cascade = {
-            CascadeType.PERSIST,
-            CascadeType.MERGE})
+    @ManyToMany(cascade = { CascadeType.PERSIST, CascadeType.MERGE })
     @JoinTable(
             name = "ingredients_products",
             joinColumns = {@JoinColumn(name = "product_id")},
-            inverseJoinColumns = {@JoinColumn(name = "ingredient_id")}
+            inverseJoinColumns = {
+                    @JoinColumn(name = "ingredient_lan", referencedColumnName = "lan"),
+                    @JoinColumn(name = "ingredient_name", referencedColumnName = "name")
+            }
     )
     private List<Ingredient> ingredients;
 
@@ -49,7 +50,7 @@ public class Product {
             CascadeType.MERGE})
     @JoinTable(
             name = "allergens_products",
-            joinColumns = {@JoinColumn(name = "allergen_id")},
+            joinColumns = {@JoinColumn(name = "product_id")},
             inverseJoinColumns = {
                     @JoinColumn(
                             name = "allergen_name", referencedColumnName = "name"),
