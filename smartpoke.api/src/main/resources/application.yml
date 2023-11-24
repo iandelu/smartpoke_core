@@ -22,6 +22,8 @@ openfoodfacts:
   filter: "?fields=product_name,code,allergens_tags,allergens,image_front_url,brands,id,product_name,ingredients_text,nutriments,countries,labels,nutrition_grades,categories,categories_tags,generic_name,image_front_small_url,ingredients_hierarchy,ingredients_tags,ingredients_original_tags,ingredients_text_es,quantity"
   supermarket-url: "https://api.openfoodfacts.org/api/v2/search?stores_tags=%s&fields=%s&page=%d"
 
+recipeScraper:
+  serverUrl: http://localhost:5000/scrape
 #LISTA DE SUPERMERCADOS DE LOS QUE COJE LOS PRODUCTOS
 supermarkets:
   - mercadona
