@@ -10,6 +10,7 @@ public class RecipeStep {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    @Column(columnDefinition = "text")
     private String description;
     private Integer position;
     private Integer time;

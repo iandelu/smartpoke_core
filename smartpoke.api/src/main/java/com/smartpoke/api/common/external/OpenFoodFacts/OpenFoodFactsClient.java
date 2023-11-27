@@ -21,9 +21,6 @@ import java.util.List;
 
 @Service
 public class OpenFoodFactsClient {
-
-    @Autowired
-    private ProductService productService;
     private List<String> stores = Arrays.asList("mercadona", "carrefour");
     private Logger logger = LoggerFactory.getLogger(OpenFoodFactsClient.class);
 
@@ -37,9 +34,7 @@ public class OpenFoodFactsClient {
     private String supermarketUrl;
 
 
-
-    @Scheduled(cron = "0 0 0 ? * SUN")
-    public void syncProducts() throws RuntimeException{
+    public List<Product> syncProducts() throws RuntimeException{
         try {
             List<ProductOFFDto> productsStore = new ArrayList<ProductOFFDto>();
             for (String store : stores){
@@ -50,7 +45,7 @@ public class OpenFoodFactsClient {
                 productsEntity.add(p.toEntity());
                 logger.info("Created or updated new product: {}", p);
             });
-            productService.saveAll(productsEntity);
+            return productsEntity;
         }catch (Exception e){
             throw new RuntimeException(e);
         }
@@ -87,7 +82,6 @@ public class OpenFoodFactsClient {
         Product productEntity = response.getProduct().toEntity();
 
         //Save product once it's fetch from OpenFoodFacts
-        productService.createProduct(productEntity);
         return productEntity;
     }
 

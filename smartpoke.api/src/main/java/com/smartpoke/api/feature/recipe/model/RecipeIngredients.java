@@ -12,6 +12,8 @@ public class RecipeIngredients {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private BigDecimal amount;
+    @Column(columnDefinition = "text")
+    private String ingredientText;
 
     @OneToOne(fetch = FetchType.EAGER)
     private UnitOfMeasure unitOfMeasure;

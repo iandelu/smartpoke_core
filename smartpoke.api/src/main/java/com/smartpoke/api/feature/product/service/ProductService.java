@@ -7,6 +7,7 @@ import com.smartpoke.api.feature.product.model.Product;
 import com.smartpoke.api.feature.product.repository.IngredientRepository;
 import com.smartpoke.api.feature.product.repository.ProductRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
@@ -94,12 +95,17 @@ public class ProductService implements IProductService{
 
 
     @Override
-    public void syncProducts() {
-        openFoodFactsClient.syncProducts();
+    @Scheduled(cron = "0 0 0 ? * SUN")
+    public List<Product> syncProducts() {
+
+        List<Product> products = openFoodFactsClient.syncProducts();
+        return saveAll(products);
+
     }
 
     @Override
     public Product fetchProductDetails(String barcode) {
-        return openFoodFactsClient.fetchProductDetails(barcode);
+        Product product =  openFoodFactsClient.fetchProductDetails(barcode);
+        return saveProduct(product);
     }
 }

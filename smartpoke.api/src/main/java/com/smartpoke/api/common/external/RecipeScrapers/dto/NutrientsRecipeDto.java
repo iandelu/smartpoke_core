@@ -1,6 +1,8 @@
 package com.smartpoke.api.common.external.RecipeScrapers.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.smartpoke.api.common.utils.NumberExtractor;
+import com.smartpoke.api.feature.recipe.model.NutrientsRecipe;
 import lombok.Data;
 
 @Data
@@ -17,4 +19,12 @@ public class NutrientsRecipeDto {
 //    private Double protein;
 //    @JsonProperty("salt_100g")
 //    private Double salt;
+
+    public NutrientsRecipe toEntity(){
+        NutrientsRecipe nutrients = new NutrientsRecipe();
+        nutrients.setCalories(NumberExtractor.getIntPosition(energeticKcal,1));
+
+
+        return nutrients;
+    }
 }

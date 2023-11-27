@@ -43,10 +43,10 @@ public class ProductController{
     @GetMapping("/syncOpenFoodFacts")
     public ResponseEntity<String> syncOpenFoodFacts(){
         try{
-            productService.syncProducts();
-            return ResponseEntity.ok().body("Initializing Sync openfoodfacts data manually");
+            List<Product> products = productService.syncProducts();
+            return ResponseEntity.ok().body("Initializing Sync openfoodfacts data manually\n"+products.toString());
         }catch (RuntimeException e){
-            return ResponseEntity.internalServerError().body("An erro has occured"+e.getMessage());
+            return ResponseEntity.internalServerError().body("An error has occurred"+e.getMessage());
         }
 
     }

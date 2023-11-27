@@ -19,7 +19,7 @@ public interface IProductService {
 
     Product saveProduct(Product product);
 
-    void syncProducts();
+    List<Product> syncProducts();
 
     Product fetchProductDetails(String barcode);
 }

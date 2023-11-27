@@ -1,5 +1,6 @@
 package com.smartpoke.api.feature.recipe.controller;
 
+import com.smartpoke.api.common.UrlDto;
 import com.smartpoke.api.feature.recipe.model.Recipe;
 import com.smartpoke.api.feature.recipe.service.RecipeService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,9 +32,10 @@ public class RecipeController {
         return ResponseEntity.status(HttpStatus.CREATED).body(recipeService.createRecipe(recipe));
     }
 
-    @PostMapping("/{url}")
-    public ResponseEntity<Recipe> createRecipeFromUrl(@RequestBody String url){
-        return ResponseEntity.status(HttpStatus.CREATED).body(recipeService.createRecipeFromUrl(url));
+    @PostMapping("fromUrl")
+    public ResponseEntity<Recipe> createRecipeFromUrl(@RequestBody UrlDto urlDto){
+        Recipe recipe = recipeService.createRecipeFromUrl(urlDto.getUrl(), "true");
+        return ResponseEntity.status(HttpStatus.CREATED).body(recipe);
     }
 
     @PutMapping("/{id}")

@@ -1,6 +1,8 @@
 package com.smartpoke.api.feature.recipe.service;
 
 import com.smartpoke.api.common.exceptions.ResourceNotFoundException;
+import com.smartpoke.api.common.external.RecipeScrapers.RecipeScraperClient;
+import com.smartpoke.api.common.external.RecipeScrapers.dto.RecipeScrapDto;
 import com.smartpoke.api.feature.recipe.model.Recipe;
 import com.smartpoke.api.feature.recipe.repository.RecipeIngredientsRepository;
 import com.smartpoke.api.feature.recipe.repository.RecipeRepository;
@@ -8,6 +10,7 @@ import com.smartpoke.api.feature.recipe.repository.RecipeStepRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.io.IOException;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -20,7 +23,7 @@ public class RecipeService implements IRecipeService{
     @Autowired
     private RecipeStepRepository recipeStepRepository;
     @Autowired
-
+    private RecipeScraperClient recipeScraperClient;
 
     @Override
     public Recipe createRecipe(Recipe recipe) {
@@ -53,9 +56,14 @@ public class RecipeService implements IRecipeService{
     public void deleteRecipe(Long id){recipeRepository.deleteById(id);}
 
     @Override
-    public Recipe createRecipeFromUrl(String url) {
+    public Recipe createRecipeFromUrl(String url, String wild) {
+        try {
+            RecipeScrapDto recipeScrapDto = recipeScraperClient.getRecipeScraped(url, wild);
+            Recipe recipe = recipeScrapDto.toEntity();
 
-
-        return null;
+            return recipeRepository.save(recipe);
+        } catch (IOException e) {
+            throw new ResourceNotFoundException(e.getMessage());
+        }
     }
 }

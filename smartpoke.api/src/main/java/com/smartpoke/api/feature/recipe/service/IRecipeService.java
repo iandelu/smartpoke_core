@@ -13,5 +13,6 @@ public interface IRecipeService{
 
 
     void deleteRecipe(Long id);
-    Recipe createRecipeFromUrl(String url);
+
+    Recipe createRecipeFromUrl(String url, String wild);
 }
