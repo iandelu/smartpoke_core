@@ -99,7 +99,7 @@ public class ProductService implements IProductService{
     public List<Product> syncProducts() {
 
         List<Product> products = openFoodFactsClient.syncProducts();
-        return saveAll(products);
+        return saveAllProducts(products);
 
     }
 

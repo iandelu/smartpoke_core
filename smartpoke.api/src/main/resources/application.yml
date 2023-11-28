@@ -32,3 +32,7 @@ recipeScraper:
 supermarkets:
   - mercadona
   - carrefour
+
+jwt:
+  expirationDays: 360
+  accessTokenSecret: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9"

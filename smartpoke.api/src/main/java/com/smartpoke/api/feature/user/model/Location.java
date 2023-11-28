@@ -1,12 +1,14 @@
 package com.smartpoke.api.feature.user.model;
 
 import jakarta.persistence.*;
+import lombok.Builder;
 import lombok.Data;
 
 import java.time.LocalDateTime;
 
 @Entity
 @Data
+@Builder
 public class Location {
 
     @Id

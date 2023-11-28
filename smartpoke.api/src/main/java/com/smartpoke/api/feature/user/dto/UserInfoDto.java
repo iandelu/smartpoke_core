@@ -1,5 +1,7 @@
 package com.smartpoke.api.feature.user.dto;
 
+import com.smartpoke.api.feature.user.model.User;
+import com.smartpoke.api.feature.user.model.Userinfo;
 import lombok.Data;
 
 import java.math.BigDecimal;
@@ -12,9 +14,20 @@ public class UserInfoDto {
         private String surname;
         private String phone;
         private Integer sex;
-        private Integer height;
-        private BigDecimal weight;
-        private String email;
+        private Double height;
+        private Double weight;
         private LocalDateTime birthDate;
+
+        public Userinfo toEntity(){
+                return Userinfo.builder()
+                        .name(this.name)
+                        .surname(this.surname)
+                        .phone(phone)
+                        .sex(this.sex)
+                        .height(this.height)
+                        .weight(this.weight)
+                        .birthdate(this.birthDate)
+                        .build();
+        }
 
 }
