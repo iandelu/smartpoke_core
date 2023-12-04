@@ -1,8 +1,8 @@
-package com.smartpoke.api.auth;
+package com.smartpoke.api.feature.auth;
 
-import com.smartpoke.api.auth.dto.AuthResponse;
-import com.smartpoke.api.auth.dto.LoginRequest;
-import com.smartpoke.api.auth.dto.RegisterRequest;
+import com.smartpoke.api.feature.auth.dto.AuthResponse;
+import com.smartpoke.api.feature.auth.dto.LoginRequest;
+import com.smartpoke.api.feature.auth.dto.RegisterRequest;
 import com.smartpoke.api.common.exceptions.ResourceNotFoundException;
 import com.smartpoke.api.common.jwt.JwtService;
 import com.smartpoke.api.feature.user.model.User;

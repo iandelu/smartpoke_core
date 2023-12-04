@@ -2,10 +2,7 @@ package com.smartpoke.api.common.external.RecipeScrapers.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.smartpoke.api.common.utils.NumberExtractor;
-import com.smartpoke.api.feature.recipe.model.DifficultyEnum;
-import com.smartpoke.api.feature.recipe.model.NutrientsRecipe;
-import com.smartpoke.api.feature.recipe.model.Recipe;
-import com.smartpoke.api.feature.recipe.model.RecipeStep;
+import com.smartpoke.api.feature.recipe.model.*;
 import lombok.Data;
 
 import java.util.HashSet;

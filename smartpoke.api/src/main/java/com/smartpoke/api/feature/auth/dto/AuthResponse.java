@@ -1,4 +1,4 @@
-package com.smartpoke.api.auth.dto;
+package com.smartpoke.api.feature.auth.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

@@ -1,8 +1,8 @@
-package com.smartpoke.api.auth;
+package com.smartpoke.api.feature.auth;
 
-import com.smartpoke.api.auth.dto.AuthResponse;
-import com.smartpoke.api.auth.dto.LoginRequest;
-import com.smartpoke.api.auth.dto.RegisterRequest;
+import com.smartpoke.api.feature.auth.dto.AuthResponse;
+import com.smartpoke.api.feature.auth.dto.LoginRequest;
+import com.smartpoke.api.feature.auth.dto.RegisterRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;

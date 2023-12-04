@@ -1,17 +1,16 @@
 package com.smartpoke.api.feature.recipe.model;
+
 import com.smartpoke.api.feature.product.model.Ingredient;
 import jakarta.persistence.*;
 import lombok.Data;
 
-import java.math.BigDecimal;
-
 @Entity
 @Data
-public class RecipeIngredients {
+public class RecipeIngredient {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private BigDecimal amount;
+    private Double amount;
     @Column(columnDefinition = "text")
     private String ingredientText;
 

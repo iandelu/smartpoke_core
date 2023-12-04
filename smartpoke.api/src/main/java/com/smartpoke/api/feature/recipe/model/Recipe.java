@@ -1,6 +1,5 @@
 package com.smartpoke.api.feature.recipe.model;
 
-import com.smartpoke.api.feature.product.model.ProductMacronutrients;
 import com.smartpoke.api.feature.user.model.User;
 import jakarta.persistence.*;
 import lombok.Data;
@@ -38,7 +37,7 @@ public class Recipe {
     private Set<RecipeStep> recipeSteps = new HashSet<>();
 
     @OneToMany(mappedBy = "recipe", cascade = CascadeType.ALL, orphanRemoval = true)
-    private Set<RecipeIngredients> recipeIngredients = new HashSet<>();
+    private Set<RecipeIngredient> recipeIngredients = new HashSet<>();
 
     @ManyToOne
     @JoinColumn(name = "creatorId", referencedColumnName = "id", insertable = false, updatable = false)

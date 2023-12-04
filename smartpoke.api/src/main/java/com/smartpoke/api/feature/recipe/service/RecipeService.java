@@ -3,7 +3,12 @@ package com.smartpoke.api.feature.recipe.service;
 import com.smartpoke.api.common.exceptions.ResourceNotFoundException;
 import com.smartpoke.api.common.external.RecipeScrapers.RecipeScraperClient;
 import com.smartpoke.api.common.external.RecipeScrapers.dto.RecipeScrapDto;
+import com.smartpoke.api.common.utils.NumberExtractor;
+import com.smartpoke.api.feature.product.model.Ingredient;
+import com.smartpoke.api.feature.product.repository.IngredientRepository;
 import com.smartpoke.api.feature.recipe.model.Recipe;
+import com.smartpoke.api.feature.recipe.model.RecipeIngredient;
+import com.smartpoke.api.feature.recipe.model.RecipeStep;
 import com.smartpoke.api.feature.recipe.repository.RecipeIngredientsRepository;
 import com.smartpoke.api.feature.recipe.repository.RecipeRepository;
 import com.smartpoke.api.feature.recipe.repository.RecipeStepRepository;
@@ -12,6 +17,7 @@ import org.springframework.stereotype.Service;
 
 import java.io.IOException;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @Service
@@ -24,6 +30,8 @@ public class RecipeService implements IRecipeService{
     private RecipeStepRepository recipeStepRepository;
     @Autowired
     private RecipeScraperClient recipeScraperClient;
+    @Autowired
+    private IngredientRepository ingredientRepository;
 
     @Override
     public Recipe createRecipe(Recipe recipe) {
@@ -60,10 +68,40 @@ public class RecipeService implements IRecipeService{
         try {
             RecipeScrapDto recipeScrapDto = recipeScraperClient.getRecipeScraped(url, wild);
             Recipe recipe = recipeScrapDto.toEntity();
+            recipe.setRecipeIngredients(convertIngredients(recipeScrapDto.getIngredients()));
 
             return recipeRepository.save(recipe);
         } catch (IOException e) {
             throw new ResourceNotFoundException(e.getMessage());
         }
+    }
+
+    private Set<RecipeIngredient> convertIngredients(List<String> recipeIngredientsText) {
+        Set<RecipeIngredient> recipeIngredients = new HashSet<>();
+        if(recipeIngredientsText != null && !recipeIngredientsText.isEmpty()){
+            for (String s : recipeIngredientsText) {
+                recipeIngredients.add(textToIngredient(s));
+            }
+        }
+        return recipeIngredients;
+    }
+
+    private RecipeIngredient textToIngredient(String text) {
+        RecipeIngredient recipeIngredient = new RecipeIngredient();
+        recipeIngredient.setIngredientText(text);
+        recipeIngredient.setAmount(NumberExtractor.getDoublePosition(text, 0));
+
+        String ingredientText = "";
+        Ingredient ingredient = ingredientRepository.findByName(ingredientText).orElse(createNewIngredient(ingredientText));
+
+        recipeIngredient.setIngredient(ingredient);
+        return recipeIngredient;
+    }
+
+    private Ingredient createNewIngredient(String ingredientText) {
+        Ingredient newIngredient = new Ingredient();
+        newIngredient.setName(ingredientText);
+        newIngredient.setLanguage("es");
+        return ingredientRepository.save(newIngredient);
     }
 }

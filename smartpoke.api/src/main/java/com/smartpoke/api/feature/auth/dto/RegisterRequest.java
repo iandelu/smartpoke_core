@@ -1,4 +1,4 @@
-package com.smartpoke.api.auth.dto;
+package com.smartpoke.api.feature.auth.dto;
 
 import com.smartpoke.api.feature.user.dto.LocationDto;
 import com.smartpoke.api.feature.user.dto.UserInfoDto;

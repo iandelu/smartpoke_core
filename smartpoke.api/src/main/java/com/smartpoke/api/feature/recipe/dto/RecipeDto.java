@@ -45,7 +45,7 @@ public class RecipeDto {
 //    private Integer diners;
 //    private String picture;
 
-    //private List<RecipeIngredients> ingredients;
+    //private List<RecipeIngredient> ingredients;
     //private List<RecipeStep> recipeSteps;
     //private List<AlimentCategory> categories;
 }
