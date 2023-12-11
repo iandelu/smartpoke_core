@@ -9,14 +9,14 @@ import java.time.LocalDateTime;
 
 @Data
 public class UserInfoDto {
-        private Integer idUser;
+        private Long id;
         private String name;
         private String surname;
         private String phone;
         private Integer sex;
         private Double height;
         private Double weight;
-        private LocalDateTime birthDate;
+        private LocalDateTime birthdate;
 
         public Userinfo toEntity(){
                 return Userinfo.builder()
@@ -26,7 +26,7 @@ public class UserInfoDto {
                         .sex(this.sex)
                         .height(this.height)
                         .weight(this.weight)
-                        .birthdate(this.birthDate)
+                        .birthdate(this.birthdate)
                         .build();
         }
 
