@@ -8,6 +8,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.Set;
 
 @RestController
@@ -35,6 +36,12 @@ public class RecipeController {
     @PostMapping("fromUrl")
     public ResponseEntity<Recipe> createRecipeFromUrl(@RequestBody UrlDto urlDto){
         Recipe recipe = recipeService.createRecipeFromUrl(urlDto.getUrl(), "true");
+        return ResponseEntity.status(HttpStatus.CREATED).body(recipe);
+    }
+
+    @PostMapping("loadBase")
+    public ResponseEntity<List<Recipe>> loadRecipeBase(){
+        List<Recipe> recipe = recipeService.loadRecipeBase();
         return ResponseEntity.status(HttpStatus.CREATED).body(recipe);
     }
 

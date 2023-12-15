@@ -2,6 +2,7 @@ package com.smartpoke.api.feature.recipe.service;
 
 import com.smartpoke.api.feature.recipe.model.Recipe;
 
+import java.util.List;
 import java.util.Set;
 
 public interface IRecipeService{
@@ -15,4 +16,8 @@ public interface IRecipeService{
     void deleteRecipe(Long id);
 
     Recipe createRecipeFromUrl(String url, String wild);
+
+    List<Recipe> createRecipeListFromUrl(List<String> urls);
+
+    List<Recipe> loadRecipeBase();
 }

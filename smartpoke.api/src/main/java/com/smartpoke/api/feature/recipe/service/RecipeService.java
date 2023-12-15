@@ -8,7 +8,6 @@ import com.smartpoke.api.feature.product.model.Ingredient;
 import com.smartpoke.api.feature.product.repository.IngredientRepository;
 import com.smartpoke.api.feature.recipe.model.Recipe;
 import com.smartpoke.api.feature.recipe.model.RecipeIngredient;
-import com.smartpoke.api.feature.recipe.model.RecipeStep;
 import com.smartpoke.api.feature.recipe.repository.RecipeIngredientsRepository;
 import com.smartpoke.api.feature.recipe.repository.RecipeRepository;
 import com.smartpoke.api.feature.recipe.repository.RecipeStepRepository;
@@ -16,9 +15,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.net.URISyntaxException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.*;
 
 @Service
 public class RecipeService implements IRecipeService{
@@ -76,6 +77,20 @@ public class RecipeService implements IRecipeService{
         }
     }
 
+    public Recipe createRecipeFromUrl(String url) {
+        return createRecipeFromUrl(url, "true");
+    }
+
+    @Override
+    public List<Recipe> createRecipeListFromUrl(List<String> urls) {
+        List<Recipe> recipeListEntity = new ArrayList<>();
+        urls.forEach( url -> {
+            Recipe newRecipe = createRecipeFromUrl(url);
+            recipeListEntity.add(newRecipe);
+        });
+        return recipeRepository.saveAll(recipeListEntity);
+    }
+
     private Set<RecipeIngredient> convertIngredients(List<String> recipeIngredientsText) {
         Set<RecipeIngredient> recipeIngredients = new HashSet<>();
         if(recipeIngredientsText != null && !recipeIngredientsText.isEmpty()){
@@ -103,5 +118,19 @@ public class RecipeService implements IRecipeService{
         newIngredient.setName(ingredientText);
         newIngredient.setLanguage("es");
         return ingredientRepository.save(newIngredient);
+    }
+
+    @Override
+    public List<Recipe> loadRecipeBase() {
+        List<String> urls = new ArrayList<>();
+        try {
+            Path path = Paths.get(getClass().getClassLoader().getResource("recipes_es.txt").toURI());
+             urls = Files.readAllLines(path);
+             return createRecipeListFromUrl(urls);
+        } catch (IOException | URISyntaxException e) {
+            e.printStackTrace();
+            return Collections.emptyList();
+        }
+
     }
 }

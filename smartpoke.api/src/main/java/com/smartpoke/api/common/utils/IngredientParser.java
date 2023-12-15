@@ -9,7 +9,7 @@ import java.math.BigDecimal;
 public class IngredientParser {
     public RecipeIngredient parse(String ingredientLine, Recipe recipe) {
         String[] parts = ingredientLine.split(" ", 2);
-        BigDecimal amount = new BigDecimal(parts[0]);
+        Double amount = Double.parseDouble(parts[0]);
         String ingredientName = parts[1];
 
         Ingredient ingredient = findOrCreateIngredient(ingredientName);
