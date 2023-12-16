@@ -14,7 +14,7 @@ import java.util.List;
 @Entity
 @Data
 @Builder
-@Table(name = "userProfile", uniqueConstraints = {@UniqueConstraint(columnNames = {"username"})})
+@Table(name = "userProfile", uniqueConstraints = {@UniqueConstraint(columnNames = {"email"})})
 public class User implements UserDetails {
 
     @Id
@@ -26,6 +26,7 @@ public class User implements UserDetails {
     private String password;
     private String firstName;
     private String lastName;
+    @Column(nullable = false)
     private String email;
 
     private boolean verify;

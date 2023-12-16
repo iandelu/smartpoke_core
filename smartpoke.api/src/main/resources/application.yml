@@ -6,6 +6,7 @@ spring:
     url: jdbc:postgresql://ep-cold-hall-15535769.eu-central-1.aws.neon.fl0.io:5432/smartpoke-api?sslmode=require
     username: fl0user
     password: zP8YMnE5eAtZ
+    driver-class-name: org.postgresql.Driver
   jpa:
     show-sql: true
     hibernate:
@@ -14,9 +15,17 @@ spring:
     properties:
       hibernate:
         format_sql: true
+    datasource: postgresql
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
 
   application:
     name: smartpoke-api
+
+jwt:
+  expirationDays: 360
+  accessTokenSecret: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9"
+
+
 
 #DATOS NECESARIOS PARA CONSUMIR LA API DE OPENFOODFACTS.ORG
 openfoodfacts:
@@ -33,6 +42,3 @@ supermarkets:
   - mercadona
   - carrefour
 
-jwt:
-  expirationDays: 360
-  accessTokenSecret: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9"
