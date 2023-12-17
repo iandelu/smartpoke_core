@@ -12,13 +12,17 @@ import java.time.LocalDateTime;
 public class Location {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
-    private Long idUser;
     private Double latitude;
     private Double longitude;
     private String city;
 
     @Column(columnDefinition = "TIMESTAMP DEFAULT NOW()")
     private LocalDateTime lastChange;
+
+    @MapsId
+    @OneToOne
+    @JoinColumn(name = "id")
+    private User user;
 }

@@ -3,6 +3,7 @@ package com.smartpoke.api.feature.auth;
 import com.smartpoke.api.feature.auth.dto.AuthResponse;
 import com.smartpoke.api.feature.auth.dto.LoginRequest;
 import com.smartpoke.api.feature.auth.dto.RegisterRequest;
+import com.smartpoke.api.feature.auth.service.AuthService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -12,7 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/auth")
+@RequestMapping("/api/auth")
 @RequiredArgsConstructor
 public class AuthController {
 

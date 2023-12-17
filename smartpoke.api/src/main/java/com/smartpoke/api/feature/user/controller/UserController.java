@@ -43,19 +43,4 @@ public class UserController {
         userService.deleteUser(id);
     }
 
-    @PutMapping("/{userId}/userinfo")
-    public ResponseEntity<Userinfo> updateUserInfo(@PathVariable Long userId, @RequestBody Userinfo userInfo) {
-        Userinfo updatedUserInfo = userService.updateUserInfo(userId, userInfo);
-        if (updatedUserInfo != null) {
-            return new ResponseEntity<>(updatedUserInfo, HttpStatus.OK);
-        } else {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
-    }
-
-    @PutMapping("/{userId}/location")
-    public ResponseEntity<Location> updateLocation(@PathVariable Long userId, @RequestBody Location location) {
-        Location updatedLocation = userService.updateLocation(userId, location);
-        return ResponseEntity.ok(updatedLocation);
-    }
 }

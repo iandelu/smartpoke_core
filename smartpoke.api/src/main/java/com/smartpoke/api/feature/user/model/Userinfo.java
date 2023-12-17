@@ -14,6 +14,7 @@ import java.time.LocalDateTime;
 public class Userinfo {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     private String name;
@@ -23,5 +24,10 @@ public class Userinfo {
     private Double height;
     private Double weight;
     private LocalDateTime birthdate;
+
+    @MapsId
+    @OneToOne
+    @JoinColumn(name = "id")
+    private User user;
 
 }

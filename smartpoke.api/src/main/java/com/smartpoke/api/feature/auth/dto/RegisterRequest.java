@@ -13,23 +13,22 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class RegisterRequest {
-    private String username;
-    private String password;
+
     private String firstName;
     private String lastName;
     private String email;
+    private String password;
     private LocationDto locationDto;
     private UserInfoDto userInfoDto;
 
     public User toEntity(){
         return User.builder()
-                .username(this.getUsername())
                 .password(this.getPassword())
                 .firstName(this.getFirstName())
                 .lastName(this.getLastName())
                 .email(this.getEmail())
-                .userinfo(this.userInfoDto.toEntity())
-                .location(this.locationDto.toEntity())
+                .userinfo(this.userInfoDto != null ? this.userInfoDto.toEntity() : null)
+                .location(this.locationDto != null ? this.locationDto.toEntity() : null)
                 .build();
 
     }

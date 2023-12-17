@@ -1,14 +1,16 @@
 package com.smartpoke.api.feature.user.dto;
 
 import com.smartpoke.api.feature.user.model.Location;
+import jakarta.persistence.Id;
 import lombok.Data;
 
 import java.time.LocalDateTime;
 
 @Data
 public class LocationDto {
-    private Integer idLocalization;
+    @Id
     private Integer idUser;
+    private Integer idLocalization;
     private Double latitude;
     private Double longitude;
     private String city;

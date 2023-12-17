@@ -43,7 +43,6 @@ public class UserService implements IUserService {
     public void deleteUser(Long id) {
         userRepository.deleteById(id);
     }
-
     @Override
     public User updateUser(Long id, User user) {
         if (userRepository.existsById(id)) {
@@ -53,14 +52,12 @@ public class UserService implements IUserService {
             return null;
         }
     }
-
     @Override
     public Userinfo updateUserInfo(Long userId, Userinfo userInfo) {
         User user = userRepository.findById(userId).orElseThrow(() -> new ResourceNotFoundException("User not found"));
         userInfo.setId(user.getUserinfo().getId());
         return userinfoRepository.save(userInfo);
     }
-
     @Override
     public Location updateLocation(Long userId, Location location) {
         User user = userRepository.findById(userId).orElseThrow(() -> new ResourceNotFoundException("User not found"));

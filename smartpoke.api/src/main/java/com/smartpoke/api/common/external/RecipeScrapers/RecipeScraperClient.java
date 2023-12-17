@@ -1,7 +1,5 @@
 package com.smartpoke.api.common.external.RecipeScrapers;
 
-import com.smartpoke.api.common.UrlDto;
-import com.smartpoke.api.common.exceptions.ResourceNotFoundException;
 import com.smartpoke.api.common.external.RecipeScrapers.dto.RecipeScrapDto;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
@@ -10,12 +8,9 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.stereotype.Service;
-import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 
 @Service
 public class RecipeScraperClient {

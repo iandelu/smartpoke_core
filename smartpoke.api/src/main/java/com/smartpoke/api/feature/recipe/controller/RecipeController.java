@@ -1,6 +1,6 @@
 package com.smartpoke.api.feature.recipe.controller;
 
-import com.smartpoke.api.common.UrlDto;
+import com.smartpoke.api.common.external.RecipeScrapers.UrlDto;
 import com.smartpoke.api.feature.recipe.model.Recipe;
 import com.smartpoke.api.feature.recipe.service.RecipeService;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -23,7 +23,7 @@ spring:
 
 jwt:
   expirationDays: 360
-  accessTokenSecret: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9"
+  accessTokenSecret: "b9901efb0161f2dd4c0537d5d7a3c53581025056703af925c8a40c5af114483b"
 
 
 

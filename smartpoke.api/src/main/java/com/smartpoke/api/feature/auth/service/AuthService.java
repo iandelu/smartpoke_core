@@ -1,4 +1,4 @@
-package com.smartpoke.api.feature.auth;
+package com.smartpoke.api.feature.auth.service;
 
 import com.smartpoke.api.feature.auth.dto.AuthResponse;
 import com.smartpoke.api.feature.auth.dto.LoginRequest;
@@ -29,17 +29,22 @@ public class AuthService {
     AuthenticationManager authenticationManager;
 
     public AuthResponse login(LoginRequest request){
-        authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(request.getUsername(), request.getPassword()));
-        UserDetails userDetails = userRepository.findByUsername(request.getUsername()).orElseThrow(ResourceNotFoundException::new);
+        authenticationManager.authenticate(
+                new UsernamePasswordAuthenticationToken(request.getUsername(), request.getPassword())
+        );
+        var user = userRepository
+                .findByEmail(request.getUsername())
+                .orElseThrow(ResourceNotFoundException::new);
+
         return AuthResponse.builder()
-                .token(jwtService.getToken(userDetails))
+                .token(jwtService.getToken(user))
                 .build();
     }
 
     public AuthResponse register(RegisterRequest request){
         request.setPassword(passwordEncoder.encode(request.getPassword()));
         User user = userRepository.save(request.toEntity());
-
+        
         return AuthResponse.builder()
                 .token(jwtService.getToken(user))
                 .build();

@@ -1,4 +1,4 @@
-package com.smartpoke.api.common;
+package com.smartpoke.api.common.external.RecipeScrapers;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
