@@ -2,6 +2,7 @@ package com.smartpoke.api.feature.auth.dto;
 
 import com.smartpoke.api.feature.user.dto.LocationDto;
 import com.smartpoke.api.feature.user.dto.UserInfoDto;
+import com.smartpoke.api.feature.user.model.Role;
 import com.smartpoke.api.feature.user.model.User;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -29,6 +30,9 @@ public class RegisterRequest {
                 .email(this.getEmail())
                 .userinfo(this.userInfoDto != null ? this.userInfoDto.toEntity() : null)
                 .location(this.locationDto != null ? this.locationDto.toEntity() : null)
+                .role(Role.USER)
+                .verify(false)
+                .premium(false)
                 .build();
 
     }
