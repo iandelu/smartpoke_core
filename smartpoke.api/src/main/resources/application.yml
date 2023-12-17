@@ -21,11 +21,11 @@ spring:
   application:
     name: smartpoke-api
 
+
+#Info de jwt
 jwt:
   expirationDays: 360
   accessTokenSecret: "b9901efb0161f2dd4c0537d5d7a3c53581025056703af925c8a40c5af114483b"
-
-
 
 #DATOS NECESARIOS PARA CONSUMIR LA API DE OPENFOODFACTS.ORG
 openfoodfacts:

@@ -30,10 +30,10 @@ public class AuthService {
 
     public AuthResponse login(LoginRequest request){
         authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(request.getUsername(), request.getPassword())
+                new UsernamePasswordAuthenticationToken(request.getEmail(), request.getPassword())
         );
         var user = userRepository
-                .findByEmail(request.getUsername())
+                .findByEmail(request.getEmail())
                 .orElseThrow(ResourceNotFoundException::new);
 
         return AuthResponse.builder()
