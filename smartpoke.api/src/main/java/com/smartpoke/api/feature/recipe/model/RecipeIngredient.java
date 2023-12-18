@@ -14,7 +14,7 @@ public class RecipeIngredient {
     @Column(columnDefinition = "text")
     private String ingredientText;
 
-    @OneToOne(fetch = FetchType.EAGER)
+    @ManyToOne(cascade = CascadeType.ALL)
     private UnitOfMeasure unitOfMeasure;
 
     @ManyToOne

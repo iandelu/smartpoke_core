@@ -8,9 +8,11 @@ import com.smartpoke.api.feature.product.model.Ingredient;
 import com.smartpoke.api.feature.product.repository.IngredientRepository;
 import com.smartpoke.api.feature.recipe.model.Recipe;
 import com.smartpoke.api.feature.recipe.model.RecipeIngredient;
+import com.smartpoke.api.feature.recipe.model.UnitOfMeasure;
 import com.smartpoke.api.feature.recipe.repository.RecipeIngredientsRepository;
 import com.smartpoke.api.feature.recipe.repository.RecipeRepository;
 import com.smartpoke.api.feature.recipe.repository.RecipeStepRepository;
+import com.smartpoke.api.feature.recipe.repository.UnitOfMesureRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -20,6 +22,8 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 @Service
 public class RecipeService implements IRecipeService{
@@ -33,6 +37,9 @@ public class RecipeService implements IRecipeService{
     private RecipeScraperClient recipeScraperClient;
     @Autowired
     private IngredientRepository ingredientRepository;
+    @Autowired
+    private UnitOfMesureRepository unitOfMesureRepository;
+
 
     @Override
     public Recipe createRecipe(Recipe recipe) {
@@ -102,15 +109,52 @@ public class RecipeService implements IRecipeService{
     }
 
     private RecipeIngredient textToIngredient(String text) {
+        String unit;
+        String ingredient = "";
+
         RecipeIngredient recipeIngredient = new RecipeIngredient();
         recipeIngredient.setIngredientText(text);
-        recipeIngredient.setAmount(NumberExtractor.getDoublePosition(text, 0));
 
-        String ingredientText = "";
-        Ingredient ingredient = ingredientRepository.findByName(ingredientText).orElse(createNewIngredient(ingredientText));
+        Pattern numberPattern = Pattern.compile("(\\d+\\.?\\d*)");
+        Matcher numberMatcher = numberPattern.matcher(text);
 
-        recipeIngredient.setIngredient(ingredient);
+        double amount = 0;
+        if (numberMatcher.find()) {
+            amount = Double.parseDouble(numberMatcher.group(1));
+        }
+
+        String[] parts = text.split("\\d+\\.?\\d*");
+        String restOfText = parts.length > 1 ? parts[1].trim() : parts[0].trim();
+
+
+
+        int firstSpaceIndex = restOfText.indexOf(' ');
+        if (firstSpaceIndex != -1) {
+            unit = restOfText.substring(0, firstSpaceIndex);
+            ingredient = restOfText.substring(firstSpaceIndex).trim();
+        } else {
+            unit = "";
+            ingredient = restOfText;
+        }
+
+        recipeIngredient.setAmount(amount);
+        UnitOfMeasure unitOfMeasure = unitOfMesureRepository.findByName(unit)
+                .orElseGet(() -> createNewUnit(unit));
+        recipeIngredient.setUnitOfMeasure(unitOfMeasure);
+
+        String finalIngredient = ingredient;
+        Ingredient ingredientEntity = ingredientRepository.findByName(ingredient)
+                .orElseGet(() -> createNewIngredient(finalIngredient));
+        recipeIngredient.setIngredient(ingredientEntity);
+
         return recipeIngredient;
+    }
+
+    private UnitOfMeasure createNewUnit(String unit) {
+        UnitOfMeasure unitOfMeasure= new UnitOfMeasure();
+        unitOfMeasure.setName(unit);
+
+        return unitOfMesureRepository.save(unitOfMeasure);
     }
 
     private Ingredient createNewIngredient(String ingredientText) {
