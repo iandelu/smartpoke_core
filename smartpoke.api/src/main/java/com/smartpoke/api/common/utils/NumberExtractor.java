@@ -57,19 +57,20 @@ public class NumberExtractor {
     }
 
     static public Integer getIntPosition(String input, Integer index) {
-        Scanner scanner = new Scanner(input);
-        List<Integer> numbers = new ArrayList<>();
+        if (input != null && !input.isEmpty()){
+            Scanner scanner = new Scanner(input);
+            List<Integer> numbers = new ArrayList<>();
 
-        while (scanner.hasNext()) {
-            if (scanner.hasNextInt()) {
-                numbers.add(scanner.nextInt());
-            } else {
-                scanner.next();
+            while (scanner.hasNext()) {
+                if (scanner.hasNextInt()) {
+                    numbers.add(scanner.nextInt());
+                } else {
+                    scanner.next();
+                }
             }
-        }
-
-        if (!numbers.isEmpty() && numbers.get(index) != null){
-            return numbers.get(index);
+            if (!numbers.isEmpty() && numbers.get(index) != null){
+                return numbers.get(index);
+            }
         }
         return null;
     }

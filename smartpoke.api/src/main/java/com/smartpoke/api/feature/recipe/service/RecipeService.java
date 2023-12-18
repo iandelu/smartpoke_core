@@ -75,10 +75,13 @@ public class RecipeService implements IRecipeService{
     public Recipe createRecipeFromUrl(String url, String wild) {
         try {
             RecipeScrapDto recipeScrapDto = recipeScraperClient.getRecipeScraped(url, wild);
-            Recipe recipe = recipeScrapDto.toEntity();
-            recipe.setRecipeIngredients(convertIngredients(recipeScrapDto.getIngredients()));
+            if (recipeScrapDto!=null){
+                Recipe recipe = recipeScrapDto.toEntity();
+                recipe.setRecipeIngredients(convertIngredients(recipeScrapDto.getIngredients()));
 
-            return recipeRepository.save(recipe);
+                return recipeRepository.save(recipe);
+            }
+            throw new ResourceNotFoundException("Not possible to find this recipe, try later");
         } catch (IOException e) {
             throw new ResourceNotFoundException(e.getMessage());
         }
@@ -166,15 +169,7 @@ public class RecipeService implements IRecipeService{
 
     @Override
     public List<Recipe> loadRecipeBase() {
-        List<String> urls = new ArrayList<>();
-        try {
-            Path path = Paths.get(getClass().getClassLoader().getResource("recipes_es.txt").toURI());
-             urls = Files.readAllLines(path);
-             return createRecipeListFromUrl(urls);
-        } catch (IOException | URISyntaxException e) {
-            e.printStackTrace();
-            return Collections.emptyList();
-        }
-
+        List<String> urls = RecipeScraperClient.loadUrls();
+        return createRecipeListFromUrl(urls);
     }
 }

@@ -39,7 +39,7 @@ public class RecipeController {
         return ResponseEntity.status(HttpStatus.CREATED).body(recipe);
     }
 
-    @PostMapping("loadBase")
+    @GetMapping("loadBase")
     public ResponseEntity<List<Recipe>> loadRecipeBase(){
         List<Recipe> recipe = recipeService.loadRecipeBase();
         return ResponseEntity.status(HttpStatus.CREATED).body(recipe);

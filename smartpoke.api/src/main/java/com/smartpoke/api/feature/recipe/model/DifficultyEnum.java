@@ -4,6 +4,7 @@ public enum DifficultyEnum {
     EASY, MODERATE, KIND_OF_HARD, HARD;
 
     public static DifficultyEnum calculateDifficult(Integer prepTime) {
+        if (prepTime == null) return MODERATE;
         if (prepTime < 30){
             return EASY;
         }else if (prepTime <=60){
