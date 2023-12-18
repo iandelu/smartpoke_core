@@ -18,10 +18,6 @@ public class RecipeIngredient {
     private UnitOfMeasure unitOfMeasure;
 
     @ManyToOne
-    @JoinColumn(name = "recipe_id")
-    private Recipe recipe;
-
-    @ManyToOne
     @JoinColumn(name = "ingredient_id")
     private Ingredient ingredient;
 

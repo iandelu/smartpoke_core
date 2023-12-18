@@ -29,20 +29,19 @@ public class Recipe {
     private DifficultyEnum difficultyEnum;
 
     @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
-    @PrimaryKeyJoinColumn(name = "idRecipe")
+    @JoinColumn(name = "recipe_id")
     private NutrientsRecipe nutrientsRecipe;
 
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "recipe_id")
     private Set<RecipeStep> recipeSteps = new HashSet<>();
 
-    @OneToMany(mappedBy = "recipe", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+    @JoinColumn(name = "recipe_id")
     private Set<RecipeIngredient> recipeIngredients = new HashSet<>();
 
     @ManyToOne
     @JoinColumn(name = "creatorId", referencedColumnName = "id", insertable = false, updatable = false)
     private User user;
-
-
 
 }

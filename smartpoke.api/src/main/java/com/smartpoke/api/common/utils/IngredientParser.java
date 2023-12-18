@@ -18,7 +18,6 @@ public class IngredientParser {
         recipeIngredient.setAmount(amount);
 
         recipeIngredient.setIngredient(ingredient);
-        recipeIngredient.setRecipe(recipe);
 
         return recipeIngredient;
     }

@@ -47,7 +47,7 @@ public class RecipeScrapDto {
         recipe.setLan(this.lan);
         recipe.setDifficultyEnum(DifficultyEnum.calculateDifficult(this.totalTime));
         recipe.setRating(this.ratings);
-        NutrientsRecipe nutrients = this.nutrients != null ? this.nutrients.toEntity() : null;
+        NutrientsRecipe nutrients = this.nutrients != null ? this.nutrients.toEntity() : new NutrientsRecipe();
         recipe.setNutrientsRecipe(nutrients);
 
 

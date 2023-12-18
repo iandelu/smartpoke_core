@@ -1,6 +1,8 @@
 package com.smartpoke.api.feature.recipe.model;
 
 import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import lombok.Data;
 
@@ -8,7 +10,9 @@ import lombok.Data;
 @Data
 public class NutrientsRecipe {
     @Id
-    private String idRecipe;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
     private Integer amount;
     private Integer calories;
     private Double fats;
