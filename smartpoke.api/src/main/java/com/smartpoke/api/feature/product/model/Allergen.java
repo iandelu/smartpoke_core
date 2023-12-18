@@ -11,15 +11,23 @@ import java.util.Set;
 @Data
 @Entity
 public class Allergen {
-    @EmbeddedId
-    private AllergenKey id;
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+    private String name;
+    private String lan;
 
     @ManyToMany(mappedBy = "allergens")
     private Set<Product> products = new HashSet<>();
 
     public Allergen(String name) {
-        id = new AllergenKey();
-        id.setLan(name.substring(0,2));
-        id.setName(name.substring(2,name.length()));
+        this.setLan(name.substring(0,2));
+        this.setName(name.substring(3,name.length()));
+    }
+
+    public Allergen(String name, String lan) {
+        this.setLan(lan);
+        this.setName(name);
     }
 }

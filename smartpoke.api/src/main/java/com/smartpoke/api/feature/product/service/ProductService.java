@@ -2,8 +2,10 @@ package com.smartpoke.api.feature.product.service;
 
 import com.smartpoke.api.common.exceptions.ResourceNotFoundException;
 import com.smartpoke.api.common.external.OpenFoodFacts.OpenFoodFactsClient;
+import com.smartpoke.api.feature.product.model.Allergen;
 import com.smartpoke.api.feature.product.model.Ingredient;
 import com.smartpoke.api.feature.product.model.Product;
+import com.smartpoke.api.feature.product.repository.AllergenRepository;
 import com.smartpoke.api.feature.product.repository.IngredientRepository;
 import com.smartpoke.api.feature.product.repository.ProductRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,9 +14,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @Service
 public class ProductService implements IProductService{
@@ -25,6 +25,8 @@ public class ProductService implements IProductService{
     private OpenFoodFactsClient openFoodFactsClient;
     @Autowired
     private IngredientRepository ingredientRepository;
+    @Autowired
+    private AllergenRepository allergenRepository;
 
     @Override
     public Product createProduct(Product product) {
@@ -76,21 +78,40 @@ public class ProductService implements IProductService{
     @Override
     public Product saveProduct(Product product) {
         List<Ingredient> updatedIngredients = new ArrayList<>();
+        Set<Allergen> updatedAllergens = new HashSet<>();
         Product updateProduct;
 
         for (Ingredient ingredient : product.getIngredients()) {
-            Optional<Ingredient> existingIngredient = ingredientRepository.findByName(ingredient.getName());
+            Ingredient ingredientEntity = ingredientRepository.findByName(ingredient.getName())
+                    .orElseGet(() -> createNewIngredient(ingredient.getName(), ingredient.getLanguage()));
 
-            if (existingIngredient.isPresent()) {
-                updatedIngredients.add(existingIngredient.get());
-            } else {
-                updatedIngredients.add(ingredient);
-            }
+            updatedIngredients.add(ingredientEntity);
+
+        }
+
+        for (Allergen allergen : product.getAllergens()){
+            Allergen allergenEntity = allergenRepository.findByName(allergen.getName(), allergen.getLan())
+                    .orElseGet(() -> createNewAllergen(allergen.getName(), allergen.getLan()));
+
+            updatedAllergens.add(allergenEntity);
         }
 
         product.setIngredients(updatedIngredients);
+        product.setAllergens(updatedAllergens);
         updateProduct = productRepository.save(product);
         return updateProduct;
+    }
+
+    private Allergen createNewAllergen(String name, String lan) {
+        Allergen newAllergen = new Allergen(name, lan);
+        return allergenRepository.save(newAllergen);
+    }
+
+    private Ingredient createNewIngredient(String name, String lan) {
+        Ingredient newIngredient = new Ingredient();
+        newIngredient.setName(name);
+        newIngredient.setLanguage(lan);
+        return ingredientRepository.save(newIngredient);
     }
 
 

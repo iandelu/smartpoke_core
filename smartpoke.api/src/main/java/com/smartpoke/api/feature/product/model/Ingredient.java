@@ -18,7 +18,4 @@ public class Ingredient {
     private String name;
     private String language;
 
-    @ManyToMany(mappedBy = "ingredients")
-    private Set<Product> products = new HashSet<>();
-
 }
