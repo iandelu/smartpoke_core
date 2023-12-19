@@ -3,7 +3,6 @@ package com.smartpoke.api.feature.recipe.service;
 import com.smartpoke.api.common.exceptions.ResourceNotFoundException;
 import com.smartpoke.api.common.external.RecipeScrapers.RecipeScraperClient;
 import com.smartpoke.api.common.external.RecipeScrapers.dto.RecipeScrapDto;
-import com.smartpoke.api.common.utils.NumberExtractor;
 import com.smartpoke.api.feature.product.model.Ingredient;
 import com.smartpoke.api.feature.product.repository.IngredientRepository;
 import com.smartpoke.api.feature.recipe.model.Recipe;
@@ -14,13 +13,12 @@ import com.smartpoke.api.feature.recipe.repository.RecipeRepository;
 import com.smartpoke.api.feature.recipe.repository.RecipeStepRepository;
 import com.smartpoke.api.feature.recipe.repository.UnitOfMesureRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
-import java.net.URISyntaxException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -40,17 +38,15 @@ public class RecipeService implements IRecipeService{
     @Autowired
     private UnitOfMesureRepository unitOfMesureRepository;
 
-
     @Override
     public Recipe createRecipe(Recipe recipe) {
         return recipeRepository.save(recipe);
     }
 
     @Override
-    public Set<Recipe> getAllRecipes() {
-        Set<Recipe> recipeSet = new HashSet<>();
-        recipeRepository.findAll().iterator().forEachRemaining(recipeSet::add);
-        return recipeSet;
+    public Page<Recipe> getAllRecipes(int page, int size) {
+        Pageable pageable = PageRequest.of(page, size);
+        return recipeRepository.findAll(pageable);
     }
 
     @Override

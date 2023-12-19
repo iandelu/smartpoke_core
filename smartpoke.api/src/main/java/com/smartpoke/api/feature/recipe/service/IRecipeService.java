@@ -1,6 +1,7 @@
 package com.smartpoke.api.feature.recipe.service;
 
 import com.smartpoke.api.feature.recipe.model.Recipe;
+import org.springframework.data.domain.Page;
 
 import java.util.List;
 import java.util.Set;
@@ -8,7 +9,7 @@ import java.util.Set;
 public interface IRecipeService{
 
     Recipe createRecipe(Recipe recipe);
-    Set<Recipe> getAllRecipes();
+    Page<Recipe> getAllRecipes(int page, int size);
     Recipe findById(Long l);
     Recipe updateRecipe(Long id, Recipe recipe);
     void deleteRecipe(Long id);

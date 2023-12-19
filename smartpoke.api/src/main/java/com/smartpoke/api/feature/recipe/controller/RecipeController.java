@@ -4,6 +4,7 @@ import com.smartpoke.api.common.external.RecipeScrapers.UrlDto;
 import com.smartpoke.api.feature.recipe.model.Recipe;
 import com.smartpoke.api.feature.recipe.service.RecipeService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -19,8 +20,8 @@ public class RecipeController {
     private RecipeService recipeService;
 
     @GetMapping
-    public ResponseEntity<Set<Recipe>> getAllRecipes(){
-        return ResponseEntity.ok().body(recipeService.getAllRecipes());
+    public ResponseEntity<Page<Recipe>> getAllRecipes(@RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "10") int size){
+        return ResponseEntity.ok().body(recipeService.getAllRecipes(page, size));
     }
 
     @GetMapping("/{id}")
