@@ -5,6 +5,8 @@ import com.smartpoke.api.common.external.RecipeScrapers.RecipeScraperClient;
 import com.smartpoke.api.common.external.RecipeScrapers.dto.RecipeScrapDto;
 import com.smartpoke.api.feature.product.model.Ingredient;
 import com.smartpoke.api.feature.product.repository.IngredientRepository;
+import com.smartpoke.api.feature.recipe.dto.RecipeDto;
+import com.smartpoke.api.feature.recipe.dto.RecipeMapper;
 import com.smartpoke.api.feature.recipe.model.Recipe;
 import com.smartpoke.api.feature.recipe.model.RecipeIngredient;
 import com.smartpoke.api.feature.recipe.model.UnitOfMeasure;
@@ -14,6 +16,7 @@ import com.smartpoke.api.feature.recipe.repository.RecipeStepRepository;
 import com.smartpoke.api.feature.recipe.repository.UnitOfMesureRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -22,6 +25,7 @@ import java.io.IOException;
 import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 @Service
 public class RecipeService implements IRecipeService{
@@ -39,26 +43,34 @@ public class RecipeService implements IRecipeService{
     private UnitOfMesureRepository unitOfMesureRepository;
 
     @Override
-    public Recipe createRecipe(Recipe recipe) {
-        return recipeRepository.save(recipe);
+    public RecipeDto createRecipe(Recipe recipe) {
+        return RecipeMapper.toDto(recipeRepository.save(recipe));
     }
 
     @Override
-    public Page<Recipe> getAllRecipes(int page, int size) {
+    public Page<RecipeDto> getAllRecipes(int page, int size) {
         Pageable pageable = PageRequest.of(page, size);
-        return recipeRepository.findAll(pageable);
+        Page<Recipe> recipePage = recipeRepository.findAll(pageable);
+
+        List<RecipeDto> dtoList = recipePage.stream()
+                .map(RecipeMapper::toDto)
+                .collect(Collectors.toList());
+
+        return new PageImpl<>(dtoList, pageable, recipePage.getTotalElements());
     }
 
     @Override
-    public Recipe findById(Long id) {
-        return recipeRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Recipe not found"));
+    public RecipeDto findById(Long id) {
+        Recipe recipe = recipeRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Recipe not found"));
+
+        return RecipeMapper.toDto(recipe);
     }
 
     @Override
-    public Recipe updateRecipe(Long id, Recipe recipe) {
+    public RecipeDto updateRecipe(Long id, Recipe recipe) {
         if (recipeRepository.existsById(id)) {
             recipe.setId(id);
-            return recipeRepository.save(recipe);
+            return RecipeMapper.toDto(recipeRepository.save(recipe));
         } else {
             return null;
         }
@@ -164,8 +176,11 @@ public class RecipeService implements IRecipeService{
     }
 
     @Override
-    public List<Recipe> loadRecipeBase() {
+    public List<RecipeDto> loadRecipeBase() {
         List<String> urls = RecipeScraperClient.loadUrls();
-        return createRecipeListFromUrl(urls);
+        return createRecipeListFromUrl(urls)
+                .stream()
+                .map(RecipeMapper::toDto)
+                .collect(Collectors.toList());
     }
 }
