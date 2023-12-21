@@ -19,7 +19,7 @@ public class RecipeMapper {
         recipe.setPrepTime(dto.getPrepTime());
         recipe.setPrice(dto.getPrice());
         recipe.setDiners(dto.getDiners());
-        recipe.setPicture(dto.getPicture());
+        recipe.setPicture(dto.getPictureUrl());
         recipe.setSource(dto.getSource());
         recipe.setLan(dto.getLan());
         recipe.setRating(dto.getRating());
@@ -45,7 +45,7 @@ public class RecipeMapper {
         dto.setPrepTime(entity.getPrepTime());
         dto.setPrice(entity.getPrice());
         dto.setDiners(entity.getDiners());
-        dto.setPicture(entity.getPicture());
+        dto.setPictureUrl(entity.getPicture());
         dto.setSource(entity.getSource());
         dto.setLan(entity.getLan());
         dto.setRating(entity.getRating());
