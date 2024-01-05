@@ -7,6 +7,7 @@ import com.smartpoke.api.feature.product.model.Ingredient;
 import com.smartpoke.api.feature.product.repository.IngredientRepository;
 import com.smartpoke.api.feature.recipe.dto.RecipeDto;
 import com.smartpoke.api.feature.recipe.dto.RecipeMapper;
+import com.smartpoke.api.feature.recipe.model.DifficultyEnum;
 import com.smartpoke.api.feature.recipe.model.Recipe;
 import com.smartpoke.api.feature.recipe.model.RecipeIngredient;
 import com.smartpoke.api.feature.recipe.model.UnitOfMeasure;
@@ -51,6 +52,18 @@ public class RecipeService implements IRecipeService{
     public Page<RecipeDto> getAllRecipes(int page, int size) {
         Pageable pageable = PageRequest.of(page, size);
         Page<Recipe> recipePage = recipeRepository.findAll(pageable);
+
+        List<RecipeDto> dtoList = recipePage.stream()
+                .map(RecipeMapper::toDto)
+                .collect(Collectors.toList());
+
+        return new PageImpl<>(dtoList, pageable, recipePage.getTotalElements());
+    }
+
+    @Override
+    public Page<RecipeDto> getRecipesByDifficult(int page, int size, String difficult) {
+        Pageable pageable = PageRequest.of(page, size);
+        Page<Recipe> recipePage = recipeRepository.findByDifficultyEnum(DifficultyEnum.valueOf(difficult), pageable);
 
         List<RecipeDto> dtoList = recipePage.stream()
                 .map(RecipeMapper::toDto)

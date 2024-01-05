@@ -1,4 +1,4 @@
-package com.smartpoke.api.feature.categories.model;
+package com.smartpoke.api.feature.category.model;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -13,6 +13,9 @@ public class Category {
     private Long id;
     @Column(unique = true)
     private String name;
+    @Column(unique = true)
+    private String iconPath;
+    private String color;
     @Column
     private String lan;
 

@@ -10,11 +10,12 @@ import java.util.Set;
 public interface IRecipeService{
 
     RecipeDto createRecipe(Recipe recipe);
-    Page<RecipeDto> getAllRecipes(int page, int size);
     RecipeDto findById(Long l);
     RecipeDto updateRecipe(Long id, Recipe recipe);
     void deleteRecipe(Long id);
     Recipe createRecipeFromUrl(String url, String wild);
     List<Recipe> createRecipeListFromUrl(List<String> urls);
     List<RecipeDto> loadRecipeBase();
+    Page<RecipeDto> getAllRecipes(int page, int size);
+    Page<RecipeDto> getRecipesByDifficult(int page, int size, String difficult);
 }

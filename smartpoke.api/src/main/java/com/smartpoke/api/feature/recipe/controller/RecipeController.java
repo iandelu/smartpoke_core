@@ -3,6 +3,7 @@ package com.smartpoke.api.feature.recipe.controller;
 import com.smartpoke.api.common.external.RecipeScrapers.UrlDto;
 import com.smartpoke.api.feature.recipe.dto.RecipeDto;
 import com.smartpoke.api.feature.recipe.dto.RecipeMapper;
+import com.smartpoke.api.feature.recipe.model.DifficultyEnum;
 import com.smartpoke.api.feature.recipe.model.Recipe;
 import com.smartpoke.api.feature.recipe.service.RecipeService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,6 +27,14 @@ public class RecipeController {
         return ResponseEntity.ok().body(recipeService.getAllRecipes(page, size));
     }
 
+    @GetMapping("/by_difficult/{difficult}")
+    public ResponseEntity<Page<RecipeDto>> getRecipesByDifficult(
+            @PathVariable String difficult,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size) {
+        return ResponseEntity.ok().body(recipeService.getRecipesByDifficult(page, size, difficult));
+    }
+
     @GetMapping("/{id}")
     public ResponseEntity<RecipeDto> getRecipe(@PathVariable Long id){
         return ResponseEntity.ok().body(recipeService.findById(id));
@@ -36,13 +45,13 @@ public class RecipeController {
         return ResponseEntity.status(HttpStatus.CREATED).body(recipeService.createRecipe(recipe));
     }
 
-    @PostMapping("fromUrl")
+    @PostMapping("from_url")
     public ResponseEntity<RecipeDto> createRecipeFromUrl(@RequestBody UrlDto urlDto){
         RecipeDto recipe = RecipeMapper.toDto(recipeService.createRecipeFromUrl(urlDto.getUrl(), "true"));
         return ResponseEntity.status(HttpStatus.CREATED).body(recipe);
     }
 
-    @GetMapping("loadBase")
+    @GetMapping("load_base")
     public ResponseEntity<List<RecipeDto>> loadRecipeBase(){
         List<RecipeDto> recipe = recipeService.loadRecipeBase();
         return ResponseEntity.status(HttpStatus.CREATED).body(recipe);

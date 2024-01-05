@@ -1,7 +1,7 @@
-package com.smartpoke.api.feature.categories.service;
+package com.smartpoke.api.feature.category.service;
 
-import com.smartpoke.api.feature.categories.model.Category;
-import com.smartpoke.api.feature.categories.repository.CategoryRepository;
+import com.smartpoke.api.feature.category.model.Category;
+import com.smartpoke.api.feature.category.repository.CategoryRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
