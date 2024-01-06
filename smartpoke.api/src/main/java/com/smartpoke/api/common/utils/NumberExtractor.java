@@ -5,6 +5,8 @@ import org.springframework.util.StringUtils;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class NumberExtractor {
 
@@ -73,5 +75,24 @@ public class NumberExtractor {
             }
         }
         return null;
+    }
+
+    public static int sumTimes(String text) {
+        Pattern pattern = Pattern.compile("(\\d+)\\s*(horas|h|minutos|min|')");
+        Matcher matcher = pattern.matcher(text);
+
+        int totalMinutes = 0;
+        while (matcher.find()) {
+            int number = Integer.parseInt(matcher.group(1));
+            String unit = matcher.group(2);
+
+            if (unit.equalsIgnoreCase("horas") || unit.equalsIgnoreCase("h")) {
+                totalMinutes += number * 60;
+            } else if (unit.equalsIgnoreCase("minutos") || unit.equalsIgnoreCase("min") || unit.equals("'")) {
+                totalMinutes += number;
+            }
+        }
+
+        return totalMinutes;
     }
 }

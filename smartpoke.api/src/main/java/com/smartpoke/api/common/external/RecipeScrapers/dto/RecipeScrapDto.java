@@ -1,10 +1,13 @@
 package com.smartpoke.api.common.external.RecipeScrapers.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonSetter;
 import com.smartpoke.api.common.utils.NumberExtractor;
+import com.smartpoke.api.feature.category.model.Category;
 import com.smartpoke.api.feature.recipe.model.*;
 import lombok.Data;
 
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -20,10 +23,8 @@ public class RecipeScrapDto {
     @JsonProperty("total_time")
     private Integer totalTime;
     @JsonProperty("yields")
-    private String servings;
+    private String dinners;
     private String description;
-    private String cuisine;
-    private String category;
     private Double ratings;
     @JsonProperty("image")
     private String image;
@@ -35,6 +36,21 @@ public class RecipeScrapDto {
     private String lan;
     @JsonProperty("recipeResponse")
     private NutrientsRecipeDto nutrients;
+    private List<String> categories = new ArrayList<>();
+
+    @JsonSetter("cuisine")
+    public void setCuisine(String cuisine) {
+        if (cuisine != null && !cuisine.isEmpty()) {
+            categories.add(cuisine);
+        }
+    }
+
+    @JsonSetter("category")
+    public void setCategory(String category) {
+        if (category != null && !category.isEmpty()) {
+            categories.add(category);
+        }
+    }
 
     public Recipe toEntity(){
         Recipe recipe = new Recipe();
@@ -42,7 +58,7 @@ public class RecipeScrapDto {
         recipe.setDescription(this.description);
         recipe.setPicture(this.image);
         recipe.setPrepTime(this.totalTime);
-        recipe.setDiners(NumberExtractor.getIntPosition(this.servings, 0));
+        recipe.setDiners(NumberExtractor.getIntPosition(this.dinners, 0));
         recipe.setSource(this.url);
         recipe.setLan(this.lan);
         recipe.setDifficultyEnum(DifficultyEnum.calculateDifficult(this.totalTime));
@@ -54,7 +70,7 @@ public class RecipeScrapDto {
         Set<RecipeStep> recipeSteps = new HashSet<>();
         if(this.steps != null && !this.steps.isEmpty()){
             for (int i = 0; i < this.steps.size(); i++) {
-                recipeSteps.add(textToIngredient(this.steps.get(i), i+1));
+                recipeSteps.add(textToStep(this.steps.get(i), i+1));
             }
         }
         recipe.setRecipeSteps(recipeSteps);
@@ -63,11 +79,11 @@ public class RecipeScrapDto {
         return recipe;
     }
 
-    private RecipeStep textToIngredient(String text, Integer position) {
+    private RecipeStep textToStep(String text, Integer position) {
         RecipeStep step = new RecipeStep();
         step.setDescription(text);
         step.setPosition(position);
-        step.setTime(NumberExtractor.getIntPosition(text, 0));
+        step.setTime(NumberExtractor.sumTimes(text));
         step.setPicture(null);
         return step;
     }
