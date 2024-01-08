@@ -35,6 +35,15 @@ public class RecipeController {
         return ResponseEntity.ok().body(recipeService.getRecipesByDifficult(page, size, difficult));
     }
 
+
+    @GetMapping("/search")
+    public ResponseEntity<Page<RecipeDto>> searchRecipes(
+            @RequestParam(required = false) String name,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10")int size) {
+        return ResponseEntity.ok().body(recipeService.searchRecipes(page, size, name));
+    }
+
     @GetMapping("/{id}")
     public ResponseEntity<RecipeDto> getRecipe(@PathVariable Long id){
         return ResponseEntity.ok().body(recipeService.findById(id));
