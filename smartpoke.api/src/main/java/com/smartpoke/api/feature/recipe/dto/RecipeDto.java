@@ -1,5 +1,6 @@
 package com.smartpoke.api.feature.recipe.dto;
 
+import com.smartpoke.api.feature.category.model.Category;
 import com.smartpoke.api.feature.recipe.model.DifficultyEnum;
 import com.smartpoke.api.feature.recipe.model.NutrientsRecipe;
 import com.smartpoke.api.feature.recipe.model.RecipeIngredient;
@@ -30,5 +31,6 @@ public class RecipeDto {
     private NutrientsRecipe nutrientsRecipe;
     private Set<RecipeStep> recipeSteps = new HashSet<>();
     private Set<RecipeIngredient> recipeIngredients = new HashSet<>();
+    private Set<Category> categories = new HashSet<>();
     private User user;
 }

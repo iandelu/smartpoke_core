@@ -47,28 +47,33 @@ public class RecipeService implements IRecipeService{
     @Autowired
     private CategoryRepository categoryRepository;
 
-    private static final Map<String, Integer> numberWords = new HashMap<>();
+    private static final Map<String, Double> numberWords = new HashMap<>();
     private static final Map<String, String> unitMappings = new HashMap<>();
 
     static {
-        numberWords.put("uno", 1);
-        numberWords.put("dos", 2);
-        numberWords.put("tres", 3);
+        numberWords.put("uno", 1.0);
+        numberWords.put("una", 1.0);
+        numberWords.put("dos", 2.0);
+        numberWords.put("tres", 3.0);
+        numberWords.put("½", 0.5);
+        numberWords.put("¼", 0.25);
 
-        unitMappings.put("g", "gramo");
-        unitMappings.put("gramo", "gramo");
-        unitMappings.put("gramos", "gramos");
-        unitMappings.put("kg", "kilogramo");
-        unitMappings.put("kilo", "kilogramo");
-        unitMappings.put("kilos", "kilogramos");
-        unitMappings.put("kilogramos", "kilogramos");
-        unitMappings.put("l", "litro");
-        unitMappings.put("litro", "litro");
-        unitMappings.put("litros", "litro");
-        unitMappings.put("mililitro", "mililitro");
-        unitMappings.put("mililitros", "mililitros");
-        unitMappings.put("pizca", "pizca");
-        unitMappings.put("puñado", "puñado");
+        unitMappings.put("g", "gr");
+        unitMappings.put("gr", "gr");
+        unitMappings.put("gramo", "gr");
+        unitMappings.put("gramos", "gr");
+        unitMappings.put("kg", "kg");
+        unitMappings.put("kilo", "kg");
+        unitMappings.put("kilos", "kg");
+        unitMappings.put("kilogramos", "kg");
+        unitMappings.put("l", "l");
+        unitMappings.put("litro", "l");
+        unitMappings.put("litros", "l");
+        unitMappings.put("mililitro", "ml");
+        unitMappings.put("ml", "ml");
+        unitMappings.put("mL", "ml");
+        unitMappings.put("mililitros", "ml");
+
     }
 
     @Override
@@ -160,12 +165,12 @@ public class RecipeService implements IRecipeService{
     }
 
     public Category getCategory(String s) {
-        return categoryRepository.findByName(s)
+        return categoryRepository.findByName(s.toLowerCase())
                 .orElseGet(() -> createNewCategory(s));
     }
     private Category createNewCategory(String s) {
         Category category = new Category();
-        category.setName(s);
+        category.setName(s.toLowerCase());
         category.setLan("es");
         return categoryRepository.save(category);
     }
@@ -203,49 +208,37 @@ public class RecipeService implements IRecipeService{
         return recipeIngredients;
     }
 
-    private RecipeIngredient textToIngredient(String text) {
+    private RecipeIngredient textToIngredient(String ingredientStr) {
         RecipeIngredient recipeIngredient = new RecipeIngredient();
-        recipeIngredient.setIngredientText(text);
+        recipeIngredient.setIngredientText(ingredientStr);
 
-        Pattern pattern = Pattern.compile("(\\w+|\\d+\\.?\\d*)\\s*(\\w+)\\s*(.+)");
-        Matcher matcher = pattern.matcher(text);
+        String[] tokens = ingredientStr.replace("-", " ").split("\\s+");
 
-        if (matcher.find()) {
-            double amount = parseAmount(matcher.group(1));
-            String unit = normalizeUnit(matcher.group(2));
-            String ingredient;
+        Double amount = null;
+        String unit = null;
+        ArrayList<String> ingredient = new ArrayList<>();
 
-            if (unit.equals("")){
-                ingredient = matcher.group(2) + " " + matcher.group(3);
-            }else{
-                ingredient = matcher.group(3);
+        for (String token : tokens) {
+            try {
+                amount = Double.parseDouble(token);
+            } catch (NumberFormatException e) {
+                if (numberWords.containsKey(token)) {
+                    // handle valid amounts as strings, or convert them to numbers as needed
+                } else if (unitMappings.containsKey(token)) {
+                    unit = unitMappings.get(token);
+                } else {
+                    ingredient.add(token);
+                }
             }
-
-            recipeIngredient.setAmount(amount);
-            recipeIngredient.setUnitOfMeasure(getUnitOfMeasure(unit));
-            recipeIngredient.setIngredient(getIngredient(ingredient));
-
-        } else {
-            throw new IllegalArgumentException("Formato de texto no reconocido");
         }
+
+        String ingredientName = String.join(" ", ingredient);
+
+        recipeIngredient.setAmount(amount);
+        recipeIngredient.setUnitOfMeasure(getUnitOfMeasure(unit));
+        recipeIngredient.setIngredient(getIngredient(ingredientName));
 
         return recipeIngredient;
-    }
-
-    private double parseAmount(String amountStr) {
-        if (numberWords.containsKey(amountStr.toLowerCase())) {
-            return numberWords.get(amountStr.toLowerCase());
-        } else {
-            try {
-                return Double.parseDouble(amountStr);
-            } catch (NumberFormatException e) {
-                return 1.0;
-            }
-        }
-    }
-
-    private String normalizeUnit(String unit) {
-        return unitMappings.getOrDefault(unit.toLowerCase(), "");
     }
 
     private UnitOfMeasure getUnitOfMeasure(String unit) {
