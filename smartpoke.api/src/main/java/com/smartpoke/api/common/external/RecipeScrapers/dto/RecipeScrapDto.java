@@ -67,7 +67,7 @@ public class RecipeScrapDto {
         recipe.setNutrientsRecipe(nutrients);
 
 
-        Set<RecipeStep> recipeSteps = new HashSet<>();
+        List<RecipeStep> recipeSteps = new ArrayList<>();
         if(this.steps != null && !this.steps.isEmpty()){
             for (int i = 0; i < this.steps.size(); i++) {
                 recipeSteps.add(textToStep(this.steps.get(i), i+1));

@@ -4,13 +4,11 @@ import com.smartpoke.api.common.ImageStorage.ImageStorageService;
 import com.smartpoke.api.common.utils.RecipeIngredientComparator;
 import com.smartpoke.api.feature.recipe.model.Recipe;
 import com.smartpoke.api.feature.recipe.model.RecipeIngredient;
+import com.smartpoke.api.feature.recipe.model.RecipeStep;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.List;
+import java.util.*;
 
 @Component
 public class RecipeMapper {
@@ -34,9 +32,9 @@ public class RecipeMapper {
         recipe.setNutrientsRecipe(dto.getNutrientsRecipe());
         recipe.setRecipeSteps(dto.getRecipeSteps());
 
-        List<RecipeIngredient> sortedIngredients = new ArrayList<>(dto.getRecipeIngredients());
-        Collections.sort(sortedIngredients, new RecipeIngredientComparator());
-        recipe.setRecipeIngredients(new HashSet<>(sortedIngredients));
+
+        dto.getRecipeIngredients().sort(new RecipeIngredientComparator());
+        recipe.setRecipeIngredients(new HashSet<>(dto.getRecipeIngredients()));
 
         recipe.setCategories(dto.getCategories());
         recipe.setUser(dto.getUser());
@@ -63,11 +61,13 @@ public class RecipeMapper {
         dto.setRating(entity.getRating());
         dto.setDifficultyEnum(entity.getDifficultyEnum());
         dto.setNutrientsRecipe(entity.getNutrientsRecipe());
+
+        entity.getRecipeSteps().sort(Comparator.comparing(RecipeStep::getPosition));
         dto.setRecipeSteps(entity.getRecipeSteps());
 
         List<RecipeIngredient> sortedIngredients = new ArrayList<>(entity.getRecipeIngredients());
         sortedIngredients.sort(new RecipeIngredientComparator());
-        dto.setRecipeIngredients(new HashSet<>(sortedIngredients));
+        dto.setRecipeIngredients(sortedIngredients);
         dto.setCategories(entity.getCategories());
         dto.setUser(entity.getUser());
 
