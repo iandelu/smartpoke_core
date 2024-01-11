@@ -10,7 +10,7 @@ spring:
   jpa:
     show-sql: true
     hibernate:
-      ddl-auto: update
+      ddl-auto: create
       format_sql: true
     properties:
       hibernate:
@@ -20,6 +20,14 @@ spring:
 
   application:
     name: smartpoke-api
+
+
+#SpringDoc
+springdoc:
+  api-docs:
+    enabled: true
+  swagger-ui.path: /doc/swagger-ui.html
+  pathsToMatch: /api/**
 
 
 #Info de jwt
