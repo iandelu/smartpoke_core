@@ -14,6 +14,9 @@ public interface IRecipeService{
     RecipeDto findById(Long l);
     RecipeDto updateRecipe(Long id, Recipe recipe);
     void deleteRecipe(Long id);
+
+    Recipe createRecipeFromUrl(String url);
+
     Recipe createRecipeFromUrl(String url, String wild);
     List<Recipe> createRecipeListFromUrl(List<String> urls);
     List<RecipeDto> loadRecipeBase();

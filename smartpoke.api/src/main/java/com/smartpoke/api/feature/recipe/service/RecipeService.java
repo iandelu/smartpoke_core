@@ -26,8 +26,6 @@ import org.springframework.stereotype.Service;
 
 import java.io.IOException;
 import java.util.*;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 @Service
@@ -56,6 +54,7 @@ public class RecipeService implements IRecipeService{
         numberWords.put("dos", 2.0);
         numberWords.put("tres", 3.0);
         numberWords.put("½", 0.5);
+        numberWords.put("⅓", 0.33);
         numberWords.put("¼", 0.25);
 
         unitMappings.put("g", "gr");
@@ -138,6 +137,10 @@ public class RecipeService implements IRecipeService{
     public void deleteRecipe(Long id){recipeRepository.deleteById(id);}
 
     @Override
+    public Recipe createRecipeFromUrl(String url) {
+        return createRecipeFromUrl(url, "true");
+    }
+    @Override
     public Recipe createRecipeFromUrl(String url, String wild) {
         try {
             RecipeScrapDto recipeScrapDto = recipeScraperClient.getRecipeScraped(url, wild);
@@ -175,9 +178,6 @@ public class RecipeService implements IRecipeService{
         return categoryRepository.save(category);
     }
 
-    public Recipe createRecipeFromUrl(String url) {
-        return createRecipeFromUrl(url, "true");
-    }
 
     @Override
     public List<Recipe> createRecipeListFromUrl(List<String> urls) {
@@ -233,7 +233,6 @@ public class RecipeService implements IRecipeService{
         }
 
         String ingredientName = String.join(" ", ingredient);
-
         recipeIngredient.setAmount(amount);
         recipeIngredient.setUnitOfMeasure(getUnitOfMeasure(unit));
         recipeIngredient.setIngredient(getIngredient(ingredientName));
@@ -250,7 +249,6 @@ public class RecipeService implements IRecipeService{
         return ingredientRepository.findByName(ingredientName)
                 .orElseGet(() -> createNewIngredient(ingredientName));
     }
-
 
     private UnitOfMeasure createNewUnit(String unit) {
         UnitOfMeasure unitOfMeasure= new UnitOfMeasure();
