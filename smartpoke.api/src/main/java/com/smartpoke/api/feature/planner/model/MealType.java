@@ -1,6 +1,5 @@
 package com.smartpoke.api.feature.planner.model;
 
-public enum MealTimeEnum {
+public enum MealType {
     BREAKFAST, LUNCH, DINNER, SNACK;
-
 }

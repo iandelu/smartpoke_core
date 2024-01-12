@@ -9,16 +9,15 @@ import java.util.List;
 
 @Entity
 @Data
-public class MealPlanner {
+public class Menu {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    private Integer numDays;
     private LocalDate startDate;
     private LocalDate endDate;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
     @JoinColumn(name = "user_id")
     private User user;
 
@@ -28,6 +27,6 @@ public class MealPlanner {
     private String lan;
     private Double rating;
 
-    @OneToMany(mappedBy = "mealPlanner", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "menu")
     private List<Meal> meals;
 }

@@ -4,25 +4,30 @@ import com.smartpoke.api.feature.recipe.model.Recipe;
 import jakarta.persistence.*;
 import lombok.Data;
 
+import java.time.LocalDate;
+import java.util.List;
+
 @Entity
 @Data
 public class Meal {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
-
-    private Integer numDay;
-    private Integer numMeal;
-
+    private Long id;
     @Enumerated(value = EnumType.STRING)
-    private MealTimeEnum mealTimeEnum;
+    private MealType mealType;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "recipe_id")
-    private Recipe recipe;
+    private LocalDate date;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "meal_planner_id")
-    private MealPlanner mealPlanner;
+    @ManyToMany
+    @JoinTable(
+            name = "meal_recipe",
+            joinColumns = @JoinColumn(name = "meal_id"),
+            inverseJoinColumns = @JoinColumn(name = "recipe_id")
+    )
+    private List<Recipe> recipes;
+
+    @ManyToOne
+    @JoinColumn(name = "menu_id")
+    private Menu menu;
 }

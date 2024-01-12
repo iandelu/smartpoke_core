@@ -1,5 +1,6 @@
-package com.smartpoke.api.feature.recipe.model;
+package com.smartpoke.api.feature.reviews.model;
 
+import com.smartpoke.api.feature.recipe.model.Recipe;
 import com.smartpoke.api.feature.user.model.User;
 import jakarta.persistence.*;
 import lombok.Data;
@@ -15,6 +16,7 @@ public class Review {
 
     Double rating;
     String comment;
+    String picture;
 
     @ManyToOne
     @JoinColumn(name = "user_id")
@@ -23,7 +25,5 @@ public class Review {
     @ManyToOne
     @JoinColumn(name = "recipe_id")
     private Recipe recipe;
-
-
 
 }
