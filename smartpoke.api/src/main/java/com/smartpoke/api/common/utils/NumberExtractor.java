@@ -78,7 +78,7 @@ public class NumberExtractor {
     }
 
     public static int sumTimes(String text) {
-        Pattern pattern = Pattern.compile("(\\d+)\\s*(horas|h|minutos|min)\\s*'");
+        Pattern pattern = Pattern.compile("(\\d+)\\s*(horas|h|minutos|min|mins)\\s+");
         Matcher matcher = pattern.matcher(text);
 
         int totalMinutes = 0;
