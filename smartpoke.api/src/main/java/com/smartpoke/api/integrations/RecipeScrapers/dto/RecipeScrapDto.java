@@ -1,16 +1,13 @@
-package com.smartpoke.api.common.external.RecipeScrapers.dto;
+package com.smartpoke.api.integrations.RecipeScrapers.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonSetter;
 import com.smartpoke.api.common.utils.NumberExtractor;
-import com.smartpoke.api.feature.category.model.Category;
 import com.smartpoke.api.feature.recipe.model.*;
 import lombok.Data;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 @Data
 public class RecipeScrapDto {

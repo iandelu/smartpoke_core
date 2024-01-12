@@ -1,4 +1,4 @@
-package com.smartpoke.api.common.external.RecipeScrapers.dto;
+package com.smartpoke.api.integrations.RecipeScrapers.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.smartpoke.api.common.utils.NumberExtractor;

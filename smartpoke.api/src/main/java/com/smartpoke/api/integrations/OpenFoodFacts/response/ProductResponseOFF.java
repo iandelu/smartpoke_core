@@ -1,6 +1,6 @@
-package com.smartpoke.api.common.external.OpenFoodFacts.response;
+package com.smartpoke.api.integrations.OpenFoodFacts.response;
 
-import com.smartpoke.api.common.external.OpenFoodFacts.dto.ProductOFFDto;
+import com.smartpoke.api.integrations.OpenFoodFacts.dto.ProductOFFDto;
 import lombok.Data;
 
 @Data

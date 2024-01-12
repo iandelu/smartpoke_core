@@ -1,6 +1,6 @@
-package com.smartpoke.api.common.external.RecipeScrapers;
+package com.smartpoke.api.integrations.RecipeScrapers;
 
-import com.smartpoke.api.common.external.RecipeScrapers.dto.RecipeScrapDto;
+import com.smartpoke.api.integrations.RecipeScrapers.dto.RecipeScrapDto;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -13,7 +13,6 @@ import org.springframework.web.client.RestTemplate;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
-import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 

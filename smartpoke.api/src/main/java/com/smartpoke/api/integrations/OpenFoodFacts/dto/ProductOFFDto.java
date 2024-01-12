@@ -1,4 +1,4 @@
-package com.smartpoke.api.common.external.OpenFoodFacts.dto;
+package com.smartpoke.api.integrations.OpenFoodFacts.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.smartpoke.api.feature.product.dto.AllergenDto;

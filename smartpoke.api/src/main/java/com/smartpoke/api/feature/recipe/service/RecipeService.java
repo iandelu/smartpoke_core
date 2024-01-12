@@ -1,8 +1,8 @@
 package com.smartpoke.api.feature.recipe.service;
 
 import com.smartpoke.api.common.exceptions.ResourceNotFoundException;
-import com.smartpoke.api.common.external.RecipeScrapers.RecipeScraperClient;
-import com.smartpoke.api.common.external.RecipeScrapers.dto.RecipeScrapDto;
+import com.smartpoke.api.integrations.RecipeScrapers.RecipeScraperClient;
+import com.smartpoke.api.integrations.RecipeScrapers.dto.RecipeScrapDto;
 import com.smartpoke.api.feature.category.model.Category;
 import com.smartpoke.api.feature.category.repository.CategoryRepository;
 import com.smartpoke.api.feature.product.model.Ingredient;

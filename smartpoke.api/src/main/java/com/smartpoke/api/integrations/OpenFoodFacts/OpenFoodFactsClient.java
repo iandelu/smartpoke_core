@@ -1,17 +1,14 @@
-package com.smartpoke.api.common.external.OpenFoodFacts;
+package com.smartpoke.api.integrations.OpenFoodFacts;
 
 import com.smartpoke.api.common.exceptions.ResourceNotFoundException;
-import com.smartpoke.api.common.external.OpenFoodFacts.dto.ProductOFFDto;
-import com.smartpoke.api.common.external.OpenFoodFacts.response.ProductResponseOFF;
-import com.smartpoke.api.common.external.OpenFoodFacts.response.OFFResponse;
+import com.smartpoke.api.integrations.OpenFoodFacts.dto.ProductOFFDto;
+import com.smartpoke.api.integrations.OpenFoodFacts.response.ProductResponseOFF;
+import com.smartpoke.api.integrations.OpenFoodFacts.response.OFFResponse;
 import com.smartpoke.api.feature.product.model.Product;
-import com.smartpoke.api.feature.product.service.ProductService;
 import com.squareup.okhttp.OkHttpClient;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 

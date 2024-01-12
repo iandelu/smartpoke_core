@@ -1,4 +1,4 @@
-package com.smartpoke.api.common.external.RecipeScrapers.dto;
+package com.smartpoke.api.integrations.RecipeScrapers.dto;
 
 import lombok.Data;
 

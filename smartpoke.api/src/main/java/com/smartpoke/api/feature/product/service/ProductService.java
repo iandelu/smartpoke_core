@@ -1,7 +1,7 @@
 package com.smartpoke.api.feature.product.service;
 
 import com.smartpoke.api.common.exceptions.ResourceNotFoundException;
-import com.smartpoke.api.common.external.OpenFoodFacts.OpenFoodFactsClient;
+import com.smartpoke.api.integrations.OpenFoodFacts.OpenFoodFactsClient;
 import com.smartpoke.api.feature.product.model.Allergen;
 import com.smartpoke.api.feature.product.model.Ingredient;
 import com.smartpoke.api.feature.product.model.Product;

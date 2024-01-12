@@ -1,9 +1,8 @@
 package com.smartpoke.api.feature.recipe.controller;
 
-import com.smartpoke.api.common.external.RecipeScrapers.UrlDto;
+import com.smartpoke.api.integrations.RecipeScrapers.UrlDto;
 import com.smartpoke.api.feature.recipe.dto.RecipeDto;
 import com.smartpoke.api.feature.recipe.dto.RecipeMapper;
-import com.smartpoke.api.feature.recipe.model.DifficultyEnum;
 import com.smartpoke.api.feature.recipe.model.Recipe;
 import com.smartpoke.api.feature.recipe.service.RecipeService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,7 +12,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Set;
 
 @RestController
 @RequestMapping("api/recipes")
