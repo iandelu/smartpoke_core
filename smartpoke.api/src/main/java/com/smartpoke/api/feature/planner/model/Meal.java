@@ -14,10 +14,10 @@ public class Meal {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
     @Enumerated(value = EnumType.STRING)
     private MealType mealType;
-
-    private LocalDate date;
+    private Integer numDay;
 
     @ManyToMany
     @JoinTable(
@@ -27,7 +27,6 @@ public class Meal {
     )
     private List<Recipe> recipes;
 
-    @ManyToOne
     @JoinColumn(name = "menu_id")
     private Menu menu;
 }
