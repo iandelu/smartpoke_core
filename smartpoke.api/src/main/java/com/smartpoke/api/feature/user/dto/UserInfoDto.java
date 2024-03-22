@@ -9,10 +9,6 @@ import java.time.LocalDateTime;
 
 @Data
 public class UserInfoDto {
-        private Long id;
-        private String name;
-        private String surname;
-        private String phone;
         private Integer sex;
         private Double height;
         private Double weight;
@@ -20,9 +16,6 @@ public class UserInfoDto {
 
         public Userinfo toEntity(){
                 return Userinfo.builder()
-                        .name(this.name)
-                        .surname(this.surname)
-                        .phone(phone)
                         .sex(this.sex)
                         .height(this.height)
                         .weight(this.weight)
