@@ -29,4 +29,13 @@ public class GlobalExceptionController {
 
         return ResponseEntity.status(HttpStatus.CONFLICT).body(map);
     }
+    @ExceptionHandler(InvalidPasswordException.class)
+    public ResponseEntity<Map<String, Object>> handlerInvalidPasswordException(InvalidPasswordException invalidPasswordException){
+        Map map = new HashMap();
+        map.put("message", invalidPasswordException.getMessage());
+        map.put("success", false);
+        map.put("status", HttpStatus.BAD_REQUEST);
+
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(map);
+    }
 }

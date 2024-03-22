@@ -1,6 +1,8 @@
 package com.smartpoke.api.feature.auth.service;
 
 import com.smartpoke.api.common.exceptions.EmailInUseException;
+import com.smartpoke.api.common.exceptions.InvalidPasswordException;
+import com.smartpoke.api.common.utils.PasswordValidator;
 import com.smartpoke.api.feature.auth.dto.AuthResponse;
 import com.smartpoke.api.feature.auth.dto.LoginRequest;
 import com.smartpoke.api.feature.auth.dto.RegisterRequest;
@@ -43,10 +45,22 @@ public class AuthService {
     }
 
     public AuthResponse register(RegisterRequest request){
+
+        //Check if password is valid
+        if (!PasswordValidator.isValid(request.getPassword())){
+            throw new InvalidPasswordException();
+        }
+
+        //Check if email is already in use
+        if(userRepository.findByEmail(request.getEmail()).isPresent()){
+            throw new EmailInUseException();
+        }
+
+        //Encode the password and save the user
         request.setPassword(passwordEncoder.encode(request.getPassword()));
-        userRepository.findByEmail(request.getEmail()).orElseThrow(EmailInUseException::new);
         User user = userRepository.save(request.toEntity());
 
+        //Return the token
         return AuthResponse.builder()
                 .token(jwtService.getToken(user))
                 .build();
