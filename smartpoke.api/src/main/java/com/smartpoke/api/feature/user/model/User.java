@@ -29,7 +29,6 @@ public class User implements UserDetails {
     private String lastName;
     @Column(nullable = false)
     private String email;
-
     private boolean verify;
     private boolean premium;
     @Enumerated(EnumType.STRING)

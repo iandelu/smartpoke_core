@@ -1,5 +1,6 @@
 package com.smartpoke.api.feature.auth.service;
 
+import com.smartpoke.api.common.exceptions.EmailInUseException;
 import com.smartpoke.api.feature.auth.dto.AuthResponse;
 import com.smartpoke.api.feature.auth.dto.LoginRequest;
 import com.smartpoke.api.feature.auth.dto.RegisterRequest;
@@ -43,8 +44,9 @@ public class AuthService {
 
     public AuthResponse register(RegisterRequest request){
         request.setPassword(passwordEncoder.encode(request.getPassword()));
+        userRepository.findByEmail(request.getEmail()).orElseThrow(EmailInUseException::new);
         User user = userRepository.save(request.toEntity());
-        
+
         return AuthResponse.builder()
                 .token(jwtService.getToken(user))
                 .build();

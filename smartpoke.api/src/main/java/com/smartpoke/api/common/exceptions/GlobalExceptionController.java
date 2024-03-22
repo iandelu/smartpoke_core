@@ -19,4 +19,14 @@ public class GlobalExceptionController {
 
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(map);
     }
+
+    @ExceptionHandler(EmailInUseException.class)
+    public ResponseEntity<Map<String, Object>> handlerEmailInUseException(EmailInUseException emailInUseException){
+        Map map = new HashMap();
+        map.put("message", emailInUseException.getMessage());
+        map.put("success", false);
+        map.put("status", HttpStatus.CONFLICT);
+
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(map);
+    }
 }
