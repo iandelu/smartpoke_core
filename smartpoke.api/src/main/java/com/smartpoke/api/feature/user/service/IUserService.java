@@ -1,20 +1,22 @@
 package com.smartpoke.api.feature.user.service;
 
 
+import com.smartpoke.api.feature.user.dto.LocationDto;
+import com.smartpoke.api.feature.user.dto.UserDto;
+import com.smartpoke.api.feature.user.dto.UserInfoDto;
 import com.smartpoke.api.feature.user.model.Location;
 import com.smartpoke.api.feature.user.model.User;
 import com.smartpoke.api.feature.user.model.Userinfo;
+import jakarta.servlet.http.HttpServletRequest;
 
 import java.util.List;
 
 public interface IUserService {
 
-    User getUserById(Long id);
-    List<User> getAllUsers();
-    User getUserByEmail(String email);
-    User createUser(User user);
-    User updateUser(Long id, User user);
+    UserDto getUserById(Long id);
+    List<UserDto> getAllUsers();
+    UserDto getMyPersonalInfo(HttpServletRequest request);
+    UserDto getUserByEmail(String email);
+    UserDto updateUser(HttpServletRequest request, UserDto user);
     void deleteUser(Long id);
-    Userinfo updateUserInfo(Long userId, Userinfo userInfo);
-    Location updateLocation(Long userId, Location location);
 }

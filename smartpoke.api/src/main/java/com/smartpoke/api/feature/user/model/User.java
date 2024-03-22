@@ -27,7 +27,9 @@ public class User implements UserDetails {
     private String password;
     private String firstName;
     private String lastName;
-    @Column(nullable = false)
+    @Column(columnDefinition = "text")
+    private String picture;
+    @Column(nullable = false, unique = true)
     private String email;
     private boolean verify;
     private boolean premium;

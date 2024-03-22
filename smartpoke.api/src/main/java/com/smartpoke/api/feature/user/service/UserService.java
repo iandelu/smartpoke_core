@@ -1,11 +1,15 @@
 package com.smartpoke.api.feature.user.service;
 
 import com.smartpoke.api.common.exceptions.ResourceNotFoundException;
-import com.smartpoke.api.feature.user.model.Location;
+import com.smartpoke.api.common.jwt.JwtService;
+import com.smartpoke.api.feature.user.dto.LocationDto;
+import com.smartpoke.api.feature.user.dto.UserDto;
+import com.smartpoke.api.feature.user.dto.UserInfoDto;
 import com.smartpoke.api.feature.user.model.User;
 import com.smartpoke.api.feature.user.model.Userinfo;
 import com.smartpoke.api.feature.user.repository.LocationRepository;
 import com.smartpoke.api.feature.user.repository.UserinfoRepository;
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -22,47 +26,49 @@ public class UserService implements IUserService {
     private UserinfoRepository userinfoRepository;
     @Autowired
     private LocationRepository locationRepository;
+    @Autowired
+    JwtService jwtService;
 
     @Override
-    public List<User> getAllUsers() {
-        return userRepository.findAll();
+    public List<UserDto> getAllUsers() {
+        return userRepository.findAll().stream().map(UserDto::fromEntity).toList();
+    }
+
+    @Override
+    public UserDto getMyPersonalInfo(HttpServletRequest request) {
+        String email = extractEmail(request);
+        return getUserByEmail(email);
+    }
+
+    @Override
+    public UserDto getUserById(Long id) {
+        return UserDto.fromEntity(userRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("User not found")));
     }
     @Override
-    public User getUserById(Long id) {
-        return userRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("User not found"));
-    }
-    @Override
-    public User getUserByEmail(String email) {
-        return userRepository.findByEmail(email).orElseThrow(() -> new ResourceNotFoundException("User not found"));
-    }
-    @Override
-    public User createUser(User user) {
-        return userRepository.save(user);
+    public UserDto getUserByEmail(String email) {
+        return UserDto.fromEntity(userRepository.findByEmail(email).orElseThrow(() -> new ResourceNotFoundException("User not found")));
     }
     @Override
     public void deleteUser(Long id) {
         userRepository.deleteById(id);
     }
     @Override
-    public User updateUser(Long id, User user) {
-        if (userRepository.existsById(id)) {
-            user.setId(id);
-            return userRepository.save(user);
-        } else {
-            return null;
+    public UserDto updateUser(HttpServletRequest request, UserDto user) {
+        String email = extractEmail(request);
+        Long id = userRepository.findByEmail(email).orElseThrow(() -> new ResourceNotFoundException("User not found")).getId();
+
+        User updatedUser = user.toEntity();
+        updatedUser.setId(id);
+        return UserDto.fromEntity(userRepository.save(updatedUser));
+    }
+
+    private String extractEmail(HttpServletRequest request) {
+        String bearerToken = request.getHeader("Authorization");
+        String token = "";
+        if (bearerToken != null && bearerToken.startsWith("Bearer ")) {
+            token = bearerToken.substring(7);
         }
-    }
-    @Override
-    public Userinfo updateUserInfo(Long userId, Userinfo userInfo) {
-        User user = userRepository.findById(userId).orElseThrow(() -> new ResourceNotFoundException("User not found"));
-        userInfo.setId(user.getUserinfo().getId());
-        return userinfoRepository.save(userInfo);
-    }
-    @Override
-    public Location updateLocation(Long userId, Location location) {
-        User user = userRepository.findById(userId).orElseThrow(() -> new ResourceNotFoundException("User not found"));
-        location.setId(user.getLocation().getId());
-        return locationRepository.save(location);
+        return jwtService.extractEmail(token);
     }
 
 }

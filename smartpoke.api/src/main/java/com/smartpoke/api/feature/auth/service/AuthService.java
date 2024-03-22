@@ -52,7 +52,7 @@ public class AuthService {
         }
 
         //Check if email is already in use
-        if(userRepository.findByEmail(request.getEmail()).isPresent()){
+        if(userRepository.existsByEmail(request.getEmail())){
             throw new EmailInUseException();
         }
 
