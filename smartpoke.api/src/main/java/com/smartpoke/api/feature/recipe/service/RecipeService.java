@@ -209,30 +209,42 @@ public class RecipeService implements IRecipeService{
     }
 
     private RecipeIngredient textToIngredient(String ingredientStr) {
+
+        //We create a new RecipeIngredient object and set the text raw
         RecipeIngredient recipeIngredient = new RecipeIngredient();
         recipeIngredient.setIngredientText(ingredientStr);
 
+        //We replace the "-" with " " and split the string by spaces
         String[] tokens = ingredientStr.replace("-", " ").split("\\s+");
 
         Double amount = null;
         String unit = null;
         ArrayList<String> ingredient = new ArrayList<>();
 
+        //We analyze each token
         for (String token : tokens) {
             try {
+                //If the token is a number, we set the amount
                 amount = Double.parseDouble(token);
             } catch (NumberFormatException e) {
+                //If the token is not a number, we check if it is a UNIT Stored in the unitMappings
                 if (numberWords.containsKey(token)) {
-                    // handle valid amounts as strings, or convert them to numbers as needed
+                    //If the token is a number word, we set the amount as number
+                    amount = numberWords.get(token);
                 } else if (unitMappings.containsKey(token)) {
+                    //If the token is a unit, we set the unit
                     unit = unitMappings.get(token);
                 } else {
+                    //If the token is not a number or a unit, we assume it as part of the ingredient name
                     ingredient.add(token);
                 }
             }
         }
 
+        //We join the ingredient name
         String ingredientName = String.join(" ", ingredient);
+
+        //We set the amount, unit and ingredient
         recipeIngredient.setAmount(amount);
         recipeIngredient.setUnitOfMeasure(getUnitOfMeasure(unit));
         recipeIngredient.setIngredient(getIngredient(ingredientName));
