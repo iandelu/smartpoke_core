@@ -6,7 +6,7 @@ import lombok.Data;
 @Data
 @AllArgsConstructor
 public class UrlDto {
-    String Url;
+    String url;
     Boolean wild;
 
 }

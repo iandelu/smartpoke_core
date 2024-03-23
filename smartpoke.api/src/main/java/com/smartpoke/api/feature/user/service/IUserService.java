@@ -14,9 +14,8 @@ import java.util.List;
 public interface IUserService {
 
     UserDto getUserById(Long id);
-    List<UserDto> getAllUsers();
     UserDto getMyPersonalInfo(HttpServletRequest request);
     UserDto getUserByEmail(String email);
     UserDto updateUser(HttpServletRequest request, UserDto user);
-    void deleteUser(Long id);
+    void deleteUser(HttpServletRequest request);
 }

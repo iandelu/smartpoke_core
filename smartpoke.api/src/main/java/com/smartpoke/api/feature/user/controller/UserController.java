@@ -18,11 +18,6 @@ public class UserController {
     @Autowired
     private IUserService userService;
 
-    @GetMapping("/all") //en un futuro esto deberia ser solo para admin
-    public ResponseEntity<List<UserDto>> getAllUsers() {
-        return ResponseEntity.ok().body(userService.getAllUsers());
-    }
-
     @GetMapping("/me")
     public ResponseEntity<UserDto> getMyPersonalInfo(HttpServletRequest request) {
         return ResponseEntity.ok().body(userService.getMyPersonalInfo(request));
@@ -37,9 +32,10 @@ public class UserController {
         return ResponseEntity.ok().body(userService.updateUser(request, user));
     }
 
-    @DeleteMapping("/{id}")
-    public void deleteUser(@PathVariable Long id) {
-        userService.deleteUser(id);
+    @DeleteMapping
+    public ResponseEntity<String> deleteUser(HttpServletRequest request) {
+        userService.deleteUser(request);
+        return ResponseEntity.ok().body("User deleted successfully");
     }
 
 }

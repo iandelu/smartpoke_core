@@ -23,16 +23,7 @@ public class UserService implements IUserService {
     @Autowired
     private UserRepository userRepository;
     @Autowired
-    private UserinfoRepository userinfoRepository;
-    @Autowired
-    private LocationRepository locationRepository;
-    @Autowired
     JwtService jwtService;
-
-    @Override
-    public List<UserDto> getAllUsers() {
-        return userRepository.findAll().stream().map(UserDto::fromEntity).toList();
-    }
 
     @Override
     public UserDto getMyPersonalInfo(HttpServletRequest request) {
@@ -49,8 +40,9 @@ public class UserService implements IUserService {
         return UserDto.fromEntity(userRepository.findByEmail(email).orElseThrow(() -> new ResourceNotFoundException("User not found")));
     }
     @Override
-    public void deleteUser(Long id) {
-        userRepository.deleteById(id);
+    public void deleteUser(HttpServletRequest request) {
+        String email = extractEmail(request);
+        userRepository.deleteByEmail(email);
     }
     @Override
     public UserDto updateUser(HttpServletRequest request, UserDto user) {
