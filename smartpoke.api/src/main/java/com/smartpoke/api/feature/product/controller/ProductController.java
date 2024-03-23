@@ -22,22 +22,22 @@ public class ProductController{
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Product> getRecipe(@PathVariable String id){
+    public ResponseEntity<Product> getProduct(@PathVariable String id){
         return ResponseEntity.ok().body(productService.findById(id));
     }
 
     @PostMapping
-    public ResponseEntity<Product> createRecipe(@RequestBody Product product){
+    public ResponseEntity<Product> createProduct(@RequestBody Product product){
         return ResponseEntity.status(HttpStatus.CREATED).body(productService.createProduct(product));
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Product> updateUser(@PathVariable String id, @RequestBody Product product){
+    public ResponseEntity<Product> updateProduct(@PathVariable String id, @RequestBody Product product){
         return ResponseEntity.ok().body(productService.updateProduct(id, product));
     }
 
     @DeleteMapping("/{id}")
-    public void deleteUser(@PathVariable String id){productService.deleteUser(id);}
+    public void deleteProduct(@PathVariable String id){productService.deleteUser(id);}
 
     @GetMapping("/syncOpenFoodFacts")
     public ResponseEntity<String> syncOpenFoodFacts(){

@@ -49,6 +49,7 @@ recipeScraper:
 supermarkets:
   - mercadona
   - carrefour
+  - alcampo
 
 spring.servlet.multipart:
   max-file-size: 2MB
