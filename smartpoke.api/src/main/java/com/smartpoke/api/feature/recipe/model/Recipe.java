@@ -5,10 +5,8 @@ import com.smartpoke.api.feature.user.model.User;
 import jakarta.persistence.*;
 import lombok.Data;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.time.LocalDate;
+import java.util.*;
 
 @Entity
 @Data
@@ -27,6 +25,13 @@ public class Recipe {
     private String source;
     private String lan;
     private Double rating;
+    private Integer views;
+
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date lastUpdateDate;
+
+    @Column(columnDefinition = "text")
+    private String videoUrl;
 
     @Enumerated(value = EnumType.STRING)
     private DifficultyEnum difficultyEnum;
@@ -55,4 +60,8 @@ public class Recipe {
     @JoinColumn(name = "creatorId", referencedColumnName = "id", insertable = false, updatable = false)
     private User user;
 
+    @PrePersist
+    protected void onCreate() {
+        lastUpdateDate = new Date();
+    }
 }

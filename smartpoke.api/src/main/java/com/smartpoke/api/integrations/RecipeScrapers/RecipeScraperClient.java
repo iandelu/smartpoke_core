@@ -26,7 +26,6 @@ public class RecipeScraperClient {
     public RecipeScrapDto getRecipeScraped(String recipeUrl, String wild) throws IOException {
 
         try{
-            RestTemplate restTemplate = new RestTemplate();
             restTemplate.getMessageConverters().add(new MappingJackson2HttpMessageConverter());
 
             UrlDto urlDto = new UrlDto(recipeUrl, Boolean.parseBoolean(wild));

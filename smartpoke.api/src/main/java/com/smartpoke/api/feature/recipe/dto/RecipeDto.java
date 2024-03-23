@@ -9,10 +9,7 @@ import com.smartpoke.api.feature.user.model.User;
 import lombok.Data;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 @Data
 public class RecipeDto {
@@ -28,6 +25,10 @@ public class RecipeDto {
     private String source;
     private String lan;
     private Double rating;
+    private Integer views;
+    private String videoUrl;
+    private Date lastUpdateDate;
+
 
     private DifficultyEnum difficultyEnum;
     private NutrientsRecipe nutrientsRecipe;

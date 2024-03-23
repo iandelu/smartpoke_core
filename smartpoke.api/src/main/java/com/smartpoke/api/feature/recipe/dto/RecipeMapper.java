@@ -31,6 +31,9 @@ public class RecipeMapper {
         recipe.setDifficultyEnum(dto.getDifficultyEnum());
         recipe.setNutrientsRecipe(dto.getNutrientsRecipe());
         recipe.setRecipeSteps(dto.getRecipeSteps());
+        recipe.setVideoUrl(dto.getVideoUrl());
+        recipe.setViews(dto.getViews());
+        recipe.setLastUpdateDate(dto.getLastUpdateDate());
 
 
         dto.getRecipeIngredients().sort(new RecipeIngredientComparator());
@@ -61,6 +64,9 @@ public class RecipeMapper {
         dto.setRating(entity.getRating());
         dto.setDifficultyEnum(entity.getDifficultyEnum());
         dto.setNutrientsRecipe(entity.getNutrientsRecipe());
+        dto.setViews(entity.getViews());
+        dto.setLastUpdateDate(entity.getLastUpdateDate());
+        dto.setVideoUrl(entity.getVideoUrl());
 
         entity.getRecipeSteps().sort(Comparator.comparing(RecipeStep::getPosition));
         dto.setRecipeSteps(entity.getRecipeSteps());
