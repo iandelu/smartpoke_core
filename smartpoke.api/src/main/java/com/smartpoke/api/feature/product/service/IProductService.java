@@ -22,4 +22,5 @@ public interface IProductService {
     List<Product> syncProducts();
 
     Product fetchProductDetails(String barcode);
+    Product findOrCreateProduct(String productName);
 }

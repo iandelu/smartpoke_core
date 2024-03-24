@@ -1,14 +1,14 @@
 package com.smartpoke.api.integrations.OpenFoodFacts.dto;
 
-import com.smartpoke.api.feature.product.model.Ingredient;
+import com.smartpoke.api.feature.category.model.Tag;
 import lombok.Data;
 
 @Data
-public class IngredientOFFDto {
+public class TagOFFDto {
     private String name;
     private String language;
 
-    public IngredientOFFDto(String offTag) {
+    public TagOFFDto(String offTag) {
         tagToIngredient(offTag);
     }
 
@@ -22,9 +22,9 @@ public class IngredientOFFDto {
         this.name = parts[1].trim();
     }
 
-    public Ingredient toEntity(){
-        Ingredient ingredient = new Ingredient();
-        ingredient.setLanguage(this.language);
+    public Tag toEntity(){
+        Tag ingredient = new Tag();
+        ingredient.setLan(this.language);
         ingredient.setName(this.name);
 
         return ingredient;

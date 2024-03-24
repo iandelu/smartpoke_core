@@ -1,14 +1,11 @@
-package com.smartpoke.api.feature.product.model;//package com.raccoon.smartpoke.model.products;
+package com.smartpoke.api.feature.category.model;
 
 import jakarta.persistence.*;
 import lombok.Data;
 
-import java.util.HashSet;
-import java.util.Set;
-
 @Entity
 @Data
-public class Ingredient {
+public class Tag {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -16,6 +13,6 @@ public class Ingredient {
 
     @Column(unique = true)
     private String name;
-    private String language;
+    private String lan;
 
 }

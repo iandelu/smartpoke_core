@@ -5,7 +5,6 @@ import com.smartpoke.api.feature.user.model.User;
 import jakarta.persistence.*;
 import lombok.Data;
 
-import java.time.LocalDate;
 import java.util.*;
 
 @Entity
@@ -46,7 +45,7 @@ public class Recipe {
 
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "recipe_id")
-    private Set<RecipeIngredient> recipeIngredients = new HashSet<>();
+    private Set<RecipeProduct> recipeProducts = new HashSet<>();
 
     @ManyToMany(cascade = CascadeType.ALL)
     @JoinTable(

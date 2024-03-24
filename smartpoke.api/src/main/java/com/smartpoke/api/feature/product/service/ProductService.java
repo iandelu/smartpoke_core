@@ -1,12 +1,13 @@
 package com.smartpoke.api.feature.product.service;
 
 import com.smartpoke.api.common.exceptions.ResourceNotFoundException;
+import com.smartpoke.api.feature.category.model.Tag;
+import com.smartpoke.api.feature.category.service.TagService;
 import com.smartpoke.api.integrations.OpenFoodFacts.OpenFoodFactsClient;
 import com.smartpoke.api.feature.product.model.Allergen;
-import com.smartpoke.api.feature.product.model.Ingredient;
 import com.smartpoke.api.feature.product.model.Product;
 import com.smartpoke.api.feature.product.repository.AllergenRepository;
-import com.smartpoke.api.feature.product.repository.IngredientRepository;
+import com.smartpoke.api.feature.category.repository.TagRepository;
 import com.smartpoke.api.feature.product.repository.ProductRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -24,7 +25,7 @@ public class ProductService implements IProductService{
     @Autowired
     private OpenFoodFactsClient openFoodFactsClient;
     @Autowired
-    private IngredientRepository ingredientRepository;
+    private TagService tagService;
     @Autowired
     private AllergenRepository allergenRepository;
 
@@ -77,15 +78,13 @@ public class ProductService implements IProductService{
 
     @Override
     public Product saveProduct(Product product) {
-        List<Ingredient> updatedIngredients = new ArrayList<>();
+        List<Tag> updatedTags = new ArrayList<>();
         Set<Allergen> updatedAllergens = new HashSet<>();
         Product updateProduct;
 
-        for (Ingredient ingredient : product.getIngredients()) {
-            Ingredient ingredientEntity = ingredientRepository.findByName(ingredient.getName())
-                    .orElseGet(() -> createNewIngredient(ingredient.getName(), ingredient.getLanguage()));
-
-            updatedIngredients.add(ingredientEntity);
+        for (Tag tag : product.getTags()) {
+            Tag tagEntity = tagService.createNewTag(tag.getName(), tag.getLan());
+            updatedTags.add(tagEntity);
 
         }
 
@@ -96,7 +95,7 @@ public class ProductService implements IProductService{
             updatedAllergens.add(allergenEntity);
         }
 
-        product.setIngredients(updatedIngredients);
+        product.setTags(updatedTags);
         product.setAllergens(updatedAllergens);
         updateProduct = productRepository.save(product);
         return updateProduct;
@@ -105,13 +104,6 @@ public class ProductService implements IProductService{
     private Allergen createNewAllergen(String name, String lan) {
         Allergen newAllergen = new Allergen(name, lan);
         return allergenRepository.save(newAllergen);
-    }
-
-    private Ingredient createNewIngredient(String name, String lan) {
-        Ingredient newIngredient = new Ingredient();
-        newIngredient.setName(name);
-        newIngredient.setLanguage(lan);
-        return ingredientRepository.save(newIngredient);
     }
 
 
@@ -128,5 +120,19 @@ public class ProductService implements IProductService{
     public Product fetchProductDetails(String barcode) {
         Product product =  openFoodFactsClient.fetchProductDetails(barcode);
         return saveProduct(product);
+    }
+
+    @Override
+    public Product findOrCreateProduct(String productName) {
+        //El find by name debe buscar algo parecido
+        return productRepository.findByName(productName)
+                .orElseGet(() -> createNewGenericProduct(productName));
+    }
+
+    private Product createNewGenericProduct(String productName) {
+        Product product = new Product();
+        product.setName(productName);
+        product.setBrand("Generic");
+        return productRepository.save(product);
     }
 }

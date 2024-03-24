@@ -1,22 +1,20 @@
 package com.smartpoke.api.feature.recipe.service;
 
 import com.smartpoke.api.common.exceptions.ResourceNotFoundException;
+import com.smartpoke.api.common.utils.IngredientRecipeProcessor;
+import com.smartpoke.api.feature.category.service.TagService;
 import com.smartpoke.api.integrations.RecipeScrapers.RecipeScraperClient;
 import com.smartpoke.api.integrations.RecipeScrapers.dto.RecipeScrapDto;
 import com.smartpoke.api.feature.category.model.Category;
 import com.smartpoke.api.feature.category.repository.CategoryRepository;
-import com.smartpoke.api.feature.product.model.Ingredient;
-import com.smartpoke.api.feature.product.repository.IngredientRepository;
 import com.smartpoke.api.feature.recipe.dto.RecipeDto;
 import com.smartpoke.api.feature.recipe.dto.RecipeMapper;
 import com.smartpoke.api.feature.recipe.model.DifficultyEnum;
 import com.smartpoke.api.feature.recipe.model.Recipe;
-import com.smartpoke.api.feature.recipe.model.RecipeIngredient;
-import com.smartpoke.api.feature.recipe.model.UnitOfMeasure;
+import com.smartpoke.api.feature.recipe.model.RecipeProduct;
 import com.smartpoke.api.feature.recipe.repository.RecipeIngredientsRepository;
 import com.smartpoke.api.feature.recipe.repository.RecipeRepository;
 import com.smartpoke.api.feature.recipe.repository.RecipeStepRepository;
-import com.smartpoke.api.feature.recipe.repository.UnitOfMesureRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -39,41 +37,12 @@ public class RecipeService implements IRecipeService{
     @Autowired
     private RecipeScraperClient recipeScraperClient;
     @Autowired
-    private IngredientRepository ingredientRepository;
-    @Autowired
-    private UnitOfMesureRepository unitOfMesureRepository;
+    private TagService tagService;
     @Autowired
     private CategoryRepository categoryRepository;
+    @Autowired
+    private IngredientRecipeProcessor ingredientRecipeProcessor;
 
-    private static final Map<String, Double> numberWords = new HashMap<>();
-    private static final Map<String, String> unitMappings = new HashMap<>();
-
-    static {
-        numberWords.put("uno", 1.0);
-        numberWords.put("una", 1.0);
-        numberWords.put("dos", 2.0);
-        numberWords.put("tres", 3.0);
-        numberWords.put("½", 0.5);
-        numberWords.put("⅓", 0.33);
-        numberWords.put("¼", 0.25);
-
-        unitMappings.put("g", "gr");
-        unitMappings.put("gr", "gr");
-        unitMappings.put("gramo", "gr");
-        unitMappings.put("gramos", "gr");
-        unitMappings.put("kg", "kg");
-        unitMappings.put("kilo", "kg");
-        unitMappings.put("kilos", "kg");
-        unitMappings.put("kilogramos", "kg");
-        unitMappings.put("l", "l");
-        unitMappings.put("litro", "l");
-        unitMappings.put("litros", "l");
-        unitMappings.put("mililitro", "ml");
-        unitMappings.put("ml", "ml");
-        unitMappings.put("mL", "ml");
-        unitMappings.put("mililitros", "ml");
-
-    }
 
     @Override
     public RecipeDto createRecipe(Recipe recipe) {
@@ -146,7 +115,7 @@ public class RecipeService implements IRecipeService{
             RecipeScrapDto recipeScrapDto = recipeScraperClient.getRecipeScraped(url, wild);
             if (recipeScrapDto!=null){
                 Recipe recipe = recipeScrapDto.toEntity();
-                recipe.setRecipeIngredients(convertIngredients(recipeScrapDto.getIngredients()));
+                recipe.setRecipeProducts(convertIngredientsToProducts(recipeScrapDto.getIngredients()));
                 recipe.setCategories(convertCategories(recipeScrapDto.getCategories()));
 
                 return recipeRepository.save(recipe);
@@ -198,83 +167,14 @@ public class RecipeService implements IRecipeService{
                 .collect(Collectors.toList());
     }
 
-    private Set<RecipeIngredient> convertIngredients(List<String> recipeIngredientsText) {
-        Set<RecipeIngredient> recipeIngredients = new HashSet<>();
+    private Set<RecipeProduct> convertIngredientsToProducts(List<String> recipeIngredientsText) {
+        Set<RecipeProduct> recipeProducts = new HashSet<>();
         if(recipeIngredientsText != null && !recipeIngredientsText.isEmpty()){
             for (String s : recipeIngredientsText) {
-                recipeIngredients.add(textToIngredient(s));
+                recipeProducts.add(ingredientRecipeProcessor.ingredientTextToProduct(s));
             }
         }
-        return recipeIngredients;
+        return recipeProducts;
     }
-
-    private RecipeIngredient textToIngredient(String ingredientStr) {
-
-        //We create a new RecipeIngredient object and set the text raw
-        RecipeIngredient recipeIngredient = new RecipeIngredient();
-        recipeIngredient.setIngredientText(ingredientStr);
-
-        //We replace the "-" with " " and split the string by spaces
-        String[] tokens = ingredientStr.replace("-", " ").split("\\s+");
-
-        Double amount = null;
-        String unit = null;
-        ArrayList<String> ingredient = new ArrayList<>();
-
-        //We analyze each token
-        for (String token : tokens) {
-            try {
-                //If the token is a number, we set the amount
-                amount = Double.parseDouble(token);
-            } catch (NumberFormatException e) {
-                //If the token is not a number, we check if it is a UNIT Stored in the unitMappings
-                if (numberWords.containsKey(token)) {
-                    //If the token is a number word, we set the amount as number
-                    amount = numberWords.get(token);
-                } else if (unitMappings.containsKey(token)) {
-                    //If the token is a unit, we set the unit
-                    unit = unitMappings.get(token);
-                } else {
-                    //If the token is not a number or a unit, we assume it as part of the ingredient name
-                    ingredient.add(token);
-                }
-            }
-        }
-
-        //We join the ingredient name
-        String ingredientName = String.join(" ", ingredient);
-
-        //We set the amount, unit and ingredient
-        recipeIngredient.setAmount(amount);
-        recipeIngredient.setUnitOfMeasure(getUnitOfMeasure(unit));
-        recipeIngredient.setIngredient(getIngredient(ingredientName));
-
-        return recipeIngredient;
-    }
-
-    private UnitOfMeasure getUnitOfMeasure(String unit) {
-        return unitOfMesureRepository.findByName(unit)
-                .orElseGet(() -> createNewUnit(unit));
-    }
-
-    private Ingredient getIngredient(String ingredientName) {
-        return ingredientRepository.findByName(ingredientName)
-                .orElseGet(() -> createNewIngredient(ingredientName));
-    }
-
-    private UnitOfMeasure createNewUnit(String unit) {
-        UnitOfMeasure unitOfMeasure= new UnitOfMeasure();
-        unitOfMeasure.setName(unit);
-
-        return unitOfMesureRepository.save(unitOfMeasure);
-    }
-
-    private Ingredient createNewIngredient(String ingredientText) {
-        Ingredient newIngredient = new Ingredient();
-        newIngredient.setName(ingredientText);
-        newIngredient.setLanguage("es");
-        return ingredientRepository.save(newIngredient);
-    }
-
 
 }

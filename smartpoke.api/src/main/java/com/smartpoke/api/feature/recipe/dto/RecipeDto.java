@@ -3,11 +3,10 @@ package com.smartpoke.api.feature.recipe.dto;
 import com.smartpoke.api.feature.category.model.Category;
 import com.smartpoke.api.feature.recipe.model.DifficultyEnum;
 import com.smartpoke.api.feature.recipe.model.NutrientsRecipe;
-import com.smartpoke.api.feature.recipe.model.RecipeIngredient;
+import com.smartpoke.api.feature.recipe.model.RecipeProduct;
 import com.smartpoke.api.feature.recipe.model.RecipeStep;
 import com.smartpoke.api.feature.user.model.User;
 import lombok.Data;
-import org.springframework.web.multipart.MultipartFile;
 
 import java.util.*;
 
@@ -33,7 +32,7 @@ public class RecipeDto {
     private DifficultyEnum difficultyEnum;
     private NutrientsRecipe nutrientsRecipe;
     private List<RecipeStep> recipeSteps = new ArrayList<>();
-    private List<RecipeIngredient> recipeIngredients = new ArrayList<>();
+    private List<RecipeProduct> recipeProducts = new ArrayList<>();
     private Set<Category> categories = new HashSet<>();
     private User user;
 }

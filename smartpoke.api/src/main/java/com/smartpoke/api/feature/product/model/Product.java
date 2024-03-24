@@ -1,5 +1,6 @@
 package com.smartpoke.api.feature.product.model;//package com.raccoon.smartpoke.model.products;
 
+import com.smartpoke.api.feature.category.model.Tag;
 import jakarta.persistence.*;
 import lombok.Data;
 
@@ -36,11 +37,11 @@ public class Product {
             CascadeType.PERSIST,
             CascadeType.MERGE})
     @JoinTable(
-            name = "ingredients_products",
+            name = "tag_products",
             joinColumns = {@JoinColumn(name = "product_id")},
-            inverseJoinColumns = {@JoinColumn(name = "ingredient_id")}
+            inverseJoinColumns = {@JoinColumn(name = "tag_id")}
     )
-    private List<Ingredient> ingredients;
+    private List<Tag> tags;
 
     @ManyToMany(cascade = {
             CascadeType.PERSIST,

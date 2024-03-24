@@ -1,10 +1,10 @@
 package com.smartpoke.api.integrations.OpenFoodFacts.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.smartpoke.api.feature.category.model.Tag;
 import com.smartpoke.api.feature.product.dto.AllergenDto;
 import com.smartpoke.api.feature.product.dto.ProductDto;
 import com.smartpoke.api.feature.product.model.Allergen;
-import com.smartpoke.api.feature.product.model.Ingredient;
 import com.smartpoke.api.feature.product.model.Product;
 import com.smartpoke.api.feature.product.model.ProductMacronutrients;
 import lombok.Data;
@@ -40,7 +40,9 @@ public class ProductOFFDto implements ProductDto {
     @JsonProperty("allergens_tags")
     private List<AllergenDto> allergens;
     @JsonProperty("categories_tags")
-    private List<IngredientOFFDto> ingredientsList;
+    private List<TagOFFDto> ingredientsList;
+    @JsonProperty("_keywords")
+    private List<String> keywords;
 
 
     @Override
@@ -64,11 +66,11 @@ public class ProductOFFDto implements ProductDto {
             entity.setProductMacronutrients(macronutrientesEntity);
         }
 
-        List<Ingredient> ingredientSet = new ArrayList<>();
+        List<Tag> ingredientSet = new ArrayList<>();
         if(this.ingredientsList != null && !this.ingredientsList.isEmpty()){
             this.ingredientsList.forEach(ingredient -> ingredientSet.add(ingredient.toEntity()));
         }
-        entity.setIngredients(ingredientSet);
+        entity.setTags(ingredientSet);
 
         Set<Allergen> allergens = new HashSet<>();
         if(this.allergens != null && !this.allergens.isEmpty()){
