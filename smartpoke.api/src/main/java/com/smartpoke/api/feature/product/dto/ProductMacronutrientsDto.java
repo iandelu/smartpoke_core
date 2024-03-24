@@ -1,9 +1,9 @@
 package com.smartpoke.api.feature.product.dto;
 
-import com.smartpoke.api.feature.product.model.ProductMacronutrients;
+import com.smartpoke.api.feature.product.model.ProductNutrients;
 
 public interface ProductMacronutrientsDto {
 
-    ProductMacronutrients toEntity();
+    ProductNutrients toEntity();
 
 }

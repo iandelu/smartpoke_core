@@ -2,7 +2,7 @@ package com.smartpoke.api.integrations.OpenFoodFacts.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.smartpoke.api.feature.product.dto.ProductMacronutrientsDto;
-import com.smartpoke.api.feature.product.model.ProductMacronutrients;
+import com.smartpoke.api.feature.product.model.ProductNutrients;
 import lombok.Data;
 
 @Data
@@ -21,8 +21,8 @@ public class ProductMacronutrientsOFFDto implements ProductMacronutrientsDto {
     private Double salt;
 
     @Override
-    public ProductMacronutrients toEntity() {
-       ProductMacronutrients entity = new ProductMacronutrients();
+    public ProductNutrients toEntity() {
+       ProductNutrients entity = new ProductNutrients();
        entity.setCalories(this.energeticKcal);
        entity.setCabs(this.cabs);
        entity.setFats(this.fats);

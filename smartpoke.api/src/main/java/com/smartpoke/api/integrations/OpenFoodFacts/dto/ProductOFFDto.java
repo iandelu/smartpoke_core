@@ -6,7 +6,7 @@ import com.smartpoke.api.feature.product.dto.AllergenDto;
 import com.smartpoke.api.feature.product.dto.ProductDto;
 import com.smartpoke.api.feature.product.model.Allergen;
 import com.smartpoke.api.feature.product.model.Product;
-import com.smartpoke.api.feature.product.model.ProductMacronutrients;
+import com.smartpoke.api.feature.product.model.ProductNutrients;
 import lombok.Data;
 
 import java.time.LocalDateTime;
@@ -61,9 +61,9 @@ public class ProductOFFDto implements ProductDto {
         entity.setNutriscore(this.nutriscore);
         entity.setLastUpdate(LocalDateTime.now());
         if (this.informationMacronutrient != null) {
-            ProductMacronutrients macronutrientesEntity = this.informationMacronutrient.toEntity();
+            ProductNutrients macronutrientesEntity = this.informationMacronutrient.toEntity();
             macronutrientesEntity.setEan(this.ean);
-            entity.setProductMacronutrients(macronutrientesEntity);
+            entity.setProductNutrients(macronutrientesEntity);
         }
 
         List<Tag> ingredientSet = new ArrayList<>();

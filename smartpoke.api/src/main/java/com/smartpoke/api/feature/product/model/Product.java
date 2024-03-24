@@ -17,6 +17,7 @@ public class Product {
     private String name;
     private String amount;
     private String nutriscore;
+    private String novaGroup;
     @Column(columnDefinition = "text")
     private String description;
     @Column(columnDefinition = "text")
@@ -31,7 +32,7 @@ public class Product {
 
     @OneToOne(cascade=CascadeType.ALL)
     @PrimaryKeyJoinColumn(name = "ean")
-    private ProductMacronutrients productMacronutrients;
+    private ProductNutrients productNutrients;
 
     @ManyToMany(cascade = {
             CascadeType.PERSIST,
