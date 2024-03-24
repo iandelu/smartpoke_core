@@ -133,6 +133,6 @@ public class ProductService implements IProductService{
         Product product = new Product();
         product.setName(productName);
         product.setBrand("Generic");
-        return productRepository.save(product);
+        return saveProduct(product);
     }
 }
