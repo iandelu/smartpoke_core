@@ -9,6 +9,7 @@ public abstract class Nutrients {
     private Integer amount;
     private Integer calories;
     private Double fats;
+    private Double saturatedFats;
     private Double cabs;
     private Double fibre;
     private Double protein;

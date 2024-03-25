@@ -13,12 +13,18 @@ public class ProductMacronutrientsOFFDto implements ProductMacronutrientsDto {
     private Double cabs;
     @JsonProperty("fat_100g")
     private Double fats;
+    @JsonProperty("saturated-fat_100g")
+    private Double saturatedFats;
     @JsonProperty("fiber_100g")
     private Double fibre;
     @JsonProperty("proteins_100g")
     private Double protein;
+    @JsonProperty("sugars_100g")
+    private Double sugars;
     @JsonProperty("salt_100g")
     private Double salt;
+    @JsonProperty("sodium_100g")
+    private Double sodium;
 
     @Override
     public ProductNutrients toEntity() {
@@ -29,6 +35,8 @@ public class ProductMacronutrientsOFFDto implements ProductMacronutrientsDto {
        entity.setFibre(this.fibre);
        entity.setProtein(this.protein);
        entity.setSalt(this.salt);
+       entity.setSaturatedFats(this.saturatedFats);
+       entity.setSodium(this.sodium);
        return entity;
     }
 }

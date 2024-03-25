@@ -25,6 +25,8 @@ public class ProductOFFDto implements ProductDto {
     private String amount;
     @JsonProperty("nutrition_grades")
     private String nutriscore;
+    @JsonProperty("nova_group")
+    private Integer novaGroup;
     @JsonProperty("generic_name")
     private String description;
     @JsonProperty("brands")
@@ -33,14 +35,17 @@ public class ProductOFFDto implements ProductDto {
     private String ingredients;
     private String origin;
     private String preservation;
-    @JsonProperty("image_front_url")
+
+    @JsonProperty("compared_to_category")
+    private String category;
+    @JsonProperty("image_front_small_url")
     private String picture;
     @JsonProperty("nutriments")
     private ProductMacronutrientsOFFDto informationMacronutrient;
     @JsonProperty("allergens_tags")
     private List<AllergenDto> allergens;
     @JsonProperty("categories_tags")
-    private List<TagOFFDto> ingredientsList;
+    private List<TagOFFDto> tags;
     @JsonProperty("_keywords")
     private List<String> keywords;
 
@@ -49,33 +54,37 @@ public class ProductOFFDto implements ProductDto {
     public Product toEntity() {
         Product entity = new Product();
         entity.setEan(this.ean);
-        entity.setBrand(this.brand);
         entity.setName(this.name);
         entity.setAmount(this.amount);
-        entity.setName(this.name);
+        entity.setNutriscore(this.nutriscore);
+        entity.setNovaGroup(this.novaGroup);
         entity.setDescription(this.description);
-        entity.setIngredientsText(this.ingredients);
+        entity.setBrand(this.brand);
+        entity.setIngredients(this.ingredients);
         entity.setOrigin(this.origin);
         entity.setPreservation(this.preservation);
         entity.setPicture(this.picture);
-        entity.setNutriscore(this.nutriscore);
+
         entity.setLastUpdate(LocalDateTime.now());
+        entity.setCategory(this.category);
+
         if (this.informationMacronutrient != null) {
             ProductNutrients macronutrientesEntity = this.informationMacronutrient.toEntity();
             macronutrientesEntity.setEan(this.ean);
             entity.setProductNutrients(macronutrientesEntity);
         }
 
-        List<Tag> ingredientSet = new ArrayList<>();
-        if(this.ingredientsList != null && !this.ingredientsList.isEmpty()){
-            this.ingredientsList.forEach(ingredient -> ingredientSet.add(ingredient.toEntity()));
+        List<Tag> tags = new ArrayList<>();
+        if(this.tags != null && !this.tags.isEmpty()){
+            this.tags.forEach(tag -> tags.add(tag.toEntity()));
         }
-        entity.setTags(ingredientSet);
+        entity.setTags(tags);
 
         Set<Allergen> allergens = new HashSet<>();
         if(this.allergens != null && !this.allergens.isEmpty()){
-            this.allergens.forEach(allergen -> allergens.add(new Allergen(allergen.getName())));
+            this.allergens.forEach(allergen -> allergens.add(allergen.toEntity()));
         }
+
         entity.setAllergens(allergens);
 
         return entity;

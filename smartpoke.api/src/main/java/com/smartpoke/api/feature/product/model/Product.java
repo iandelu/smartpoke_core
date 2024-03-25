@@ -1,8 +1,8 @@
-package com.smartpoke.api.feature.product.model;//package com.raccoon.smartpoke.model.products;
-
+package com.smartpoke.api.feature.product.model;
 import com.smartpoke.api.feature.category.model.Tag;
 import jakarta.persistence.*;
 import lombok.Data;
+import org.hibernate.annotations.UpdateTimestamp;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -17,18 +17,21 @@ public class Product {
     private String name;
     private String amount;
     private String nutriscore;
-    private String novaGroup;
+    private Integer novaGroup;
     @Column(columnDefinition = "text")
     private String description;
     @Column(columnDefinition = "text")
     private String brand;
     @Column(columnDefinition = "text")
-    private String ingredientsText;
+    private String ingredients;
     private String origin;
     private String preservation;
     @Column(columnDefinition = "text")
     private String picture;
     private LocalDateTime lastUpdate;
+
+    private String category;
+    private String emoji;
 
     @OneToOne(cascade=CascadeType.ALL)
     @PrimaryKeyJoinColumn(name = "ean")
@@ -58,9 +61,4 @@ public class Product {
             }
     )
     private Set<Allergen> allergens;
-
-
-
-
-
 }

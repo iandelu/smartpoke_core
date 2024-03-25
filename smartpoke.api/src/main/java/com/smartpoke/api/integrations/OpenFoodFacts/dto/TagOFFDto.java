@@ -6,25 +6,25 @@ import lombok.Data;
 @Data
 public class TagOFFDto {
     private String name;
-    private String language;
+    private String lan;
 
     public TagOFFDto(String offTag) {
-        tagToIngredient(offTag);
+        textToTag(offTag);
     }
 
-    private void tagToIngredient(String message){
+    private void textToTag(String message){
         String[] parts = message.split(":");
         if (parts.length != 2) {
             throw new IllegalArgumentException("Formato de ingrediente inválido");
         }
 
-        this.language = parts[0].trim();
+        this.lan = parts[0].trim();
         this.name = parts[1].trim();
     }
 
     public Tag toEntity(){
         Tag ingredient = new Tag();
-        ingredient.setLan(this.language);
+        ingredient.setLan(this.lan);
         ingredient.setName(this.name);
 
         return ingredient;
