@@ -23,11 +23,11 @@ public class TagOFFDto {
     }
 
     public Tag toEntity(){
-        Tag ingredient = new Tag();
-        ingredient.setLan(this.lan);
-        ingredient.setName(this.name);
+        Tag tag = new Tag();
+        tag.setLan(this.lan);
+        tag.setName(this.name);
 
-        return ingredient;
+        return tag;
     }
 
 }

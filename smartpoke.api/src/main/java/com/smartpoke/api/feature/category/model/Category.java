@@ -12,6 +12,7 @@ public class Category {
     private Long id;
     @Column(unique = true)
     private String name;
+    private String lan;
     private String emoji;
 
 

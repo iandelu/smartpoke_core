@@ -1,4 +1,5 @@
 package com.smartpoke.api.feature.product.model;
+import com.smartpoke.api.feature.category.model.Category;
 import com.smartpoke.api.feature.category.model.Tag;
 import jakarta.persistence.*;
 import lombok.Data;
@@ -30,8 +31,8 @@ public class Product {
     private String picture;
     private LocalDateTime lastUpdate;
 
-    private String category;
-    private String emoji;
+    private Category category;
+    private String keywords;
 
     @OneToOne(cascade=CascadeType.ALL)
     @PrimaryKeyJoinColumn(name = "ean")
