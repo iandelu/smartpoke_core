@@ -14,7 +14,7 @@ public class TagService implements ITagService{
     private TagRepository tagRepository;
 
     @Override
-    public Tag createNewTag(String name, String lan) {
+    public Tag saveTag(String name, String lan) {
 
         return findByName(name)
                 .orElseGet( () -> {

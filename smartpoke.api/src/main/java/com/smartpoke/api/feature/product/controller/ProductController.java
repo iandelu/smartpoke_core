@@ -1,5 +1,6 @@
 package com.smartpoke.api.feature.product.controller;
 
+import com.smartpoke.api.feature.product.dto.ProductDto;
 import com.smartpoke.api.feature.product.model.Product;
 import com.smartpoke.api.feature.product.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,22 +18,22 @@ public class ProductController{
     private ProductService productService;
 
     @GetMapping
-    public ResponseEntity<List<Product>> getAllProducts(){
+    public ResponseEntity<List<ProductDto>> getAllProducts(){
         return ResponseEntity.ok().body(productService.getAll());
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Product> getProduct(@PathVariable String id){
+    public ResponseEntity<ProductDto> getProduct(@PathVariable String id){
         return ResponseEntity.ok().body(productService.findById(id));
     }
 
     @PostMapping
-    public ResponseEntity<Product> createProduct(@RequestBody Product product){
+    public ResponseEntity<ProductDto> createProduct(@RequestBody ProductDto product){
         return ResponseEntity.status(HttpStatus.CREATED).body(productService.createProduct(product));
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Product> updateProduct(@PathVariable String id, @RequestBody Product product){
+    public ResponseEntity<ProductDto> updateProduct(@PathVariable String id, @RequestBody ProductDto product){
         return ResponseEntity.ok().body(productService.updateProduct(id, product));
     }
 
@@ -42,7 +43,7 @@ public class ProductController{
     @GetMapping("/syncOpenFoodFacts")
     public ResponseEntity<String> syncOpenFoodFacts(){
         try{
-            List<Product> products = productService.syncProducts();
+            List<ProductDto> products = productService.syncProducts();
             return ResponseEntity.ok().body("Initializing Sync openfoodfacts data manually\n"+products.toString());
         }catch (RuntimeException e){
             return ResponseEntity.internalServerError().body("An error has occurred"+e.getMessage());
@@ -51,7 +52,7 @@ public class ProductController{
     }
 
     @GetMapping("/fetchProductInfo/{barcode}")
-    public ResponseEntity<Product> fetchProductInfo(@PathVariable String barcode){
+    public ResponseEntity<ProductDto> fetchProductInfo(@PathVariable String barcode){
         return ResponseEntity.ok().body(productService.fetchProductDetails(barcode));
     }
 

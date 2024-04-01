@@ -3,7 +3,7 @@ package com.smartpoke.api.integrations.OpenFoodFacts.dto;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.smartpoke.api.feature.category.model.Tag;
 import com.smartpoke.api.feature.product.dto.AllergenDto;
-import com.smartpoke.api.feature.product.dto.ProductDto;
+import com.smartpoke.api.feature.product.dto.IProductDto;
 import com.smartpoke.api.feature.product.model.Allergen;
 import com.smartpoke.api.feature.product.model.Product;
 import com.smartpoke.api.feature.product.model.ProductNutrients;
@@ -16,7 +16,7 @@ import java.util.List;
 import java.util.Set;
 
 @Data
-public class ProductOFFDto implements ProductDto {
+public class ProductOFFDto implements IProductDto {
     @JsonProperty("code")
     private String ean;
     @JsonProperty("product_name")

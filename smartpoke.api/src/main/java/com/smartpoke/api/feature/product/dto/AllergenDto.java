@@ -12,6 +12,10 @@ public class AllergenDto {
     public AllergenDto(String offTag) {
         textToAllergen(offTag);
     }
+    public AllergenDto(Allergen allergen) {
+        this.name = allergen.getName();
+        this.lan = allergen.getLan();
+    }
 
     private void textToAllergen(String message){
         String[] parts = message.split(":");

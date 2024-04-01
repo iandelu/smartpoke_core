@@ -7,4 +7,6 @@ import java.util.List;
 public interface ICategoryService {
 
     List<Category> getAllCategories();
+
+    Category saveCategory(String name, String emoji, String lan);
 }

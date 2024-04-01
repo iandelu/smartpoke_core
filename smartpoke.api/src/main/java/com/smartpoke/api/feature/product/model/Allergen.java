@@ -20,4 +20,14 @@ public class Allergen {
 
     @ManyToMany(mappedBy = "allergens")
     private Set<Product> products = new HashSet<>();
+
+    public Allergen(String name) {
+        this.setLan(name.substring(0,2));
+        this.setName(name.substring(3));
+    }
+
+    public Allergen(String name, String lan) {
+        this.setLan(lan);
+        this.setName(name);
+    }
 }

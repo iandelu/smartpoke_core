@@ -31,6 +31,8 @@ public class Product {
     private String picture;
     private LocalDateTime lastUpdate;
 
+    @ManyToOne
+    @JoinColumn(name = "category_id")
     private Category category;
     private String keywords;
 
