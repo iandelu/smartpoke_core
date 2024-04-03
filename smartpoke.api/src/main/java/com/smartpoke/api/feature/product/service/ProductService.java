@@ -129,9 +129,9 @@ public class ProductService implements IProductService{
     }
 
     @Override
-    public Product findOrCreateProduct(String productName) {
-        return productRepository.findByName(productName)
-                .orElseGet(() -> createNewGenericProduct(productName));
+    public Product findOrCreateProduct(String[] tokens) {
+        return productRepository.findMostSimilarByName(tokens)
+                .orElseGet(() -> createNewGenericProduct(String.join(" ", tokens)));
     }
 
     private Product createNewGenericProduct(String productName) {

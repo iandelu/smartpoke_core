@@ -64,13 +64,13 @@ public class IngredientProcessor {
 
         //We create a new RecipeIngredient object and set the text raw
         RecipeProduct recipeProduct = new RecipeProduct();
-        recipeProduct.setIngredientName(ingredientStr);
+        recipeProduct.setText(ingredientStr);
 
         String[] tokens = this.tokenizeIngredient(ingredientStr);
 
         Double amount = null;
         String unit = null;
-        ArrayList<String> ingredient = new ArrayList<>();
+        ArrayList<String> ingredientTokens = new ArrayList<>();
 
         for (String token : tokens) {
             if (numberWords.containsKey(token)) {
@@ -81,16 +81,17 @@ public class IngredientProcessor {
                 try {
                     amount = Double.parseDouble(token);
                 } catch (NumberFormatException e) {
-                    ingredient.add(token);
+                    ingredientTokens.add(token);
                 }
             }
         }
 
         //We join the ingredient name
-        String productName = String.join(" ", ingredient);
+        String ingredientName = String.join(" ", ingredientTokens);
+        recipeProduct.setIngredientName(ingredientName);
 
-        //Buscar Producto en la base de datos
-        Product product = productService.findOrCreateProduct(productName);
+        //Buscar Producto en la base de datos TODO MEJORAR BUSQUEDA POR SIMILITUD
+        Product product = productService.findOrCreateProduct(ingredientTokens.toArray(new String[0]));
 
         //We set the amount, unit and ingredient
         recipeProduct.setAmount(amount);

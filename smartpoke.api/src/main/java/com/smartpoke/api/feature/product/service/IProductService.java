@@ -16,5 +16,5 @@ public interface IProductService {
     List<ProductDto> saveAllProducts(List<Product> products);
     List<ProductDto> syncProducts();
     ProductDto fetchProductDetails(String barcode);
-    Product findOrCreateProduct(String productName);
+    Product findOrCreateProduct(String[] tokens);
 }

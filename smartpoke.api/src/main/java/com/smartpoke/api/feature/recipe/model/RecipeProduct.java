@@ -12,6 +12,8 @@ public class RecipeProduct {
     private Long id;
     private Double amount;
     @Column(columnDefinition = "text")
+    private String text;
+    @Column(columnDefinition = "text")
     private String ingredientName;
 
     @ManyToOne(cascade = CascadeType.ALL)
