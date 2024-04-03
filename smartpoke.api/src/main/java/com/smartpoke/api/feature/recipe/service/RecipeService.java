@@ -149,22 +149,22 @@ public class RecipeService implements IRecipeService{
 
 
     @Override
-    public List<Recipe> createRecipeListFromUrl(List<String> urls) {
+    public List<RecipeDto> createRecipeListFromUrl(List<String> urls) {
         List<Recipe> recipeListEntity = new ArrayList<>();
         urls.forEach( url -> {
             Recipe newRecipe = createRecipeFromUrl(url);
             recipeListEntity.add(newRecipe);
         });
-        return recipeRepository.saveAll(recipeListEntity);
+        return recipeRepository.saveAll(recipeListEntity).stream()
+                .map(RecipeMapper::toDto)
+                .toList();
     }
 
     @Override
     public List<RecipeDto> loadRecipeBase() {
         List<String> urls = RecipeScraperClient.loadUrls();
-        return createRecipeListFromUrl(urls)
-                .stream()
-                .map(RecipeMapper::toDto)
-                .collect(Collectors.toList());
+        return createRecipeListFromUrl(urls);
+
     }
 
     private Set<RecipeProduct> convertIngredientsToProducts(List<String> recipeIngredientsText) {

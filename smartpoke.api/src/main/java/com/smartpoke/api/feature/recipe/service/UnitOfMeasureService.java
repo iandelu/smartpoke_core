@@ -16,10 +16,12 @@ public class UnitOfMeasureService implements IUnitOfMeasureService {
 
     @Override
     public UnitOfMeasure createNewUnitOfMeasure(String name) {
-        UnitOfMeasure unitOfMeasure= new UnitOfMeasure();
-        unitOfMeasure.setName(name);
-
-        return unitOfMeasureRepository.save(unitOfMeasure);
+        return unitOfMeasureRepository.findByName(name)
+                .orElseGet(() ->{
+                    UnitOfMeasure unitOfMeasure= new UnitOfMeasure();
+                    unitOfMeasure.setName(name);
+                    return unitOfMeasureRepository.save(unitOfMeasure);
+                });
     }
 
     @Override

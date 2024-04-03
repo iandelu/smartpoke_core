@@ -18,7 +18,7 @@ public interface IRecipeService{
     Recipe createRecipeFromUrl(String url);
 
     Recipe createRecipeFromUrl(String url, String wild);
-    List<Recipe> createRecipeListFromUrl(List<String> urls);
+    List<RecipeDto> createRecipeListFromUrl(List<String> urls);
     List<RecipeDto> loadRecipeBase();
     Page<RecipeDto> getAllRecipes(int page, int size);
     Page<RecipeDto> getRecipesByDifficult(int page, int size, String difficult);
