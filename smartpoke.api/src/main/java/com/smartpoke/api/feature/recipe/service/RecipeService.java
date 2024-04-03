@@ -1,7 +1,7 @@
 package com.smartpoke.api.feature.recipe.service;
 
 import com.smartpoke.api.common.exceptions.ResourceNotFoundException;
-import com.smartpoke.api.common.utils.IngredientRecipeProcessor;
+import com.smartpoke.api.common.utils.IngredientProcessor;
 import com.smartpoke.api.feature.category.service.TagService;
 import com.smartpoke.api.integrations.RecipeScrapers.RecipeScraperClient;
 import com.smartpoke.api.integrations.RecipeScrapers.dto.RecipeScrapDto;
@@ -41,7 +41,7 @@ public class RecipeService implements IRecipeService{
     @Autowired
     private CategoryRepository categoryRepository;
     @Autowired
-    private IngredientRecipeProcessor ingredientRecipeProcessor;
+    private IngredientProcessor ingredientProcessor;
 
 
     @Override
@@ -162,7 +162,7 @@ public class RecipeService implements IRecipeService{
 
     @Override
     public List<RecipeDto> loadRecipeBase() {
-        List<String> urls = RecipeScraperClient.loadUrls();
+        List<String> urls = recipeScraperClient.loadUrls();
         return createRecipeListFromUrl(urls);
 
     }
@@ -171,7 +171,7 @@ public class RecipeService implements IRecipeService{
         Set<RecipeProduct> recipeProducts = new HashSet<>();
         if(recipeIngredientsText != null && !recipeIngredientsText.isEmpty()){
             for (String s : recipeIngredientsText) {
-                recipeProducts.add(ingredientRecipeProcessor.ingredientTextToProduct(s));
+                recipeProducts.add(ingredientProcessor.ingredientTextToProduct(s));
             }
         }
         return recipeProducts;

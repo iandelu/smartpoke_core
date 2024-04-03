@@ -43,7 +43,7 @@ public class RecipeScraperClient {
         }
     }
 
-    public static List<String> loadUrls(){
+    public List<String> loadUrls(){
         String resourceFileName = "src/main/resources/urls.txt";
         List<String> urls = new ArrayList<>();
 
