@@ -10,6 +10,11 @@ public class CategoryDto {
     private String lan;
     private String emoji;
 
+    public CategoryDto(Category category) {
+        this.name = category.getName();
+        this.lan = category.getLan();
+        this.emoji = category.getEmoji();
+    }
     public Category toEntity() {
         Category category = new Category();
         category.setName(this.name);
@@ -17,14 +22,5 @@ public class CategoryDto {
         category.setEmoji(this.emoji);
         return category;
     }
-
-    public static CategoryDto fromEntity(Category category) {
-        CategoryDto categoryDto = new CategoryDto();
-        categoryDto.setName(category.getName());
-        categoryDto.setLan(category.getLan());
-        categoryDto.setEmoji(category.getEmoji());
-        return categoryDto;
-    }
-
 
 }

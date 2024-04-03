@@ -13,4 +13,6 @@ import java.util.Optional;
 public interface AllergenRepository extends JpaRepository<Allergen, Long> {
     @Query("SELECT a FROM Allergen a WHERE a.name = :name and a.lan = :lan")
     Optional<Allergen> findByName(@Param("name") String name, @Param("lan") String lan);
+
+    void deleteByName(String name);
 }

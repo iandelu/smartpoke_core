@@ -43,7 +43,7 @@ public class ProductService implements IProductService{
     public Product saveProduct(Product product) {
         Optional<Product> productOptional = Optional.empty();
         if (product.getEan() != null) {
-            productOptional = productRepository.findById(product.getEan());
+            productOptional = productRepository.findByEan(product.getEan());
         }
 
         if (productOptional.isPresent()) {
@@ -79,7 +79,7 @@ public class ProductService implements IProductService{
 
     @Override
     public ProductDto updateProduct(String ean, ProductDto product) {
-        if (productRepository.existsById(ean)) {
+        if (productRepository.existsByEan(ean)) {
             product.setEan(ean);
             return new ProductDto(productRepository.save(product.toEntity()));
         } else {
@@ -96,12 +96,17 @@ public class ProductService implements IProductService{
     @Transactional(propagation = Propagation.REQUIRES_NEW)
     public List<ProductDto> saveAll(List<ProductDto> products) {
         List<Product> productsEntity = products.stream().map(ProductDto::toEntity).toList();
-        return productRepository.saveAll(productsEntity).stream().map(ProductDto::new).toList();
+        return this.saveAllProducts(productsEntity);
     }
 
     @Override
     public ProductDto findById(String id) {
         return new ProductDto(productRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Product not found")));
+    }
+
+    @Override
+    public ProductDto findByEan(String ean) {
+        return new ProductDto(productRepository.findByEan(ean).orElseThrow(() -> new ResourceNotFoundException("Product not found")));
     }
 
     @Override

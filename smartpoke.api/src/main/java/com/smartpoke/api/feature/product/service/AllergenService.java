@@ -27,7 +27,7 @@ public class AllergenService implements IAllergenService{
 
     @Override
     public void deleteAllergen(String name) {
-
+        allergenRepository.deleteByName(name);
     }
 
     @Override

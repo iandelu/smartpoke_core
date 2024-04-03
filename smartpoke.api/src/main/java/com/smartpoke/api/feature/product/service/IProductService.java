@@ -12,6 +12,7 @@ public interface IProductService {
     List<ProductDto> getAll();
     List<ProductDto> saveAll(List<ProductDto> products);
     ProductDto findById(String id);
+    ProductDto findByEan(String ean);
     List<ProductDto> saveAllProducts(List<Product> products);
     List<ProductDto> syncProducts();
     ProductDto fetchProductDetails(String barcode);
