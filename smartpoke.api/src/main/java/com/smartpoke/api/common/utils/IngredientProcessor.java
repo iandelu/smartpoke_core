@@ -8,16 +8,19 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
 @Service
-public class IngredientRecipeProcessor {
+public class IngredientProcessor {
 
     @Autowired
     private UnitOfMeasureService unitOfMeasureService;
     @Autowired
     private ProductService productService;
+
+
     private static final Map<String, Double> numberWords = new HashMap<>();
     private static final Map<String, String> unitMappings = new HashMap<>();
 
@@ -27,11 +30,13 @@ public class IngredientRecipeProcessor {
         numberWords.put("una", 1.0);
         numberWords.put("dos", 2.0);
         numberWords.put("tres", 3.0);
+        numberWords.put("cuatro", 3.0);
         numberWords.put("½", 0.5);
         numberWords.put("1/2", 0.5);
         numberWords.put("⅓", 0.33);
         numberWords.put("1/3", 0.33);
         numberWords.put("¼", 0.25);
+        numberWords.put("1/4", 0.25);
         numberWords.put("1/5", 0.25);
 
         unitMappings.put("g", "gr");
@@ -61,28 +66,21 @@ public class IngredientRecipeProcessor {
         RecipeProduct recipeProduct = new RecipeProduct();
         recipeProduct.setIngredientName(ingredientStr);
 
-        //We replace the "-" with " " and split the string by spaces
-        String[] tokens = ingredientStr.replace("-", " ").split("\\s+");
+        String[] tokens = this.tokenizeIngredient(ingredientStr);
 
         Double amount = null;
         String unit = null;
         ArrayList<String> ingredient = new ArrayList<>();
 
-        //We analyze each token
         for (String token : tokens) {
-            try {
-                //If the token is a number, we set the amount
-                amount = Double.parseDouble(token);
-            } catch (NumberFormatException e) {
-                //If the token is not a number, we check if it is a UNIT Stored in the unitMappings
-                if (numberWords.containsKey(token)) {
-                    //If the token is a number word, we set the amount as number
-                    amount = numberWords.get(token);
-                } else if (unitMappings.containsKey(token)) {
-                    //If the token is a unit, we set the unit
-                    unit = unitMappings.get(token);
-                } else {
-                    //If the token is not a number or a unit, we assume it as part of the ingredient name
+            if (numberWords.containsKey(token)) {
+                amount = numberWords.get(token);
+            } else if (unitMappings.containsKey(token)) {
+                unit = unitMappings.get(token);
+            } else {
+                try {
+                    amount = Double.parseDouble(token);
+                } catch (NumberFormatException e) {
                     ingredient.add(token);
                 }
             }
@@ -91,7 +89,7 @@ public class IngredientRecipeProcessor {
         //We join the ingredient name
         String productName = String.join(" ", ingredient);
 
-        //Buscar Producto en la base de datos normalizar y buscar
+        //Buscar Producto en la base de datos
         Product product = productService.findOrCreateProduct(productName);
 
         //We set the amount, unit and ingredient
@@ -100,5 +98,17 @@ public class IngredientRecipeProcessor {
         recipeProduct.setProduct(productService.saveProduct(product));
 
         return recipeProduct;
+    }
+
+    private String[] tokenizeIngredient(String ingredientStr) {
+        String[] tokens = ingredientStr.replace("-", " ").split("\\s+");
+        return Arrays.stream(tokens).map(this::normalizeIngredient).toArray(String[]::new);
+    }
+
+    private String normalizeIngredient(String ingredientStr) {
+        //We normalize the ingredient text
+        String normalizedIngredient = NormalizerUtils.normalize(ingredientStr);
+        //We singularize the ingredient text
+        return SingularizerUtils.toSingular(normalizedIngredient);
     }
 }
