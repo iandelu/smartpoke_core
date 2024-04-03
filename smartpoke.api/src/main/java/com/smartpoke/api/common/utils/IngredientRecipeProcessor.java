@@ -96,7 +96,7 @@ public class IngredientRecipeProcessor {
 
         //We set the amount, unit and ingredient
         recipeProduct.setAmount(amount);
-        recipeProduct.setUnitOfMeasure(unitOfMeasureService.createNewUnitOfMeasure(unit));
+        recipeProduct.setUnitOfMeasure(unitOfMeasureService.findOrCreateNewUnitOfMeasure(unit));
         recipeProduct.setProduct(productService.saveProduct(product));
 
         return recipeProduct;

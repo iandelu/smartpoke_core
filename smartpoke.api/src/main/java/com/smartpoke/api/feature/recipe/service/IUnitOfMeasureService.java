@@ -4,6 +4,6 @@ import com.smartpoke.api.feature.recipe.model.UnitOfMeasure;
 
 public interface IUnitOfMeasureService {
 
-    UnitOfMeasure createNewUnitOfMeasure(String name);
+    UnitOfMeasure findOrCreateNewUnitOfMeasure(String name);
     UnitOfMeasure findByName(String name);
 }

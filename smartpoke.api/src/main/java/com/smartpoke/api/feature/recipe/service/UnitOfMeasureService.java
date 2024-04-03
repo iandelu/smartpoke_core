@@ -5,9 +5,6 @@ import com.smartpoke.api.feature.recipe.repository.UnitOfMesureRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.HashMap;
-import java.util.Map;
-
 @Service
 public class UnitOfMeasureService implements IUnitOfMeasureService {
 
@@ -15,7 +12,7 @@ public class UnitOfMeasureService implements IUnitOfMeasureService {
     private UnitOfMesureRepository unitOfMeasureRepository;
 
     @Override
-    public UnitOfMeasure createNewUnitOfMeasure(String name) {
+    public UnitOfMeasure findOrCreateNewUnitOfMeasure(String name) {
         return unitOfMeasureRepository.findByName(name)
                 .orElseGet(() ->{
                     UnitOfMeasure unitOfMeasure= new UnitOfMeasure();
@@ -27,6 +24,6 @@ public class UnitOfMeasureService implements IUnitOfMeasureService {
     @Override
     public UnitOfMeasure findByName(String unit) {
         return unitOfMeasureRepository.findByName(unit)
-                .orElseGet(() -> createNewUnitOfMeasure(unit));
+                .orElseGet(() -> findOrCreateNewUnitOfMeasure(unit));
     }
 }
