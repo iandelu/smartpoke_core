@@ -81,7 +81,8 @@ public class IngredientProcessor {
                 try {
                     amount = Double.parseDouble(token);
                 } catch (NumberFormatException e) {
-                    ingredientTokens.add(token);
+                    if (!token.isEmpty() && !token.equals("de"))
+                        ingredientTokens.add(token);
                 }
             }
         }
