@@ -36,8 +36,45 @@ public class ProductService implements IProductService{
     @Override
     @Transactional
     public ProductDto createProduct(ProductDto product) {
-
         return new ProductDto(this.saveProduct(product.toEntity()));
+    }
+
+    @Override
+    public Product saveProduct(Product product) {
+        Optional<Product> productOptional = Optional.empty();
+        if (product.getEan() != null) {
+            productOptional = productRepository.findById(product.getEan());
+        }
+
+        if (productOptional.isPresent()) {
+            return productOptional.get();
+        }
+
+        List<Tag> updatedTags = new ArrayList<>();
+        Set<Allergen> updatedAllergens = new HashSet<>();
+
+        if (product.getCategory() != null) {
+            Category category = categoryService.saveCategory(product.getCategory().getName(), product.getCategory().getEmoji(), product.getCategory().getLan());
+            product.setCategory(category);
+        }
+
+        if (product.getTags() != null)
+            for (Tag tag : product.getTags()) {
+                Tag tagEntity = tagService.saveTag(tag.getName(), tag.getLan());
+                updatedTags.add(tagEntity);
+
+            }
+
+        if (product.getAllergens() != null)
+            for (Allergen allergen : product.getAllergens()){
+                Allergen allergenEntity = allergenService.saveAllergen(allergen.getName(), allergen.getLan());
+                updatedAllergens.add(allergenEntity);
+            }
+
+        product.setTags(updatedTags);
+        product.setAllergens(updatedAllergens);
+        product = productRepository.save(product);
+        return product;
     }
 
     @Override
@@ -68,65 +105,16 @@ public class ProductService implements IProductService{
     }
 
     @Override
-    public void deleteUser(String id) {productRepository.deleteById(id);}
-
-    @Override
     public List<ProductDto> saveAllProducts(List<Product> products) {
-        List<ProductDto> updatedProducts = new ArrayList<>();
-        ProductDto updateProduct = new ProductDto();
-
-        for (Product product : products) {
-            updateProduct = new ProductDto(this.saveProduct(product));
-            updatedProducts.add(updateProduct);
-        }
-
-        return updatedProducts;
+        List<Product> productsEntity = products.stream().map(this::saveProduct).toList();
+        return productsEntity.stream().map(ProductDto::new).toList();
     }
-
-    @Override
-    public Product saveProduct(Product product) {
-        Optional<Product> productOptional = Optional.empty();
-        if (product.getEan() != null) {
-            productOptional = productRepository.findById(product.getEan());
-        }
-
-        if (productOptional.isPresent()) {
-            return productOptional.get();
-        }
-
-        List<Tag> updatedTags = new ArrayList<>();
-        Set<Allergen> updatedAllergens = new HashSet<>();
-
-        if (product.getCategory() != null) {
-            Category category = categoryService.saveCategory(product.getCategory().getName(), product.getCategory().getEmoji(), product.getCategory().getLan());
-            product.setCategory(category);
-        }
-
-        for (Tag tag : product.getTags()) {
-            Tag tagEntity = tagService.saveTag(tag.getName(), tag.getLan());
-            updatedTags.add(tagEntity);
-
-        }
-
-        for (Allergen allergen : product.getAllergens()){
-            Allergen allergenEntity = allergenService.saveAllergen(allergen.getName(), allergen.getLan());
-            updatedAllergens.add(allergenEntity);
-        }
-
-        product.setTags(updatedTags);
-        product.setAllergens(updatedAllergens);
-        product = productRepository.save(product);
-        return product;
-    }
-
 
     @Override
     @Scheduled(cron = "0 0 0 ? * SUN")
     public List<ProductDto> syncProducts() {
-
         List<Product> products = openFoodFactsClient.syncProducts();
         return saveAllProducts(products);
-
     }
 
     @Override
@@ -145,6 +133,6 @@ public class ProductService implements IProductService{
         Product product = new Product();
         product.setName(productName);
         product.setBrand("Generic");
-        return saveProduct(product);
+        return this.saveProduct(product);
     }
 }

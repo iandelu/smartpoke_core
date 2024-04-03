@@ -13,6 +13,9 @@ import java.util.Set;
 @Data
 public class Product {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Integer id;
+    @Column(unique = true)
     private String ean;
     @Column(columnDefinition = "text")
     private String name;
