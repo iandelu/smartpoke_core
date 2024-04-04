@@ -11,6 +11,7 @@ import com.smartpoke.api.feature.product.model.Allergen;
 import com.smartpoke.api.feature.product.model.Product;
 import com.smartpoke.api.feature.product.repository.ProductRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
@@ -32,22 +33,25 @@ public class ProductService implements IProductService{
     private CategoryService categoryService;
     @Autowired
     private AllergenService allergenService;
+    @Autowired
+    RedisTemplate<String, Object> redisTemplate;
+    private static final String PRODUCT_CACHE_KEY = "Product:";
 
     @Override
     @Transactional
-    public ProductDto createProduct(ProductDto product) {
-        return new ProductDto(this.saveProduct(product.toEntity()));
+    public Product createProduct(Product product) {
+        return this.saveProduct(product);
     }
 
     @Override
     public Product saveProduct(Product product) {
-        Optional<Product> productOptional = Optional.empty();
+        Product productOptional = null;
         if (product.getEan() != null) {
-            productOptional = productRepository.findByEan(product.getEan());
+            productOptional = findByEan(product.getEan());
         }
 
-        if (productOptional.isPresent()) {
-            return productOptional.get();
+        if (productOptional != null) {
+            return productOptional;
         }
 
         List<Tag> updatedTags = new ArrayList<>();
@@ -78,54 +82,57 @@ public class ProductService implements IProductService{
     }
 
     @Override
-    public ProductDto updateProduct(String ean, ProductDto product) {
+    public Product updateProduct(String ean, Product product) {
         if (productRepository.existsByEan(ean)) {
             product.setEan(ean);
-            return new ProductDto(productRepository.save(product.toEntity()));
+            return productRepository.save(product);
         } else {
             return null;
         }
     }
 
     @Override
-    public List<ProductDto> getAll() {
-        return productRepository.findAll().stream().map(ProductDto::new).collect(Collectors.toList());
+    public List<Product> getAll() {
+        return productRepository.findAll();
     }
 
     @Override
     @Transactional(propagation = Propagation.REQUIRES_NEW)
-    public List<ProductDto> saveAll(List<ProductDto> products) {
-        List<Product> productsEntity = products.stream().map(ProductDto::toEntity).toList();
-        return this.saveAllProducts(productsEntity);
+    public List<Product> saveAll(List<Product> products) {
+        return this.saveAllProducts(products);
     }
 
     @Override
-    public ProductDto findById(String id) {
-        return new ProductDto(productRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Product not found")));
+    public Product findById(Long id) {
+        Product product = getProductFromCache(id);
+        if (product == null) {
+            product = productRepository.findById(id).orElseThrow(() -> new RuntimeException("Producto no encontrado"));
+            saveProductInCache(id, product);
+        }
+        return product;
     }
 
     @Override
-    public ProductDto findByEan(String ean) {
-        return new ProductDto(productRepository.findByEan(ean).orElseThrow(() -> new ResourceNotFoundException("Product not found")));
+    public Product findByEan(String ean) {
+        return productRepository.findByEan(ean).orElseThrow(() -> new ResourceNotFoundException("Product not found"));
     }
 
     @Override
-    public List<ProductDto> saveAllProducts(List<Product> products) {
-        List<Product> productsEntity = products.stream().map(this::saveProduct).toList();
-        return productsEntity.stream().map(ProductDto::new).toList();
+    public List<Product> saveAllProducts(List<Product> products) {
+        return products.stream().map(this::saveProduct).toList();
     }
 
     @Override
     @Scheduled(cron = "0 0 0 ? * SUN")
-    public List<ProductDto> syncProducts() {
+    public List<Product> syncProducts() {
         List<Product> products = openFoodFactsClient.syncProducts();
         return saveAllProducts(products);
     }
 
     @Override
-    public ProductDto fetchProductDetails(String barcode) {
+    public Product fetchProductDetails(String barcode) {
         Product product =  openFoodFactsClient.fetchProductDetails(barcode);
-        return new ProductDto(this.saveProduct(product));
+        return this.saveProduct(product);
     }
 
     @Override
@@ -139,5 +146,14 @@ public class ProductService implements IProductService{
         product.setName(productName);
         product.setBrand("Generic");
         return this.saveProduct(product);
+    }
+
+    @Override
+    public void saveProductInCache(Long id, Product product) {
+        redisTemplate.opsForValue().set(PRODUCT_CACHE_KEY + id, product);
+    }
+    @Override
+    public Product getProductFromCache(Long id) {
+        return (Product) redisTemplate.opsForValue().get(PRODUCT_CACHE_KEY + id);
     }
 }

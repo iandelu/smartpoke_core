@@ -19,31 +19,35 @@ public class ProductController{
 
     @GetMapping
     public ResponseEntity<List<ProductDto>> getAllProducts(){
-        return ResponseEntity.ok().body(productService.getAll());
+        List<ProductDto> products = productService.getAll().stream().map(ProductDto::new).toList();
+        return ResponseEntity.ok().body(products);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<ProductDto> getProduct(@PathVariable String id){
-        return ResponseEntity.ok().body(productService.findById(id));
+    public ResponseEntity<ProductDto> getProduct(@PathVariable Long id){
+        ProductDto product = new ProductDto(productService.findById(id));
+        return ResponseEntity.ok().body(product);
     }
 
     @PostMapping
     public ResponseEntity<ProductDto> createProduct(@RequestBody ProductDto product){
-        return ResponseEntity.status(HttpStatus.CREATED).body(productService.createProduct(product));
+        ProductDto productDto = new ProductDto(productService.createProduct(product.toEntity()));
+        return ResponseEntity.status(HttpStatus.CREATED).body(productDto);
     }
 
     @PutMapping("/{id}")
     public ResponseEntity<ProductDto> updateProduct(@PathVariable String id, @RequestBody ProductDto product){
-        return ResponseEntity.ok().body(productService.updateProduct(id, product));
+        ProductDto productDto = new ProductDto(productService.updateProduct(id, product.toEntity()));
+        return ResponseEntity.ok().body(productDto);
     }
 
     @DeleteMapping("/{id}")
-    public void deleteProduct(@PathVariable String id){productService.deleteUser(id);}
+    public void deleteProduct(@PathVariable String id){throw new UnsupportedOperationException("Not implemented yet");}
 
     @GetMapping("/syncOpenFoodFacts")
     public ResponseEntity<String> syncOpenFoodFacts(){
         try{
-            List<ProductDto> products = productService.syncProducts();
+            List<ProductDto> products = productService.syncProducts().stream().map(ProductDto::new).toList();
             return ResponseEntity.ok().body("Initializing Sync openfoodfacts data manually\n"+products.toString());
         }catch (RuntimeException e){
             return ResponseEntity.internalServerError().body("An error has occurred"+e.getMessage());
@@ -53,7 +57,8 @@ public class ProductController{
 
     @GetMapping("/fetchProductInfo/{barcode}")
     public ResponseEntity<ProductDto> fetchProductInfo(@PathVariable String barcode){
-        return ResponseEntity.ok().body(productService.fetchProductDetails(barcode));
+        ProductDto productDto = new ProductDto(productService.fetchProductDetails(barcode));
+        return ResponseEntity.ok().body(productDto);
     }
 
 }
