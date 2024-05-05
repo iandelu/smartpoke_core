@@ -1,4 +1,4 @@
-package com.smartpoke.api.integrations.RecipeScrapers;
+package com.smartpoke.api.integrations.RecipeScrapers.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
