@@ -1,6 +1,6 @@
 package com.smartpoke.api.feature.recipe.controller;
 
-import com.smartpoke.api.integrations.RecipeScrapers.UrlDto;
+import com.smartpoke.api.integrations.RecipeScrapers.dto.UrlDto;
 import com.smartpoke.api.feature.recipe.dto.RecipeDto;
 import com.smartpoke.api.feature.recipe.dto.RecipeMapper;
 import com.smartpoke.api.feature.recipe.model.Recipe;

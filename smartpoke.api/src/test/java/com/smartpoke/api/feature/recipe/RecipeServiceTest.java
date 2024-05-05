@@ -14,8 +14,6 @@ public class RecipeServiceTest {
     @InjectMocks
     private RecipeService recipeService;
 
-    @Test
-
 
 
 }

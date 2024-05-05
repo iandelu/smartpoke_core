@@ -1,6 +1,7 @@
 package com.smartpoke.api.integrations.RecipeScrapers;
 
 import com.smartpoke.api.integrations.RecipeScrapers.dto.RecipeScrapDto;
+import com.smartpoke.api.integrations.RecipeScrapers.dto.UrlDto;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;

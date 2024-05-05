@@ -66,7 +66,7 @@ public class IngredientProcessor {
         RecipeProduct recipeProduct = new RecipeProduct();
         recipeProduct.setText(ingredientStr);
 
-        String[] tokens = this.tokenizeIngredient(ingredientStr);
+        String[] tokens = NormalizerUtils.tokenizeIngredient(ingredientStr);
 
         Double amount = null;
         String unit = null;
@@ -97,20 +97,10 @@ public class IngredientProcessor {
         //We set the amount, unit and ingredient
         recipeProduct.setAmount(amount);
         recipeProduct.setUnitOfMeasure(unitOfMeasureService.findOrCreateNewUnitOfMeasure(unit));
-        recipeProduct.setProduct(productService.saveProduct(product));
+        recipeProduct.setProduct(productService.createProduct(product));
 
         return recipeProduct;
     }
 
-    private String[] tokenizeIngredient(String ingredientStr) {
-        String[] tokens = ingredientStr.replace("-", " ").split("\\s+");
-        return Arrays.stream(tokens).map(this::normalizeIngredient).toArray(String[]::new);
-    }
 
-    private String normalizeIngredient(String ingredientStr) {
-        //We normalize the ingredient text
-        String normalizedIngredient = NormalizerUtils.normalize(ingredientStr);
-        //We singularize the ingredient text
-        return SingularizerUtils.toSingular(normalizedIngredient);
-    }
 }
