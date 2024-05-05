@@ -1,6 +1,8 @@
 package com.smartpoke.api.feature.product.service;
 
 import com.smartpoke.api.common.exceptions.ResourceNotFoundException;
+import com.smartpoke.api.common.utils.IngredientProcessor;
+import com.smartpoke.api.common.utils.NormalizerUtils;
 import com.smartpoke.api.feature.category.model.Category;
 import com.smartpoke.api.feature.category.model.Tag;
 import com.smartpoke.api.feature.category.service.CategoryService;
@@ -40,22 +42,17 @@ public class ProductService implements IProductService{
     @Override
     @Transactional
     public Product createProduct(Product product) {
-        return this.saveProduct(product);
-    }
-
-    @Override
-    public Product saveProduct(Product product) {
         Product productOptional = null;
+        List<Tag> updatedTags = new ArrayList<>();
+        Set<Allergen> updatedAllergens = new HashSet<>();
+
         if (product.getEan() != null) {
-            productOptional = findByEan(product.getEan());
+            productOptional = productRepository.findByEan(product.getEan()).orElseGet(() -> null);
         }
 
         if (productOptional != null) {
             return productOptional;
         }
-
-        List<Tag> updatedTags = new ArrayList<>();
-        Set<Allergen> updatedAllergens = new HashSet<>();
 
         if (product.getCategory() != null) {
             Category category = categoryService.saveCategory(product.getCategory().getName(), product.getCategory().getEmoji(), product.getCategory().getLan());
@@ -75,10 +72,18 @@ public class ProductService implements IProductService{
                 updatedAllergens.add(allergenEntity);
             }
 
+        String[] tokens = NormalizerUtils.tokenizeIngredient(product.getName());
+        Product genericProduct = this.findOrCreateProduct(tokens);
+        product.setGenericProduct(genericProduct);
+
         product.setTags(updatedTags);
         product.setAllergens(updatedAllergens);
-        product = productRepository.save(product);
-        return product;
+        return this.saveProduct(product);
+    }
+
+    @Override
+    public Product saveProduct(Product product) {
+        return productRepository.save(product);
     }
 
     @Override
@@ -132,7 +137,7 @@ public class ProductService implements IProductService{
     @Override
     public Product fetchProductDetails(String barcode) {
         Product product =  openFoodFactsClient.fetchProductDetails(barcode);
-        return this.saveProduct(product);
+        return this.createProduct(product);
     }
 
     @Override

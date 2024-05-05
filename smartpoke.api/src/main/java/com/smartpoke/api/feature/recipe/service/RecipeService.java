@@ -43,7 +43,6 @@ public class RecipeService implements IRecipeService{
     @Autowired
     private IngredientProcessor ingredientProcessor;
 
-
     @Override
     public RecipeDto createRecipe(Recipe recipe) {
         return RecipeMapper.toDto(recipeRepository.save(recipe));
@@ -152,8 +151,13 @@ public class RecipeService implements IRecipeService{
     public List<RecipeDto> createRecipeListFromUrl(List<String> urls) {
         List<Recipe> recipeListEntity = new ArrayList<>();
         urls.forEach( url -> {
-            Recipe newRecipe = createRecipeFromUrl(url);
-            recipeListEntity.add(newRecipe);
+            try{
+                Recipe newRecipe = createRecipeFromUrl(url);
+                recipeListEntity.add(newRecipe);
+            }catch (ResourceNotFoundException e) {
+                System.out.println(e.getMessage());
+            }
+
         });
         return recipeRepository.saveAll(recipeListEntity).stream()
                 .map(RecipeMapper::toDto)

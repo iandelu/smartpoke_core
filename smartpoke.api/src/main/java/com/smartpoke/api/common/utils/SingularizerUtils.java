@@ -3,7 +3,11 @@ import edu.stanford.nlp.simple.*;
 
 public class SingularizerUtils {
     public static String toSingular(String word) {
+        if (word == null || word.isEmpty()) {
+            return "";
+        }
         Sentence sent = new Sentence(word);
-        return sent.lemma(0);
+        String lemma = sent.lemma(0); // Asumiendo que cada input es una palabra
+        return lemma;
     }
 }

@@ -67,4 +67,8 @@ public class Product {
             }
     )
     private Set<Allergen> allergens;
+
+    @ManyToOne
+    @JoinColumn(name = "generic_product")
+    private Product genericProduct;
 }

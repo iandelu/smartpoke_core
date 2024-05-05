@@ -12,7 +12,7 @@ import org.springframework.stereotype.Repository;
 public interface RecipeRepository extends JpaRepository<Recipe, Long> {
 
     Page<Recipe> findByDifficultyEnum(DifficultyEnum difficult, Pageable pageable);
-    @Query(value = "SELECT * FROM GetRecipesByCriteria(:searchTerm)", nativeQuery = true)
+    @Query(value = "SELECT * FROM get_recipes_by_criteria(:searchTerm)", nativeQuery = true)
     Page<Recipe> findByNameContaining(String searchTerm, Pageable pageable);
 
 

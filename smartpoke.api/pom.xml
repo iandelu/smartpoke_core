@@ -96,6 +96,13 @@
 			<artifactId>stanford-corenlp</artifactId>
 			<version>4.5.6</version>
 		</dependency>
+
+		<dependency>
+			<groupId>edu.stanford.nlp</groupId>
+			<artifactId>stanford-corenlp</artifactId>
+			<version>4.5.6</version>
+			<classifier>models</classifier>
+		</dependency>
 		<!-- Spring Data Redis -->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
