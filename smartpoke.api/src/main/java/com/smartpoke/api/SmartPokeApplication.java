@@ -6,7 +6,6 @@ import org.springframework.context.annotation.ComponentScan;
 
 @SpringBootApplication
 public class SmartPokeApplication {
-
 	public static void main(String[] args) {
 		SpringApplication.run(SmartPokeApplication.class, args);
 	}

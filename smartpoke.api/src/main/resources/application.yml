@@ -2,19 +2,59 @@ server:
   port: 8082
 
 spring:
+  redis:
+    host: localhost
+    port: 6379
   datasource:
     url: jdbc:postgresql://ep-cold-hall-15535769.eu-central-1.aws.neon.fl0.io:5432/smartpoke-api?sslmode=require
     username: fl0user
     password: zP8YMnE5eAtZ
+    driver-class-name: org.postgresql.Driver
   jpa:
+    show-sql: true
     hibernate:
       ddl-auto: update
-    show-sql: true
+      format_sql: true
+    properties:
+      hibernate:
+        format_sql: true
+    datasource: postgresql
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
 
   application:
     name: smartpoke-api
 
+
+#SpringDoc
+springdoc:
+  api-docs:
+    enabled: true
+  swagger-ui.path: /doc/swagger-ui.html
+  pathsToMatch: /api/**
+
+
+#Info de jwt
+jwt:
+  expirationDays: 360
+  accessTokenSecret: "b9901efb0161f2dd4c0537d5d7a3c53581025056703af925c8a40c5af114483b"
+
+#DATOS NECESARIOS PARA CONSUMIR LA API DE OPENFOODFACTS.ORG
 openfoodfacts:
   product-url: "https://world.openfoodfacts.org/api/v2/product/%s?fields=%s"
-  filter: "?fields=product_name,code,allergens_tags,allergens,image_front_url,brands,id,product_name,ingredients_text,nutriments,countries,labels,nutrition_grades,categories,categories_tags,generic_name,image_front_small_url,ingredients_hierarchy,ingredients_tags,ingredients_original_tags,ingredients_text_es,quantity"
+  filter: "?fields=product_name,code,allergens_tags,allergens,traces_hierarchy,image_front_url,brands,id,product_name,ingredients_text,nutriments,countries,labels,nutrition_grades,categories,categories_tags,generic_name,image_front_small_url,ingredients_hierarchy,ingredients_tags,ingredients_original_tags,ingredients_text_es,quantity"
   supermarket-url: "https://api.openfoodfacts.org/api/v2/search?stores_tags=%s&fields=%s&page=%d"
+
+recipeScraper:
+  server-url: "http://localhost:5000/scrape"
+
+
+#LISTA DE SUPERMERCADOS DE LOS QUE COJE LOS PRODUCTOS
+supermarkets:
+  - mercadona
+  - carrefour
+  - alcampo
+
+spring.servlet.multipart:
+  max-file-size: 2MB
+  max-request-size: 2MB
+
