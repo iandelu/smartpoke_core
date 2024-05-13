@@ -46,12 +46,11 @@ public class ProductService implements IProductService{
         List<Tag> updatedTags = new ArrayList<>();
         Set<Allergen> updatedAllergens = new HashSet<>();
 
-        if (product.getEan() != null) {
-            productOptional = productRepository.findByEan(product.getEan()).orElseGet(() -> null);
-        }
-
-        if (productOptional != null) {
-            return productOptional;
+        if (product.getEan() != null && product.getDescription() != null) {
+            productOptional = productRepository.findByEanOrName(product.getEan(), product.getDescription()).orElseGet(() -> null);
+            if (productOptional != null) {
+                return productOptional;
+            }
         }
 
         if (product.getCategory() != null) {
@@ -59,12 +58,9 @@ public class ProductService implements IProductService{
             product.setCategory(category);
         }
 
-        if (product.getTags() != null)
-            for (Tag tag : product.getTags()) {
-                Tag tagEntity = tagService.saveTag(tag.getName(), tag.getLan());
-                updatedTags.add(tagEntity);
-
-            }
+        if (product.getTags() != null){
+            tagService.saveAllTags(product.getTags());
+        }
 
         if (product.getAllergens() != null)
             for (Allergen allergen : product.getAllergens()){
@@ -72,12 +68,15 @@ public class ProductService implements IProductService{
                 updatedAllergens.add(allergenEntity);
             }
 
-        String[] tokens = NormalizerUtils.tokenizeIngredient(product.getName());
-        Product genericProduct = this.findOrCreateProduct(tokens);
-        product.setGenericProduct(genericProduct);
-
         product.setTags(updatedTags);
         product.setAllergens(updatedAllergens);
+
+        //Relation with generic product
+        if(!product.getBrand().equals("Generic")) {
+            String[] tokens = NormalizerUtils.tokenizeIngredient(product.getName());
+            Product genericProduct = this.findOrCreateProduct(tokens);
+            product.setGenericProduct(genericProduct);
+        }
         return this.saveProduct(product);
     }
 

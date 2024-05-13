@@ -13,7 +13,6 @@ import lombok.Data;
 public class Review {
     @Id
     Long id;
-
     Double rating;
     String comment;
     String picture;

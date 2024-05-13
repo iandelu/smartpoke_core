@@ -9,7 +9,8 @@ import java.util.Optional;
 
 public interface ProductRepository extends JpaRepository<Product, Long> {
     Optional<Product> findByName(String name);
-    Optional<Product> findByEan(String name);
+    Optional<Product> findByEan(String ean);
+    Optional<Product> findByEanOrName(@Param("ean")String ean, @Param("name") String name);
 
     Optional<Product> findMostSimilarByName(String name);
     @Query(value = "SELECT * FROM search_product_by_description(:searchQuery)", nativeQuery = true)

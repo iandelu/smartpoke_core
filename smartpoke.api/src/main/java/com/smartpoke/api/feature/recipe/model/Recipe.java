@@ -1,6 +1,7 @@
 package com.smartpoke.api.feature.recipe.model;
 
 import com.smartpoke.api.feature.category.model.Category;
+import com.smartpoke.api.feature.reviews.model.Review;
 import com.smartpoke.api.feature.user.model.User;
 import jakarta.persistence.*;
 import lombok.Data;
@@ -58,6 +59,9 @@ public class Recipe {
     @ManyToOne
     @JoinColumn(name = "creatorId", referencedColumnName = "id", insertable = false, updatable = false)
     private User user;
+
+    @OneToMany(mappedBy = "recipe", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private List<Review> reviews;
 
     @PrePersist
     protected void onCreate() {
