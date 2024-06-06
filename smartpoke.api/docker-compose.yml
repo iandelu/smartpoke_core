@@ -1,0 +1,12 @@
+version: '3.9'
+
+services:
+  java_app:
+    build: .
+    container_name: java_service
+    ports:
+      - "8080:8080"
+    environment:
+      - DB_URL=jdbc:postgresql://smartpoke-v1.cruc8oiyeu1c.eu-west-3.rds.amazonaws.com:5432/postgres
+      - DB_USERNAME=postgres
+      - DB_PASSWORD=smartpoke
