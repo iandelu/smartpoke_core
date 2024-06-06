@@ -10,11 +10,11 @@
 	</parent>
 	<groupId>com.smartpoke</groupId>
 	<artifactId>smartpoke.api</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
-	<name>smartpoke.api</name>
-	<description>Smartpoke api</description>
+	<version>0.0.1</version>
+	<name>smartpoke_api</name>
+	<description>Application in backend to consume this information from frontend</description>
 	<properties>
-		<java.version>17</java.version>
+		<java.version>21</java.version>
 	</properties>
 	<dependencies>
 		<dependency>
@@ -109,6 +109,28 @@
 			<artifactId>spring-boot-starter-data-redis</artifactId>
 		</dependency>
     </dependencies>
+	<profiles>
+		<profile>
+			<id>dev</id>
+			<properties>
+				<profileActive>dev</profileActive>
+				<build.profile.id>dev</build.profile.id>
+			</properties>
+			<activation>
+				<activeByDefault>true</activeByDefault>
+			</activation>
+		</profile>
+		<profile>
+			<id>prod</id>
+			<properties>
+				<profileActive>prod</profileActive>
+				<build.profile.id>prod</build.profile.id>
+			</properties>
+			<activation>
+				<activeByDefault>false</activeByDefault>
+			</activation>
+		</profile>
+	</profiles>
 
 	<build>
 		<plugins>
