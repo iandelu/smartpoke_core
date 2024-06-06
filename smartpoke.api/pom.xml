@@ -9,7 +9,7 @@
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>com.smartpoke</groupId>
-	<artifactId>smartpoke.api</artifactId>
+	<artifactId>smartpoke_api</artifactId>
 	<version>0.0.1</version>
 	<name>smartpoke_api</name>
 	<description>Application in backend to consume this information from frontend</description>
