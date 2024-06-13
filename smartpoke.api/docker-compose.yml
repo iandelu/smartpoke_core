@@ -20,7 +20,7 @@ services:
     depends_on:
       - postgres_db  # Este servicio depende de postgres_db
     ports:
-      - "8080:8080"
+      - "8082:8082"
     environment:
       - DB_URL=jdbc:postgresql://postgres_db:5432/postgres
       - DB_USERNAME=postgres
