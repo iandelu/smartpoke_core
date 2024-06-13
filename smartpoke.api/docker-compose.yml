@@ -12,6 +12,11 @@ services:
       - "5432:5432"
     volumes:
       - pgdata:/var/lib/postgresql/data  # Persistencia de datos
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U postgres" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
 
   java_app:
     build: .
@@ -25,6 +30,7 @@ services:
       - DB_URL=jdbc:postgresql://postgres_db:5432/postgres
       - DB_USERNAME=postgres
       - DB_PASSWORD=smartpokeprod
+    entrypoint: ["./wait-for-it.sh", "postgres_db:5432", "--timeout=60", "--", "java", "-jar", "your-application.jar"]
 
 volumes:
   pgdata:  # Volumen para persistencia de datos de PostgreSQL
