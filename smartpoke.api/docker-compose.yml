@@ -30,7 +30,6 @@ services:
       - DB_URL=jdbc:postgresql://postgres_db:5432/postgres
       - DB_USERNAME=postgres
       - DB_PASSWORD=smartpokeprod
-    entrypoint: ["./wait-for-it.sh", "postgres_db:5432", "--timeout=60", "--", "java", "-jar", "your-application.jar"]
 
 volumes:
   pgdata:  # Volumen para persistencia de datos de PostgreSQL
