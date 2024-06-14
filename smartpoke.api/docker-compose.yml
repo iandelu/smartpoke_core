@@ -1,0 +1,35 @@
+version: '3.8'  # Especifica la versión de Compose
+
+services:
+  postgres_db:
+    image: postgres:latest  # Imagen de PostgreSQL
+    container_name: postgres_service
+    environment:
+      - POSTGRES_DB=postgres
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=smartpokeprod
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data  # Persistencia de datos
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U postgres" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  java_app:
+    build: .
+    image: smartpoke_api  # Imagen de tu aplicación Java
+    container_name: java_service
+    depends_on:
+      - postgres_db  # Este servicio depende de postgres_db
+    ports:
+      - "8082:8082"
+    environment:
+      - DB_URL=jdbc:postgresql://postgres_db:5432/postgres
+      - DB_USERNAME=postgres
+      - DB_PASSWORD=smartpokeprod
+
+volumes:
+  pgdata:  # Volumen para persistencia de datos de PostgreSQL
