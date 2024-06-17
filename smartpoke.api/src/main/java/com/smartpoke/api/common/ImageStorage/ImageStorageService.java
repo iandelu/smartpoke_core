@@ -27,7 +27,7 @@ public class ImageStorageService {
 
     public static byte[] dowloadImage(String data) {
         try {
-            if (data.startsWith("FILE:")) {
+            if (data!= null && data.startsWith("FILE:")) {
                 return downloadFileFromStorage((data.substring(5)));
             } else {
                 return downloadImageFromUrl(data);

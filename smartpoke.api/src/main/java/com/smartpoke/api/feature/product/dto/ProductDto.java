@@ -81,6 +81,7 @@ public class ProductDto implements IProductDto{
 
         if (this.productNutrients != null) {
             productNutrients.setEan(this.ean);
+            entity.setProductNutrients(productNutrients);
         }
 
         List<Tag> tags = new ArrayList<>();

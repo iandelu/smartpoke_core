@@ -59,17 +59,17 @@ public class ProductService implements IProductService{
         }
 
         if (product.getTags() != null){
-            tagService.saveAllTags(product.getTags());
+            updatedTags = tagService.saveAllTags(product.getTags());
+            product.setTags(updatedTags);
         }
 
-        if (product.getAllergens() != null)
+        if (product.getAllergens() != null){
             for (Allergen allergen : product.getAllergens()){
                 Allergen allergenEntity = allergenService.saveAllergen(allergen.getName(), allergen.getLan());
                 updatedAllergens.add(allergenEntity);
             }
-
-        product.setTags(updatedTags);
-        product.setAllergens(updatedAllergens);
+            product.setAllergens(updatedAllergens);
+        }
 
         //Relation with generic product
         if(!product.getBrand().equals("Generic")) {

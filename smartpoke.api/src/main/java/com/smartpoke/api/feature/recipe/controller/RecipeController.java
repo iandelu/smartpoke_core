@@ -60,8 +60,8 @@ public class RecipeController {
 
     @GetMapping("load_base")
     public ResponseEntity<List<RecipeDto>> loadRecipeBase(){
-        List<RecipeDto> recipe = recipeService.loadRecipeBase();
-        return ResponseEntity.status(HttpStatus.CREATED).body(recipe);
+        List<RecipeDto> recipes = recipeService.loadRecipeBase();
+        return ResponseEntity.status(HttpStatus.CREATED).body(recipes);
     }
 
     @PutMapping("/{id}")

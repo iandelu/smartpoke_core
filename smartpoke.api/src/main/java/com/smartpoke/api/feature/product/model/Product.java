@@ -34,8 +34,14 @@ public class Product {
     private String picture;
     private LocalDateTime lastUpdate;
 
-    @ManyToOne
-    @JoinColumn(name = "category_id")
+    private String maingroup;
+    private String subgroup;
+    private String status;
+    private String details;
+
+
+    @ManyToOne(targetEntity = Category.class)
+    @JoinColumn(name = "category_id", referencedColumnName = "id")
     private Category category;
     private String keywords;
 

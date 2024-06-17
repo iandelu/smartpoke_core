@@ -152,14 +152,13 @@ public class RecipeService implements IRecipeService{
         List<Recipe> recipeListEntity = new ArrayList<>();
         urls.forEach( url -> {
             try{
-                Recipe newRecipe = createRecipeFromUrl(url);
-                recipeListEntity.add(newRecipe);
+                recipeListEntity.add(this.createRecipeFromUrl(url));
             }catch (ResourceNotFoundException e) {
                 System.out.println(e.getMessage());
             }
 
         });
-        return recipeRepository.saveAll(recipeListEntity).stream()
+        return recipeListEntity.stream()
                 .map(RecipeMapper::toDto)
                 .toList();
     }

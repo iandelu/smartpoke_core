@@ -18,7 +18,4 @@ public class Category {
     private String lan;
     private String emoji;
 
-    @OneToMany(mappedBy = "category", fetch = FetchType.LAZY)
-    private Set<Product> products;
-
 }

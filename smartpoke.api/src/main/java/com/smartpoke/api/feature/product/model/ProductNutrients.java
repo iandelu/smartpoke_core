@@ -10,7 +10,6 @@ import lombok.EqualsAndHashCode;
 @Data
 public class ProductNutrients extends Nutrients {
     @Id
-    private Integer idProduct;
     private String ean;
     private Integer amount;
     private Integer calories;
