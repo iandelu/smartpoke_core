@@ -35,6 +35,13 @@ public class ProductController{
         return ResponseEntity.status(HttpStatus.CREATED).body(productDto);
     }
 
+    @PostMapping("/bulk")
+    public ResponseEntity<List<ProductDto>> createProducts(@RequestBody List<ProductDto> products){
+        if (products == null ||products.isEmpty() ) throw new IllegalArgumentException("No products to create");
+        List<ProductDto> updated = products.stream().map(product -> new ProductDto(productService.createProduct(product.toEntity()))).toList();
+        return ResponseEntity.status(HttpStatus.CREATED).body(updated);
+    }
+
     @PutMapping("/{id}")
     public ResponseEntity<ProductDto> updateProduct(@PathVariable String id, @RequestBody ProductDto product){
         ProductDto productDto = new ProductDto(productService.updateProduct(id, product.toEntity()));

@@ -10,6 +10,8 @@ import lombok.EqualsAndHashCode;
 @Data
 public class ProductNutrients extends Nutrients {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Integer id;
     private String ean;
     private Integer amount;
     private Integer calories;
@@ -44,4 +46,6 @@ public class ProductNutrients extends Nutrients {
     private Double thiamin;   // milligrams
     private Double niacin;    // milligrams
 
+    @OneToOne(mappedBy = "productNutrients")
+    private Product product;
 }

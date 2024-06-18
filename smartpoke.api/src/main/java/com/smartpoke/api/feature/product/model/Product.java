@@ -45,8 +45,8 @@ public class Product {
     private Category category;
     private String keywords;
 
-    @OneToOne(cascade=CascadeType.ALL)
-    @PrimaryKeyJoinColumn(name = "ean")
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "nutrients_id", referencedColumnName = "id")
     private ProductNutrients productNutrients;
 
     @ManyToMany(cascade = {
