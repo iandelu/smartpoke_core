@@ -9,6 +9,7 @@ import lombok.Data;
 @Builder
 public class UserDto {
 
+    private Long id;
     private String firstName;
     private String lastName;
     private String email;
@@ -22,6 +23,7 @@ public class UserDto {
 
     public User toEntity() {
         return User.builder()
+                .id(id)
                 .firstName(firstName)
                 .lastName(lastName)
                 .email(email)
@@ -35,6 +37,7 @@ public class UserDto {
     }
     public static UserDto fromEntity(User user) {
         return UserDto.builder()
+                .id(user.getId())
                 .firstName(user.getFirstName())
                 .lastName(user.getLastName())
                 .email(user.getEmail())
