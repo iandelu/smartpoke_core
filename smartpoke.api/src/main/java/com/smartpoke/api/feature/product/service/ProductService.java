@@ -74,7 +74,8 @@ public class ProductService implements IProductService{
         //Relation with generic product
         if(!product.getBrand().equals("Generic")) {
             String[] tokens = NormalizerUtils.tokenizeIngredient(product.getName());
-            Product genericProduct = this.findOrCreateProduct(tokens);
+            String tokensString = String.join(" ", tokens);
+            Product genericProduct = this.findOrCreateProduct(tokensString);
             product.setGenericProduct(genericProduct);
         }
         return this.saveProduct(product);
@@ -140,7 +141,7 @@ public class ProductService implements IProductService{
     }
 
     @Override
-    public Product findOrCreateProduct(String[] tokens) {
+    public Product findOrCreateProduct(String tokens) {
         return productRepository.findMostSimilarByName(tokens)
                 .orElseGet(() -> createNewGenericProduct(String.join(" ", tokens)));
     }

@@ -16,7 +16,7 @@ public interface IProductService {
     List<Product> saveAllProducts(List<Product> products);
     List<Product> syncProducts();
     Product fetchProductDetails(String barcode);
-    Product findOrCreateProduct(String[] tokens);
+    Product findOrCreateProduct(String tokens);
     void saveProductInCache(Long id, Product product);
     Product getProductFromCache(Long id);
 }

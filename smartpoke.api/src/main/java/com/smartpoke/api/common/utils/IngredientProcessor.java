@@ -92,12 +92,12 @@ public class IngredientProcessor {
         recipeProduct.setIngredientName(ingredientName);
 
         //Buscar Producto en la base de datos TODO MEJORAR BUSQUEDA POR SIMILITUD
-        Product product = productService.findOrCreateProduct(ingredientTokens.toArray(new String[0]));
+        Product product = productService.findOrCreateProduct(ingredientName);
 
         //We set the amount, unit and ingredient
         recipeProduct.setAmount(amount);
         recipeProduct.setUnitOfMeasure(unitOfMeasureService.findOrCreateNewUnitOfMeasure(unit));
-        recipeProduct.setProduct(productService.createProduct(product));
+        recipeProduct.setProduct(product);
 
         return recipeProduct;
     }

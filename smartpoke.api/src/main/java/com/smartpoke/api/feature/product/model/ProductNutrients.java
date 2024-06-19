@@ -1,11 +1,12 @@
 package com.smartpoke.api.feature.product.model;//package com.raccoon.smartpoke.model.products;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.smartpoke.api.common.model.Nutrients;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
-@EqualsAndHashCode(callSuper = true)
+@EqualsAndHashCode(of = {"id", "name"})
 @Entity
 @Data
 public class ProductNutrients extends Nutrients {
@@ -47,5 +48,6 @@ public class ProductNutrients extends Nutrients {
     private Double niacin;    // milligrams
 
     @OneToOne(mappedBy = "productNutrients")
+    @JsonBackReference
     private Product product;
 }

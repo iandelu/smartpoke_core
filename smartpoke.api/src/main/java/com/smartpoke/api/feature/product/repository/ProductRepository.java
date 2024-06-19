@@ -13,7 +13,12 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
     Optional<Product> findByEanOrName(@Param("ean")String ean, @Param("name") String name);
 
     Optional<Product> findMostSimilarByName(String name);
-    @Query(value = "SELECT * FROM search_product_by_description(:searchQuery)", nativeQuery = true)
-    Optional<Product> findMostSimilarByName(@Param("searchQuery") String[] searchQuery);
+    @Query(value = "SELECT p.* " +
+            "FROM product p, " +
+            "     unnest(string_to_array(:tokens, ' ')) as token " +
+            "GROUP BY p.id " +
+            "ORDER BY avg(similarity(token, p.description)) DESC " +
+            "LIMIT 1", nativeQuery = true)
+    Optional<Product> findMostSimilarProduct(@Param("tokens") String tokens);
     boolean existsByEan(String ean);
 }
