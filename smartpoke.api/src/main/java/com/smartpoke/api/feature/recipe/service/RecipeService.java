@@ -85,6 +85,18 @@ public class RecipeService implements IRecipeService{
     }
 
     @Override
+    public Page<RecipeDto> getRecipesByCategory(int page, int size, String category) {
+        Pageable pageable = PageRequest.of(page, size);
+        Page<Recipe> recipePage = recipeRepository.findByCategoryName(category, pageable);
+
+        List<RecipeDto> dtoList = recipePage.stream()
+                .map(RecipeMapper::toDto)
+                .collect(Collectors.toList());
+
+        return new PageImpl<>(dtoList, pageable, recipePage.getTotalElements());
+    }
+
+    @Override
     public RecipeDto findById(Long id) {
         Recipe recipe = recipeRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Recipe not found"));
 

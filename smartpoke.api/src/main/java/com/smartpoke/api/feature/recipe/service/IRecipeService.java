@@ -23,4 +23,5 @@ public interface IRecipeService{
     Page<RecipeDto> getAllRecipes(int page, int size);
     Page<RecipeDto> getRecipesByDifficult(int page, int size, String difficult);
     Page<RecipeDto> searchRecipes(int page, int size, String name);
+    Page<RecipeDto> getRecipesByCategory(int page, int size, String category);
 }

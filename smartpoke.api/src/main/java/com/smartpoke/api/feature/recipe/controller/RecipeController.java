@@ -21,7 +21,9 @@ public class RecipeController {
     private RecipeService recipeService;
 
     @GetMapping
-    public ResponseEntity<Page<RecipeDto>> getAllRecipes(@RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "10") int size){
+    public ResponseEntity<Page<RecipeDto>> getAllRecipes(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size){
         return ResponseEntity.ok().body(recipeService.getAllRecipes(page, size));
     }
 
@@ -31,6 +33,14 @@ public class RecipeController {
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size) {
         return ResponseEntity.ok().body(recipeService.getRecipesByDifficult(page, size, difficult));
+    }
+
+    @GetMapping("/by_category/{category}")
+    public ResponseEntity<Page<RecipeDto>> getRecipesByCategory(
+            @PathVariable String category,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size) {
+        return ResponseEntity.ok().body(recipeService.getRecipesByCategory(page, size, category));
     }
 
 
