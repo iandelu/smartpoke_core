@@ -44,4 +44,15 @@ public class CategoryService implements ICategoryService
         };
         return categories.stream().map(CategoryDto::new).toList();
     }
+
+    public Category getCategory(String s) {
+        return categoryRepository.findByName(s.toLowerCase())
+                .orElseGet(() -> createNewCategory(s));
+    }
+    private Category createNewCategory(String s) {
+        Category category = new Category();
+        category.setName(s.toLowerCase());
+        category.setLan("es");
+        return categoryRepository.save(category);
+    }
 }

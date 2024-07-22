@@ -20,7 +20,7 @@ public class CategoryController {
     private CategoryService categoryService;
 
     @GetMapping("/{type}")
-    public ResponseEntity<List<CategoryDto>> getCategories(@PathVariable String type) {
+    public ResponseEntity<List<CategoryDto>> getCategories(@PathVariable(name = "type", required = false) String type) {
         return ResponseEntity.ok().body(categoryService.getCategoriesByType(type));
     }
 

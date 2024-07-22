@@ -1,13 +1,11 @@
 package com.smartpoke.api.feature.product.dto;
 
-import com.smartpoke.api.common.model.Nutrients;
 import com.smartpoke.api.feature.category.model.Category;
 import com.smartpoke.api.feature.category.model.Tag;
 import com.smartpoke.api.feature.product.model.Allergen;
 import com.smartpoke.api.feature.product.model.Product;
 import com.smartpoke.api.feature.product.model.ProductNutrients;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -33,7 +31,7 @@ public class ProductDto implements IProductDto{
     private LocalDateTime lastUpdate;
     private Category category;
     private String keywords;
-    private ProductNutrients productNutrients;
+    private ProductNutrients nutrients;
     private List<String> tags;
     private Set<AllergenDto> allergens;
 
@@ -55,7 +53,7 @@ public class ProductDto implements IProductDto{
         this.lastUpdate = product.getLastUpdate();
         this.category = product.getCategory();
         this.keywords = product.getKeywords();
-        this.productNutrients = product.getProductNutrients();
+        this.nutrients = product.getProductNutrients();
         this.tags = new ArrayList<>();
         product.getTags().forEach(tag -> this.tags.add(tag.getName()));
         this.allergens = new HashSet<>();
@@ -79,9 +77,9 @@ public class ProductDto implements IProductDto{
         entity.setCategory(this.category);
         entity.setKeywords(this.keywords);
 
-        if (this.productNutrients != null) {
-            productNutrients.setEan(this.ean);
-            entity.setProductNutrients(productNutrients);
+        if (this.nutrients != null) {
+            nutrients.setEan(this.ean);
+            entity.setProductNutrients(nutrients);
         }
 
         List<Tag> tags = new ArrayList<>();
