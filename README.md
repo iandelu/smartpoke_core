@@ -34,7 +34,7 @@
    Ejecuta el siguiente comando para crear un backup de la base de datos:
 
    ```sh
-   docker exec -t postgres-container pg_dump -U postgres -d postgres > backup.sql
+   docker exec -t postgres_service pg_dump -U postgres -d postgres > backup.sql  
    ```
 
    Esto creará un archivo `backup.sql` en tu directorio actual con el contenido de la base de datos `postgres`.
@@ -50,7 +50,7 @@
    En el nuevo equipo, inicia un contenedor de PostgreSQL:
 
    ```sh
-   docker run --name postgres-container -e POSTGRES_DB=postgres -e POSTGRES_USER=postgres -e POSTGRES_PASSWORD=tu_contraseña -d postgres
+      docker-compose up postgres_db   
    ```
 
 3. **Copiar el Backup al Contenedor**
@@ -58,7 +58,7 @@
    Copia el archivo `backup.sql` al contenedor:
 
    ```sh
-   docker cp backup.sql postgres-container:/backup.sql
+   docker cp backup.sql postgres_service:/backup.sql
    ```
 
 4. **Restaurar el Backup**
@@ -66,7 +66,7 @@
    Ingresa al contenedor:
 
    ```sh
-   docker exec -it postgres-container bash
+   docker exec -it postgres_service bash
    ```
 
    Dentro del contenedor, restaura la base de datos usando `psql`:
@@ -80,7 +80,7 @@
    Puedes verificar que la base de datos se ha restaurado correctamente conectándote a PostgreSQL y revisando los datos:
 
    ```sh
-   docker exec -it postgres-container psql -U postgres -d postgres
+   docker exec -it postgres_service psql -U postgres -d postgres
    ```
 
    Dentro de `psql`, puedes listar las tablas y revisar el contenido para asegurarte de que todo se haya restaurado correctamente.
