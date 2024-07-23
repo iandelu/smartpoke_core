@@ -40,6 +40,44 @@ public class NumberExtractor {
         return numbers;
     }
 
+    static public Double getDouble(String input) {
+        if (StringUtils.hasText(input)) {
+            Scanner scanner = new Scanner(input);
+            while (scanner.hasNext()) {
+                if (scanner.hasNextDouble()) {
+                    return scanner.nextDouble();
+                } else {
+                    scanner.next();
+                }
+            }
+        }
+        return null;
+    }
+
+    static public Double getDouble(String input, Double defaultValue) {
+        Double value = getDouble(input);
+        return value != null ? value : defaultValue;
+    }
+
+    static public Integer getInt(String input, Integer defaultValue) {
+        Integer value = getInt(input);
+        return value != null ? value : defaultValue;
+    }
+
+    static public Integer getInt(String input) {
+        if (StringUtils.hasText(input)) {
+            Scanner scanner = new Scanner(input);
+            while (scanner.hasNext()) {
+                if (scanner.hasNextInt()) {
+                    return scanner.nextInt();
+                } else {
+                    scanner.next();
+                }
+            }
+        }
+        return null;
+    }
+
     static public Double getDoublePosition(String input, Integer index) {
         Scanner scanner = new Scanner(input);
         List<Double> numbers = new ArrayList<>();

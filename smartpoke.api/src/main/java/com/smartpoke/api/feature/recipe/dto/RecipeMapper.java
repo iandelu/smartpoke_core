@@ -21,15 +21,15 @@ public class RecipeMapper {
         recipe.setId(dto.getId());
         recipe.setName(dto.getName());
         recipe.setDescription(dto.getDescription());
-        recipe.setPrepTime(dto.getPrepTime());
+        recipe.setPrepTime(dto.getTotalTime());
         recipe.setPrice(dto.getPrice());
-        recipe.setDiners(dto.getDiners());
+        recipe.setDiners(dto.getYields());
         recipe.setPicture(dto.getPictureUrl());
         recipe.setSource(dto.getSource());
         recipe.setLan(dto.getLan());
-        recipe.setRating(dto.getRating());
-        recipe.setDifficultyEnum(dto.getDifficultyEnum());
-        recipe.setNutrientsRecipe(dto.getNutrientsRecipe());
+        recipe.setRating(dto.getRatings());
+        recipe.setDifficultyEnum(dto.getDifficulty());
+        recipe.setNutrientsRecipe(dto.getNutrients());
         recipe.setRecipeSteps(dto.getRecipeSteps());
         recipe.setVideoUrl(dto.getVideoUrl());
         recipe.setViews(dto.getViews());
@@ -42,8 +42,8 @@ public class RecipeMapper {
         recipe.setCategories(dto.getCategories());
         recipe.setUser(dto.getUser());
 
-        if (dto.getPictureFile() != null && dto.getPictureFile().length > 0) {
-            String destination = ImageStorageService.storeImage(dto.getPictureFile());
+        if (dto.getImageFile() != null && dto.getImageFile().length > 0) {
+            String destination = ImageStorageService.storeImage(dto.getImageFile());
             recipe.setPicture(destination);
         }
 
@@ -55,18 +55,19 @@ public class RecipeMapper {
         dto.setId(entity.getId());
         dto.setName(entity.getName());
         dto.setDescription(entity.getDescription());
-        dto.setPrepTime(entity.getPrepTime());
+        dto.setTotalTime(entity.getPrepTime());
         dto.setPrice(entity.getPrice());
-        dto.setDiners(entity.getDiners());
+        dto.setYields(entity.getDiners());
         dto.setPictureUrl(entity.getPicture());
         dto.setSource(entity.getSource());
         dto.setLan(entity.getLan());
-        dto.setRating(entity.getRating());
-        dto.setDifficultyEnum(entity.getDifficultyEnum());
-        dto.setNutrientsRecipe(entity.getNutrientsRecipe());
+        dto.setRatings(entity.getRating());
+        dto.setDifficulty(entity.getDifficultyEnum());
+        dto.setNutrients(entity.getNutrientsRecipe());
         dto.setViews(entity.getViews());
         dto.setLastUpdateDate(entity.getLastUpdateDate());
         dto.setVideoUrl(entity.getVideoUrl());
+        dto.setImage(entity.getPicture());
 
         entity.getRecipeSteps().sort(Comparator.comparing(RecipeStep::getPosition));
         dto.setRecipeSteps(entity.getRecipeSteps());
@@ -78,7 +79,7 @@ public class RecipeMapper {
         dto.setUser(entity.getUser());
 
         byte[] pictureBytes = ImageStorageService.dowloadImage(entity.getPicture());
-        dto.setPictureFile(pictureBytes);
+        dto.setImageFile(pictureBytes);
 
         return dto;
     }
