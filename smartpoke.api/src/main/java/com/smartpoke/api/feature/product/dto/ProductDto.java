@@ -1,5 +1,6 @@
 package com.smartpoke.api.feature.product.dto;
 
+import com.smartpoke.api.common.model.Nutrients;
 import com.smartpoke.api.feature.category.model.Category;
 import com.smartpoke.api.feature.category.model.Tag;
 import com.smartpoke.api.feature.product.model.Allergen;
@@ -31,7 +32,7 @@ public class ProductDto implements IProductDto{
     private LocalDateTime lastUpdate;
     private Category category;
     private String keywords;
-    private ProductNutrients nutrients;
+    private Nutrients nutrients;
     private List<String> tags;
     private Set<AllergenDto> allergens;
 
@@ -53,7 +54,7 @@ public class ProductDto implements IProductDto{
         this.lastUpdate = product.getLastUpdate();
         this.category = product.getCategory();
         this.keywords = product.getKeywords();
-        this.nutrients = product.getProductNutrients();
+        this.nutrients = new Nutrients(product.getProductNutrients());
         this.tags = new ArrayList<>();
         product.getTags().forEach(tag -> this.tags.add(tag.getName()));
         this.allergens = new HashSet<>();
@@ -78,8 +79,7 @@ public class ProductDto implements IProductDto{
         entity.setKeywords(this.keywords);
 
         if (this.nutrients != null) {
-            nutrients.setEan(this.ean);
-            entity.setProductNutrients(nutrients);
+            entity.setProductNutrients(nutrients.toNutrientsProduct());
         }
 
         List<Tag> tags = new ArrayList<>();

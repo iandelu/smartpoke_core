@@ -1,6 +1,7 @@
 package com.smartpoke.api.feature.recipe.dto;
 
 import com.smartpoke.api.common.ImageStorage.ImageStorageService;
+import com.smartpoke.api.common.model.Nutrients;
 import com.smartpoke.api.common.utils.RecipeIngredientComparator;
 import com.smartpoke.api.feature.recipe.model.Recipe;
 import com.smartpoke.api.feature.recipe.model.RecipeProduct;
@@ -29,7 +30,7 @@ public class RecipeMapper {
         recipe.setLan(dto.getLan());
         recipe.setRating(dto.getRatings());
         recipe.setDifficultyEnum(dto.getDifficulty());
-        recipe.setNutrientsRecipe(dto.getNutrients());
+        recipe.setNutrientsRecipe(dto.getNutrients().toNutrientsRecipe());
         recipe.setRecipeSteps(dto.getRecipeSteps());
         recipe.setVideoUrl(dto.getVideoUrl());
         recipe.setViews(dto.getViews());
@@ -63,7 +64,7 @@ public class RecipeMapper {
         dto.setLan(entity.getLan());
         dto.setRatings(entity.getRating());
         dto.setDifficulty(entity.getDifficultyEnum());
-        dto.setNutrients(entity.getNutrientsRecipe());
+        dto.setNutrients(new Nutrients(entity.getNutrientsRecipe()));
         dto.setViews(entity.getViews());
         dto.setLastUpdateDate(entity.getLastUpdateDate());
         dto.setVideoUrl(entity.getVideoUrl());

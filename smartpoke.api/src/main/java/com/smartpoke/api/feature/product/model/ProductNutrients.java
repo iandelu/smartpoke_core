@@ -3,13 +3,15 @@ package com.smartpoke.api.feature.product.model;//package com.raccoon.smartpoke.
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.smartpoke.api.common.model.Nutrients;
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
 
 @EqualsAndHashCode(of = {"id", "name"})
 @Entity
 @Data
-public class ProductNutrients extends Nutrients {
+public class ProductNutrients{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
