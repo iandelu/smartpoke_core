@@ -16,7 +16,7 @@ public interface CategoryRepository extends JpaRepository<Category, Long> {
     @Query("SELECT DISTINCT c " +
             "FROM Product p " +
             "JOIN p.category c " +
-            "ORDER BY c.id")
+            "ORDER BY c.name")
     List<Category> findCategoriesInUseProduct();
 
     @Query("SELECT DISTINCT c FROM Recipe p " +
