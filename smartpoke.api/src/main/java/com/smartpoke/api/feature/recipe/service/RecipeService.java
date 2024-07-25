@@ -150,6 +150,10 @@ public class RecipeService implements IRecipeService{
     }
     public Recipe createRecipeFromUrl(String url, String wild) {
         try {
+            List<Recipe> foundedRecipes = recipeRepository.findBySource(url);//TODO: Replace Source for unique identifier
+            if (foundedRecipes != null && !foundedRecipes.isEmpty()) {
+                return foundedRecipes.getFirst();
+            }
             RecipeScrapDto recipeScrapDto = recipeScraperClient.getRecipeScraped(url, wild);
             if (recipeScrapDto!=null){
                 Recipe recipe = recipeScrapDto.toEntity();

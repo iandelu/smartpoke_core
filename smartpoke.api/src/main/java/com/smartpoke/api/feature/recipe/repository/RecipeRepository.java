@@ -10,6 +10,8 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 @Repository
 public interface RecipeRepository extends JpaRepository<Recipe, Long>, JpaSpecificationExecutor<Recipe> {
 
@@ -19,4 +21,6 @@ public interface RecipeRepository extends JpaRepository<Recipe, Long>, JpaSpecif
 
     @Query("SELECT r FROM Recipe r JOIN r.categories c WHERE c.name = :category ORDER BY r.id")
     Page<Recipe> findByCategoryName(@Param("category") String category, Pageable pageable);
+
+    List<Recipe> findBySource(String url);
 }
