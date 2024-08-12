@@ -8,6 +8,7 @@ import com.smartpoke.api.feature.auth.dto.LoginRequest;
 import com.smartpoke.api.feature.auth.dto.RegisterRequest;
 import com.smartpoke.api.common.exceptions.ResourceNotFoundException;
 import com.smartpoke.api.common.jwt.JwtService;
+import com.smartpoke.api.feature.user.dto.UserDto;
 import com.smartpoke.api.feature.user.model.User;
 import com.smartpoke.api.feature.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -41,6 +42,7 @@ public class AuthService {
 
         return AuthResponse.builder()
                 .token(jwtService.getToken(user))
+                .user(UserDto.fromEntity(user))
                 .build();
     }
 
@@ -63,6 +65,7 @@ public class AuthService {
         //Return the token
         return AuthResponse.builder()
                 .token(jwtService.getToken(user))
+                .user(UserDto.fromEntity(user))
                 .build();
     }
 }

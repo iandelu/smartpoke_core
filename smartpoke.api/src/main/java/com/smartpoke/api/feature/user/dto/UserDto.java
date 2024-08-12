@@ -21,6 +21,7 @@ public class UserDto {
     private UserInfoDto userinfo;
     private LocationDto location;
 
+
     public User toEntity() {
         return User.builder()
                 .id(id)
