@@ -6,7 +6,9 @@ import com.smartpoke.api.feature.category.model.Tag;
 import com.smartpoke.api.feature.product.model.Allergen;
 import com.smartpoke.api.feature.product.model.Product;
 import com.smartpoke.api.feature.product.model.ProductNutrients;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -15,6 +17,7 @@ import java.util.List;
 import java.util.Set;
 
 @Data
+@NoArgsConstructor
 public class ProductDto implements IProductDto{
 
 
@@ -35,9 +38,6 @@ public class ProductDto implements IProductDto{
     private Nutrients nutrients;
     private List<String> tags;
     private Set<AllergenDto> allergens;
-
-    public ProductDto() {
-    }
 
     public ProductDto(Product product){
         this.ean = product.getEan();

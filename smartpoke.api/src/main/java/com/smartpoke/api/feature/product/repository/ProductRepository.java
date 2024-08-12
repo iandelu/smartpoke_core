@@ -8,6 +8,7 @@ import org.springframework.data.repository.query.Param;
 import java.util.Optional;
 
 public interface ProductRepository extends JpaRepository<Product, Long> {
+
     Optional<Product> findByName(String name);
     Optional<Product> findByEan(String ean);
     Optional<Product> findByEanOrName(@Param("ean")String ean, @Param("name") String name);

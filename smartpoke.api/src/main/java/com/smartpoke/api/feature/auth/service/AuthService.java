@@ -48,7 +48,7 @@ public class AuthService {
 
         //Check if password is valid
         if (!PasswordValidator.isValid(request.getPassword())){
-            throw new InvalidPasswordException();
+                throw new InvalidPasswordException();
         }
 
         //Check if email is already in use
