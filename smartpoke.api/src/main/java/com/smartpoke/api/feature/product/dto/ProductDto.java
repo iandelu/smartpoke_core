@@ -54,7 +54,9 @@ public class ProductDto implements IProductDto{
         this.lastUpdate = product.getLastUpdate();
         this.category = product.getCategory();
         this.keywords = product.getKeywords();
-        this.nutrients = new Nutrients(product.getProductNutrients());
+        if (product.getProductNutrients() != null) {
+            this.nutrients = new Nutrients(product.getProductNutrients());
+        }
         this.tags = new ArrayList<>();
         product.getTags().forEach(tag -> this.tags.add(tag.getName()));
         this.allergens = new HashSet<>();

@@ -66,8 +66,14 @@ public class ProductOFFDto implements IProductDto {
         entity.setPicture(this.picture);
 
         entity.setLastUpdate(LocalDateTime.now());
-        entity.setCategory(this.category.toEntity()); //TODO: Implementar CategoryOFFDto PARA QUE BUSQUE LA CATEGORIA EN LA BASE DE DATOS
-        entity.setKeywords(String.join(", ", this.keywords));
+        if (this.category != null){
+            entity.setCategory(this.category.toEntity()); //TODO: Implementar CategoryOFFDto PARA QUE BUSQUE LA CATEGORIA EN LA BASE DE DATOS
+        }
+
+        if (this.keywords != null && !this.keywords.isEmpty()){
+            entity.setKeywords(String.join(", ", this.keywords));
+        }
+
 
         if (this.informationMacronutrient != null) {
             ProductNutrients macronutrientesEntity = this.informationMacronutrient.toEntity();

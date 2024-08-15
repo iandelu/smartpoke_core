@@ -4,6 +4,7 @@ import com.smartpoke.api.feature.product.dto.ProductDto;
 import com.smartpoke.api.feature.product.model.Product;
 import com.smartpoke.api.feature.product.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -18,8 +19,19 @@ public class ProductController{
     private ProductService productService;
 
     @GetMapping
-    public ResponseEntity<List<ProductDto>> getAllProducts(){
-        List<ProductDto> products = productService.getAll().stream().map(ProductDto::new).toList();
+    public ResponseEntity<Page<ProductDto>> getProducts(
+            @RequestParam(required = false) String ean,
+            @RequestParam(required = false) String name,
+            @RequestParam(required = false) String brand,
+            @RequestParam(required = false) String category,
+            @RequestParam(required = false) String keywords,
+            @RequestParam(required = false) List<String> tags,
+            @RequestParam(required = false) List<String> allergens,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size
+    ){
+        Page<ProductDto> products = productService.filterProducts(ean, name, brand,category, keywords, tags,allergens, page, size)
+                .map(ProductDto::new);
         return ResponseEntity.ok().body(products);
     }
 

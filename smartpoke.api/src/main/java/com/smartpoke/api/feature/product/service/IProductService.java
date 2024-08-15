@@ -2,7 +2,9 @@ package com.smartpoke.api.feature.product.service;
 
 import com.smartpoke.api.feature.product.dto.ProductDto;
 import com.smartpoke.api.feature.product.model.Product;
+import org.springframework.data.domain.Page;
 
+import java.util.Collection;
 import java.util.List;
 
 public interface IProductService {
@@ -19,4 +21,6 @@ public interface IProductService {
     Product findOrCreateProduct(String tokens);
     void saveProductInCache(Long id, Product product);
     Product getProductFromCache(Long id);
+
+    Page<Product> filterProducts(String ean, String name, String brand, String category, String keywords, List<String> tags, List<String> allergens, int page, int size);
 }
