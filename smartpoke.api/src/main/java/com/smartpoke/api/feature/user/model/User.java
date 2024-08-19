@@ -38,7 +38,8 @@ public class User implements UserDetails {
 
     @OneToOne(cascade = CascadeType.ALL,mappedBy = "user", orphanRemoval = true)
     private Location location;
-    @OneToOne(cascade = CascadeType.ALL,mappedBy = "user", orphanRemoval = true)
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "user_id", referencedColumnName = "id")
     private Userinfo userinfo;
 
     @Override

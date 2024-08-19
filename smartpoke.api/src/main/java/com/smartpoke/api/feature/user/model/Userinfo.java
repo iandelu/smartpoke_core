@@ -18,16 +18,15 @@ import java.time.LocalDateTime;
 public class Userinfo {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(name = "id")
     private Long id;
     private Integer sex;
     private Double height;
     private Double weight;
     private LocalDateTime birthdate;
 
-    @MapsId
-    @OneToOne
-    @JoinColumn(name = "id")
+    @OneToOne(mappedBy = "userinfo")
     private User user;
 
 }

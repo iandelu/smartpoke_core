@@ -11,7 +11,6 @@ import java.time.LocalDateTime;
 @Data
 @Builder
 public class UserInfoDto {
-        private Long id;
         private Integer sex;
         private Double height;
         private Double weight;
@@ -19,7 +18,6 @@ public class UserInfoDto {
 
         public Userinfo toEntity(){
                 return Userinfo.builder()
-                        .id(this.id)
                         .sex(this.sex)
                         .height(this.height)
                         .weight(this.weight)
@@ -29,7 +27,6 @@ public class UserInfoDto {
 
         public static UserInfoDto fromEntity(Userinfo userinfo){
                 return UserInfoDto.builder()
-                        .id(userinfo.getId())
                         .sex(userinfo.getSex())
                         .height(userinfo.getHeight())
                         .weight(userinfo.getWeight())
