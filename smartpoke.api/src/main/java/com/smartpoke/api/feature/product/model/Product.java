@@ -53,7 +53,7 @@ public class Product {
 
     @ManyToMany(cascade = {
             CascadeType.PERSIST,
-            CascadeType.MERGE})
+            CascadeType.ALL})
     @JoinTable(
             name = "tag_products",
             joinColumns = {@JoinColumn(name = "product_id")},
@@ -63,7 +63,7 @@ public class Product {
 
     @ManyToMany(cascade = {
             CascadeType.PERSIST,
-            CascadeType.MERGE})
+            CascadeType.ALL})
     @JoinTable(
             name = "allergens_products",
             joinColumns = {@JoinColumn(name = "allergen_id")},

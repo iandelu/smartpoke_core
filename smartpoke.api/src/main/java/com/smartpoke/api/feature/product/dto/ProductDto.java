@@ -21,6 +21,7 @@ import java.util.Set;
 public class ProductDto implements IProductDto{
 
 
+    private long id;
     private String ean;
     private String name;
     private String amount;
@@ -40,6 +41,7 @@ public class ProductDto implements IProductDto{
     private Set<AllergenDto> allergens;
 
     public ProductDto(Product product){
+        this.id = product.getId();
         this.ean = product.getEan();
         this.name = product.getName();
         this.amount = product.getAmount();

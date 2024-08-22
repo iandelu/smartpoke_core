@@ -64,7 +64,9 @@ public class RecipeMapper {
         dto.setLan(entity.getLan());
         dto.setRatings(entity.getRating());
         dto.setDifficulty(entity.getDifficultyEnum());
-        dto.setNutrients(new Nutrients(entity.getNutrientsRecipe()));
+        if (entity.getNutrientsRecipe() !=null){
+            dto.setNutrients(new Nutrients(entity.getNutrientsRecipe()));
+        }
         dto.setViews(entity.getViews());
         dto.setLastUpdateDate(entity.getLastUpdateDate());
         dto.setVideoUrl(entity.getVideoUrl());
