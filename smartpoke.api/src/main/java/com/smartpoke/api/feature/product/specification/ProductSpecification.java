@@ -1,6 +1,7 @@
 package com.smartpoke.api.feature.product.specification;
 
 import com.smartpoke.api.feature.product.model.Product;
+import com.smartpoke.api.feature.recipe.model.Recipe;
 import jakarta.persistence.criteria.JoinType;
 import org.springframework.data.jpa.domain.Specification;
 import java.util.List;
@@ -75,5 +76,9 @@ public class ProductSpecification {
                 return root.join("allergens", JoinType.LEFT).get("name").in(allergens);
             }
         };
+    }
+
+    public static Specification<Product> excludeBrandRecipe() {
+        return (root, query, cb) -> cb.notEqual(cb.upper(root.get("brand")), "RECIPE");
     }
 }

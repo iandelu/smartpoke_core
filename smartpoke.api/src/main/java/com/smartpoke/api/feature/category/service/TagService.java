@@ -17,14 +17,14 @@ public class TagService implements ITagService{
     @Override
     public Tag saveTag(String name, String lan) {
 
-        return findByName(name)
-                .orElseGet( () -> {
-                    Tag tag = new Tag();
-                    tag.setName(name);
-                    tag.setLan(lan);
-                    return tagRepository.save(tag);
-                }
-        );
+        var tag = findByName(name);
+        if (tag.isPresent()) {
+            return tag.get();
+        }
+        Tag newTag = new Tag();
+        newTag.setName(name);
+        newTag.setLan(lan);
+        return tagRepository.save(newTag);
     }
 
     @Override

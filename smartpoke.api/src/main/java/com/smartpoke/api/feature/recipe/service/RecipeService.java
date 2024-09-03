@@ -18,10 +18,7 @@ import com.smartpoke.api.feature.recipe.repository.RecipeIngredientsRepository;
 import com.smartpoke.api.feature.recipe.repository.RecipeRepository;
 import com.smartpoke.api.feature.recipe.repository.RecipeStepRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.*;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
@@ -97,19 +94,22 @@ public class RecipeService implements IRecipeService{
 
     @Override
     public Page<RecipeDto> filterRecipes(String name, Integer rating, DifficultyEnum difficulty, Integer time, Set<String> categories, int page, int size) {
-        Pageable pageable = PageRequest.of(page, size);
 
         Specification<Recipe> spec = Specification.where(
-                RecipeSpecification.nameLike(name)
+                RecipeSpecification.nameOrDescriptionLike(name)
                         .and(RecipeSpecification.ratingGreaterThanOrEqualTo(rating))
                         .and(RecipeSpecification.difficultyEqual(difficulty))
                         .and(RecipeSpecification.timeLessThanOrEqualTo(time))
                         .and(RecipeSpecification.categoryIn(categories))
         );
 
-        return recipeRepository.findAll(spec, pageable)
+
+        Sort sort = Sort.by(Sort.Order.desc("name"));
+
+        return recipeRepository.findAll(spec, PageRequest.of(page, size, sort))
                 .map(RecipeMapper::toDto);
     }
+
 
     @Override
     public List<RecipeDto> createRecipeListFromUrl(List<String> urls) {

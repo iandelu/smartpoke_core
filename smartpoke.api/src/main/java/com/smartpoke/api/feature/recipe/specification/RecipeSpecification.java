@@ -2,16 +2,22 @@ package com.smartpoke.api.feature.recipe.specification;
 
 import com.smartpoke.api.feature.recipe.model.DifficultyEnum;
 import com.smartpoke.api.feature.recipe.model.Recipe;
+import jakarta.persistence.criteria.JoinType;
 import org.springframework.data.jpa.domain.Specification;
 import java.util.Set;
 
 public class RecipeSpecification {
-    public static Specification<Recipe> nameLike(String name) {
+
+    public static Specification<Recipe> nameOrDescriptionLike(String value) {
         return (root, query, cb) -> {
-            if (name == null || name.isEmpty()) {
-                return cb.conjunction(); // No filter for name
+            if (value == null || value.isEmpty()) {
+                return cb.conjunction(); // No filter
             } else {
-                return cb.like(root.get("name"), "%" + name + "%");
+                String likePattern = "%" + value.toUpperCase() + "%";
+                return cb.or(
+                        cb.like(cb.upper(root.get("name")), likePattern),
+                        cb.like(cb.upper(root.get("description")), likePattern)
+                );
             }
         };
     }
@@ -29,6 +35,24 @@ public class RecipeSpecification {
     }
 
     public static Specification<Recipe> categoryIn(Set<String> categories) {
-        return categories == null || categories.isEmpty() ? null : (root, query, cb) -> root.join("categories").get("name").in(categories);
+        return (root, query, cb) -> {
+            if (categories == null || categories.isEmpty()) {
+                return cb.conjunction(); // No filter for categories
+            } else {
+                return root.join("categories", JoinType.LEFT).get("name").in(categories);
+            }
+        };
     }
+
+    public static Specification<Recipe> containsIngredient(String ingredient) {
+        return (root, query, cb) -> {
+            if (ingredient == null || ingredient.isEmpty()) {
+                return cb.conjunction(); // No filter for ingredients
+            } else {
+                return cb.like(cb.upper(root.join("ingredients", JoinType.LEFT).get("name")), "%" + ingredient.toUpperCase() + "%");
+            }
+        };
+    }
+
+
 }

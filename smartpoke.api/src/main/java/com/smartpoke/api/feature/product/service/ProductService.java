@@ -7,6 +7,7 @@ import com.smartpoke.api.feature.category.model.Tag;
 import com.smartpoke.api.feature.category.service.CategoryService;
 import com.smartpoke.api.feature.category.service.TagService;
 import com.smartpoke.api.feature.product.specification.ProductSpecification;
+import com.smartpoke.api.feature.recipe.specification.RecipeSpecification;
 import com.smartpoke.api.integrations.OpenFoodFacts.OpenFoodFactsClient;
 import com.smartpoke.api.feature.product.model.Allergen;
 import com.smartpoke.api.feature.product.model.Product;
@@ -85,21 +86,17 @@ public class ProductService implements IProductService{
 
     @Override
     public Product saveProduct(Product product) {
-        var prouductName = productRepository.findMostSimilarByName(product.getName());
-        if (prouductName.isPresent()) {
-            return prouductName.get();
-        }
         if (product.getEan() != null) {
             var productFound = productRepository.findFirstByEan(product.getEan());
             if (productFound.isPresent()) {
                 return productFound.get();
             }
         }
-
-
-
+        var prouductName = productRepository.findMostSimilarByName(product.getName());
+        if (prouductName.isPresent()) {
+            return prouductName.get();
+        }
         return productRepository.save(product);
-
     }
 
     @Override
@@ -140,7 +137,7 @@ public class ProductService implements IProductService{
 
     @Override
     public List<Product> saveAllProducts(List<Product> products) {
-        return products.stream().map(this::saveProduct).toList();
+        return products.stream().map(this::createProduct).toList();
     }
 
     @Override
@@ -185,13 +182,24 @@ public class ProductService implements IProductService{
     @Override
     public Page<Product> filterProducts(String ean, String name, String brand, String category, String keywords, List<String> tags, List<String> allergens, int page, int size) {
         Pageable pageable = PageRequest.of(page, size);
+        Specification<Product> spec = Specification.where(null);
 
-        Specification<Product> spec = ProductSpecification.nameLike(name)
+        if (ean != null && !ean.isEmpty()) {
+            try {
+                Integer.parseInt(ean);
+                spec = ProductSpecification.eanEqual(ean);
+            } catch (NumberFormatException e) {
+            }
+        }
+
+
+        spec = spec.and(ProductSpecification.nameLike(name))
                 .and(ProductSpecification.brandLike(brand))
                 .and(ProductSpecification.categoryLike(category))
                 .and(ProductSpecification.keywordsLike(keywords))
                 .and(ProductSpecification.tagsIn(tags))
-                .and(ProductSpecification.allergensIn(allergens));
+                .and(ProductSpecification.allergensIn(allergens))
+                .and(ProductSpecification.excludeBrandRecipe());
 
         return productRepository.findAll(spec, pageable);
     }
