@@ -85,7 +85,21 @@ public class ProductService implements IProductService{
 
     @Override
     public Product saveProduct(Product product) {
+        var prouductName = productRepository.findMostSimilarByName(product.getName());
+        if (prouductName.isPresent()) {
+            return prouductName.get();
+        }
+        if (product.getEan() != null) {
+            var productFound = productRepository.findFirstByEan(product.getEan());
+            if (productFound.isPresent()) {
+                return productFound.get();
+            }
+        }
+
+
+
         return productRepository.save(product);
+
     }
 
     @Override
@@ -121,7 +135,7 @@ public class ProductService implements IProductService{
 
     @Override
     public Product findByEan(String ean) {
-        return productRepository.findByEan(ean).orElseThrow(() -> new ResourceNotFoundException("Product not found"));
+        return productRepository.findFirstByEan(ean).orElseThrow(() -> new ResourceNotFoundException("Product not found"));
     }
 
     @Override
@@ -139,7 +153,7 @@ public class ProductService implements IProductService{
     @Override
     public Product fetchProductDetails(String barcode) {
 
-        Product product =  productRepository.findByEan(barcode).orElseGet(() -> {
+        Product product =  productRepository.findFirstByEan(barcode).orElseGet(() -> {
             Product productFromOpenFoodFacts = openFoodFactsClient.fetchProductDetails(barcode);
             return productFromOpenFoodFacts != null ? createProduct(productFromOpenFoodFacts) : null;
         });
@@ -155,7 +169,7 @@ public class ProductService implements IProductService{
     private Product createNewGenericProduct(String productName) {
         Product product = new Product();
         product.setName(productName);
-        product.setBrand("Generic");
+        product.setBrand("Recipe");
         return this.saveProduct(product);
     }
 

@@ -12,7 +12,7 @@ import java.util.Optional;
 public interface ProductRepository extends JpaRepository<Product, Long>, JpaSpecificationExecutor<Product> {
 
     Optional<Product> findByName(String name);
-    Optional<Product> findByEan(String ean);
+    Optional<Product> findFirstByEan(String ean);
     Optional<Product> findFirstByEanOrName(@Param("ean")String ean, @Param("name") String name);
 
     Optional<Product> findMostSimilarByName(String name);
