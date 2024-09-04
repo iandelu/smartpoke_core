@@ -32,6 +32,7 @@ public class User implements UserDetails {
     @Column(nullable = false, unique = true)
     private String email;
     private boolean verify;
+    private String confirmationCode;
     private boolean premium;
     @Enumerated(EnumType.STRING)
     private Role role;
