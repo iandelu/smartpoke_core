@@ -193,7 +193,7 @@ public class ProductService implements IProductService{
         }
 
 
-        spec = spec.and(ProductSpecification.nameLike(name))
+        spec = spec.and(ProductSpecification.nameOrDescriptionLike(name))
                 .and(ProductSpecification.brandLike(brand))
                 .and(ProductSpecification.categoryLike(category))
                 .and(ProductSpecification.keywordsLike(keywords))
