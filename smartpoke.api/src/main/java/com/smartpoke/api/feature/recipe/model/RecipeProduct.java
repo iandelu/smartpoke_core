@@ -19,8 +19,11 @@ public class RecipeProduct {
     @ManyToOne
     private UnitOfMeasure unitOfMeasure;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.PERSIST)
     @JoinColumn(name = "product_id")
     private Product product;
 
+    @ManyToOne
+    @JoinColumn(name = "recipe_id")
+    private Recipe recipe;
 }
