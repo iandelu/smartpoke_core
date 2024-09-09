@@ -18,21 +18,6 @@ public class ProductSpecification {
         };
     }
 
-    public static Specification<Product> nameOrDescriptionLike(String keyword) {
-        return (root, query, cb) -> {
-            if (keyword == null || keyword.isEmpty()) {
-                return cb.conjunction(); // Sin filtro si la palabra clave está vacía
-            } else {
-                String pattern = "%" + keyword.toLowerCase() + "%";
-                return cb.or(
-                        cb.like(cb.lower(root.get("name")), pattern),
-                        cb.like(cb.lower(root.get("description")), pattern),
-                        cb.like(cb.lower(root.get("keywords")), pattern) // Asumiendo que existe un campo 'keywords'
-                );
-            }
-        };
-    }
-
     public static Specification<Product> eanEqual(String ean) {
         return (root, query, cb) -> {
             if (ean == null || ean.isEmpty()) {

@@ -4,7 +4,6 @@ import com.smartpoke.api.common.exceptions.ResourceNotFoundException;
 import com.smartpoke.api.common.utils.IngredientProcessor;
 import com.smartpoke.api.feature.category.service.CategoryService;
 import com.smartpoke.api.feature.category.service.TagService;
-import com.smartpoke.api.feature.recipe.model.RecipeStep;
 import com.smartpoke.api.feature.recipe.specification.RecipeSpecification;
 import com.smartpoke.api.integrations.RecipeScrapers.RecipeScraperClient;
 import com.smartpoke.api.integrations.RecipeScrapers.dto.RecipeScrapDto;
@@ -46,11 +45,8 @@ public class RecipeService implements IRecipeService{
 
     @Override
     public RecipeDto createRecipe(Recipe recipe) {
-
-        Recipe savedRecipe = recipeRepository.save(recipe);
-        return RecipeMapper.toDto(savedRecipe);
+        return RecipeMapper.toDto(recipeRepository.save(recipe));
     }
-
 
 
     @Override

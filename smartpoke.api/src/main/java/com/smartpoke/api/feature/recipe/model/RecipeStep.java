@@ -15,8 +15,4 @@ public class RecipeStep {
     private Integer position;
     private Integer time;
     private String picture;
-
-    @ManyToOne
-    @JoinColumn(name = "recipe_id")
-    private Recipe recipe;
 }

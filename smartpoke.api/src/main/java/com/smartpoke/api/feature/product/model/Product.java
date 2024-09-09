@@ -1,7 +1,6 @@
 package com.smartpoke.api.feature.product.model;
 import com.smartpoke.api.feature.category.model.Category;
 import com.smartpoke.api.feature.category.model.Tag;
-import com.smartpoke.api.feature.recipe.model.RecipeProduct;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -80,7 +79,4 @@ public class Product {
     @ManyToOne
     @JoinColumn(name = "generic_product")
     private Product genericProduct;
-
-    @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
-    private Set<RecipeProduct> recipeProducts;
 }
