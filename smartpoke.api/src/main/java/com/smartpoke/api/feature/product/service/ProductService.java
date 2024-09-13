@@ -1,18 +1,22 @@
 package com.smartpoke.api.feature.product.service;
 
 import com.smartpoke.api.common.exceptions.ResourceNotFoundException;
-import com.smartpoke.api.common.utils.IngredientProcessor;
 import com.smartpoke.api.common.utils.NormalizerUtils;
 import com.smartpoke.api.feature.category.model.Category;
 import com.smartpoke.api.feature.category.model.Tag;
 import com.smartpoke.api.feature.category.service.CategoryService;
 import com.smartpoke.api.feature.category.service.TagService;
-import com.smartpoke.api.feature.product.dto.ProductDto;
+import com.smartpoke.api.feature.product.specification.ProductSpecification;
+import com.smartpoke.api.feature.recipe.specification.RecipeSpecification;
 import com.smartpoke.api.integrations.OpenFoodFacts.OpenFoodFactsClient;
 import com.smartpoke.api.feature.product.model.Allergen;
 import com.smartpoke.api.feature.product.model.Product;
 import com.smartpoke.api.feature.product.repository.ProductRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
@@ -20,7 +24,6 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.*;
-import java.util.stream.Collectors;
 
 @Service
 public class ProductService implements IProductService{
@@ -47,7 +50,7 @@ public class ProductService implements IProductService{
         Set<Allergen> updatedAllergens = new HashSet<>();
 
         if (product.getEan() != null && product.getDescription() != null) {
-            productOptional = productRepository.findByEanOrName(product.getEan(), product.getDescription()).orElseGet(() -> null);
+            productOptional = productRepository.findFirstByEanOrName(product.getEan(), product.getDescription()).orElseGet(() -> null);
             if (productOptional != null) {
                 return productOptional;
             }
@@ -83,6 +86,16 @@ public class ProductService implements IProductService{
 
     @Override
     public Product saveProduct(Product product) {
+        if (product.getEan() != null) {
+            var productFound = productRepository.findFirstByEan(product.getEan());
+            if (productFound.isPresent()) {
+                return productFound.get();
+            }
+        }
+        var prouductName = productRepository.findMostSimilarByName(product.getName());
+        if (prouductName.isPresent()) {
+            return prouductName.get();
+        }
         return productRepository.save(product);
     }
 
@@ -119,12 +132,12 @@ public class ProductService implements IProductService{
 
     @Override
     public Product findByEan(String ean) {
-        return productRepository.findByEan(ean).orElseThrow(() -> new ResourceNotFoundException("Product not found"));
+        return productRepository.findFirstByEan(ean).orElseThrow(() -> new ResourceNotFoundException("Product not found"));
     }
 
     @Override
     public List<Product> saveAllProducts(List<Product> products) {
-        return products.stream().map(this::saveProduct).toList();
+        return products.stream().map(this::createProduct).toList();
     }
 
     @Override
@@ -136,7 +149,11 @@ public class ProductService implements IProductService{
 
     @Override
     public Product fetchProductDetails(String barcode) {
-        Product product =  openFoodFactsClient.fetchProductDetails(barcode);
+
+        Product product =  productRepository.findFirstByEan(barcode).orElseGet(() -> {
+            Product productFromOpenFoodFacts = openFoodFactsClient.fetchProductDetails(barcode);
+            return productFromOpenFoodFacts != null ? createProduct(productFromOpenFoodFacts) : null;
+        });
         return this.createProduct(product);
     }
 
@@ -149,7 +166,7 @@ public class ProductService implements IProductService{
     private Product createNewGenericProduct(String productName) {
         Product product = new Product();
         product.setName(productName);
-        product.setBrand("Generic");
+        product.setBrand("Recipe");
         return this.saveProduct(product);
     }
 
@@ -160,5 +177,30 @@ public class ProductService implements IProductService{
     @Override
     public Product getProductFromCache(Long id) {
         return (Product) redisTemplate.opsForValue().get(PRODUCT_CACHE_KEY + id);
+    }
+
+    @Override
+    public Page<Product> filterProducts(String ean, String name, String brand, String category, String keywords, List<String> tags, List<String> allergens, int page, int size) {
+        Pageable pageable = PageRequest.of(page, size);
+        Specification<Product> spec = Specification.where(null);
+
+        if (ean != null && !ean.isEmpty()) {
+            try {
+                Integer.parseInt(ean);
+                spec = ProductSpecification.eanEqual(ean);
+            } catch (NumberFormatException e) {
+            }
+        }
+
+
+        spec = spec.and(ProductSpecification.nameOrDescriptionLike(name))
+                .and(ProductSpecification.brandLike(brand))
+                .and(ProductSpecification.categoryLike(category))
+                .and(ProductSpecification.keywordsLike(keywords))
+                .and(ProductSpecification.tagsIn(tags))
+                .and(ProductSpecification.allergensIn(allergens))
+                .and(ProductSpecification.excludeBrandRecipe());
+
+        return productRepository.findAll(spec, pageable);
     }
 }

@@ -5,6 +5,8 @@ import com.smartpoke.api.feature.recipe.repository.UnitOfMesureRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class UnitOfMeasureService implements IUnitOfMeasureService {
 
@@ -25,5 +27,10 @@ public class UnitOfMeasureService implements IUnitOfMeasureService {
     public UnitOfMeasure findByName(String unit) {
         return unitOfMeasureRepository.findByName(unit)
                 .orElseGet(() -> findOrCreateNewUnitOfMeasure(unit));
+    }
+
+    @Override
+    public List<UnitOfMeasure> findAll() {
+        return unitOfMeasureRepository.findAll();
     }
 }

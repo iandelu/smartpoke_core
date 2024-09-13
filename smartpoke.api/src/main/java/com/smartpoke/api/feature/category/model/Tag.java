@@ -2,6 +2,7 @@ package com.smartpoke.api.feature.category.model;
 
 import jakarta.persistence.*;
 import lombok.Data;
+import org.hibernate.annotations.NaturalId;
 
 @Entity
 @Data
@@ -11,7 +12,8 @@ public class Tag {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(unique = true)
+    @NaturalId
+    @Column(unique = true, nullable = false)
     private String name;
     private String lan;
 

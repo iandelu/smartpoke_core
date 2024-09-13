@@ -31,7 +31,7 @@ public class RecipeScrapDto {
     private List<String> steps;
     @JsonProperty("language")
     private String lan;
-    @JsonProperty("recipeResponse")
+    @JsonProperty("nutrients")
     private NutrientsRecipeDto nutrients;
     private List<String> categories = new ArrayList<>();
 

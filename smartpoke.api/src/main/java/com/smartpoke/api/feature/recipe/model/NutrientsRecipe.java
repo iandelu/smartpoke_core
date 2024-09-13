@@ -16,8 +16,11 @@ public class NutrientsRecipe {
     private Integer amount;
     private Integer calories;
     private Double fats;
+    private Double saturatedFats;
+    private Double cholesterol;
     private Double cabs;
-    private Double fibre;
+    private Double fiber;
     private Double protein;
     private Double salt;
+    private Double sugar;
 }

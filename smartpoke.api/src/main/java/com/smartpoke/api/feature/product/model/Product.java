@@ -1,6 +1,7 @@
 package com.smartpoke.api.feature.product.model;
 import com.smartpoke.api.feature.category.model.Category;
 import com.smartpoke.api.feature.category.model.Tag;
+import com.smartpoke.api.feature.recipe.model.RecipeProduct;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -52,8 +53,8 @@ public class Product {
     private ProductNutrients productNutrients;
 
     @ManyToMany(cascade = {
-            CascadeType.PERSIST,
-            CascadeType.MERGE})
+            CascadeType.MERGE,
+            CascadeType.PERSIST})
     @JoinTable(
             name = "tag_products",
             joinColumns = {@JoinColumn(name = "product_id")},
@@ -62,8 +63,8 @@ public class Product {
     private List<Tag> tags;
 
     @ManyToMany(cascade = {
-            CascadeType.PERSIST,
-            CascadeType.MERGE})
+            CascadeType.MERGE,
+            CascadeType.PERSIST})
     @JoinTable(
             name = "allergens_products",
             joinColumns = {@JoinColumn(name = "allergen_id")},
@@ -79,4 +80,7 @@ public class Product {
     @ManyToOne
     @JoinColumn(name = "generic_product")
     private Product genericProduct;
+
+    @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Set<RecipeProduct> recipeProducts;
 }

@@ -32,13 +32,15 @@ public class User implements UserDetails {
     @Column(nullable = false, unique = true)
     private String email;
     private boolean verify;
+    private String confirmationCode;
     private boolean premium;
     @Enumerated(EnumType.STRING)
     private Role role;
 
     @OneToOne(cascade = CascadeType.ALL,mappedBy = "user", orphanRemoval = true)
     private Location location;
-    @OneToOne(cascade = CascadeType.ALL,mappedBy = "user", orphanRemoval = true)
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "user_id", referencedColumnName = "id")
     private Userinfo userinfo;
 
     @Override

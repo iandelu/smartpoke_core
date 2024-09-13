@@ -1,5 +1,6 @@
 package com.smartpoke.api.feature.recipe.dto;
 
+import com.smartpoke.api.common.model.Nutrients;
 import com.smartpoke.api.feature.category.model.Category;
 import com.smartpoke.api.feature.recipe.model.DifficultyEnum;
 import com.smartpoke.api.feature.recipe.model.NutrientsRecipe;
@@ -16,23 +17,24 @@ public class RecipeDto {
     private Long id;
     private String name;
     private String description;
-    private Integer prepTime;
+    private Integer totalTime;
     private Double price;
-    private Integer diners;
+    private Integer yields;
     private String pictureUrl;
-    private byte[] pictureFile;
+
     private String source;
     private String lan;
-    private Double rating;
+    private Double ratings;
     private Integer views;
     private String videoUrl;
     private Date lastUpdateDate;
+    private String image;
 
-
-    private DifficultyEnum difficultyEnum;
-    private NutrientsRecipe nutrientsRecipe;
+    private DifficultyEnum difficulty;
+    private Nutrients nutrients;
     private List<RecipeStep> recipeSteps = new ArrayList<>();
     private List<RecipeProduct> recipeProducts = new ArrayList<>();
     private Set<Category> categories = new HashSet<>();
     private User user;
+    private byte[] imageFile;
 }

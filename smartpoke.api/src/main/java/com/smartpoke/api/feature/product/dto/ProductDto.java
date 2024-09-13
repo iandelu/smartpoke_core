@@ -6,6 +6,7 @@ import com.smartpoke.api.feature.category.model.Tag;
 import com.smartpoke.api.feature.product.model.Allergen;
 import com.smartpoke.api.feature.product.model.Product;
 import com.smartpoke.api.feature.product.model.ProductNutrients;
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -16,9 +17,11 @@ import java.util.List;
 import java.util.Set;
 
 @Data
+@NoArgsConstructor
 public class ProductDto implements IProductDto{
 
 
+    private long id;
     private String ean;
     private String name;
     private String amount;
@@ -33,14 +36,12 @@ public class ProductDto implements IProductDto{
     private LocalDateTime lastUpdate;
     private Category category;
     private String keywords;
-    private ProductNutrients productNutrients;
+    private Nutrients nutrients;
     private List<String> tags;
     private Set<AllergenDto> allergens;
 
-    public ProductDto() {
-    }
-
     public ProductDto(Product product){
+        this.id = product.getId();
         this.ean = product.getEan();
         this.name = product.getName();
         this.amount = product.getAmount();
@@ -55,7 +56,9 @@ public class ProductDto implements IProductDto{
         this.lastUpdate = product.getLastUpdate();
         this.category = product.getCategory();
         this.keywords = product.getKeywords();
-        this.productNutrients = product.getProductNutrients();
+        if (product.getProductNutrients() != null) {
+            this.nutrients = new Nutrients(product.getProductNutrients());
+        }
         this.tags = new ArrayList<>();
         product.getTags().forEach(tag -> this.tags.add(tag.getName()));
         this.allergens = new HashSet<>();
@@ -79,9 +82,8 @@ public class ProductDto implements IProductDto{
         entity.setCategory(this.category);
         entity.setKeywords(this.keywords);
 
-        if (this.productNutrients != null) {
-            productNutrients.setEan(this.ean);
-            entity.setProductNutrients(productNutrients);
+        if (this.nutrients != null) {
+            entity.setProductNutrients(nutrients.toNutrientsProduct());
         }
 
         List<Tag> tags = new ArrayList<>();

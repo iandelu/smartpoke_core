@@ -1,5 +1,6 @@
 package com.smartpoke.api.feature.recipe.controller;
 
+import com.smartpoke.api.feature.recipe.model.DifficultyEnum;
 import com.smartpoke.api.integrations.RecipeScrapers.dto.UrlDto;
 import com.smartpoke.api.feature.recipe.dto.RecipeDto;
 import com.smartpoke.api.feature.recipe.dto.RecipeMapper;
@@ -12,6 +13,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Set;
 
 @RestController
 @RequestMapping("api/recipes")
@@ -21,18 +23,16 @@ public class RecipeController {
     private RecipeService recipeService;
 
     @GetMapping
-    public ResponseEntity<Page<RecipeDto>> getAllRecipes(@RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "10") int size){
-        return ResponseEntity.ok().body(recipeService.getAllRecipes(page, size));
-    }
-
-    @GetMapping("/by_difficult/{difficult}")
-    public ResponseEntity<Page<RecipeDto>> getRecipesByDifficult(
-            @PathVariable String difficult,
+    public  ResponseEntity<Page<RecipeDto>> getRecipes(
+            @RequestParam(required = false) String name,
+            @RequestParam(required = false) Integer rating,
+            @RequestParam(required = false) DifficultyEnum difficulty,
+            @RequestParam(required = false) Integer time,
+            @RequestParam(required = false) Set<String> categories,
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size) {
-        return ResponseEntity.ok().body(recipeService.getRecipesByDifficult(page, size, difficult));
+        return ResponseEntity.ok().body(recipeService.filterRecipes(name, rating, difficulty, time, categories, page, size));
     }
-
 
     @GetMapping("/search")
     public ResponseEntity<Page<RecipeDto>> searchRecipes(

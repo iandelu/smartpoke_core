@@ -47,11 +47,12 @@ public class UserService implements IUserService {
     @Override
     public UserDto updateUser(HttpServletRequest request, UserDto user) {
         String email = extractEmail(request);
-        Long id = userRepository.findByEmail(email).orElseThrow(() -> new ResourceNotFoundException("User not found")).getId();
+        User oldUser = userRepository.findByEmail(email).orElseThrow(() -> new ResourceNotFoundException("User not found"));
 
-        User updatedUser = user.toEntity();
-        updatedUser.setId(id);
-        return UserDto.fromEntity(userRepository.save(updatedUser));
+        User newUser = user.toEntity();
+        newUser.setId(oldUser.getId());
+        newUser.setPassword(oldUser.getPassword());
+        return UserDto.fromEntity(userRepository.save(newUser));
     }
 
     private String extractEmail(HttpServletRequest request) {
