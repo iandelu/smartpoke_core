@@ -23,15 +23,15 @@ public class RecipeSpecification {
     }
 
     public static Specification<Recipe> ratingGreaterThanOrEqualTo(Integer rating) {
-        return rating == null ? null : (root, query, cb) -> cb.greaterThanOrEqualTo(root.get("rating"), rating);
+        return rating == null ? (root, query, cb) -> cb.conjunction() : (root, query, cb) -> cb.greaterThanOrEqualTo(root.get("rating"), rating);
     }
 
     public static Specification<Recipe> difficultyEqual(DifficultyEnum difficulty) {
-        return difficulty == null ? null : (root, query, cb) -> cb.equal(root.get("difficultyEnum"), difficulty);
+        return difficulty == null ? (root, query, cb) -> cb.conjunction() : (root, query, cb) -> cb.equal(root.get("difficultyEnum"), difficulty);
     }
 
     public static Specification<Recipe> timeLessThanOrEqualTo(Integer time) {
-        return time == null ? null : (root, query, cb) -> cb.lessThanOrEqualTo(root.get("prepTime"), time);
+        return time == null ? (root, query, cb) -> cb.conjunction() : (root, query, cb) -> cb.lessThanOrEqualTo(root.get("prepTime"), time);
     }
 
     public static Specification<Recipe> categoryIn(Set<String> categories) {
