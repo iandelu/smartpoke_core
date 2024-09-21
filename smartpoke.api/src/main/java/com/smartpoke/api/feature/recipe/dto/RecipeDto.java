@@ -1,5 +1,6 @@
 package com.smartpoke.api.feature.recipe.dto;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.smartpoke.api.common.model.Nutrients;
 import com.smartpoke.api.feature.category.model.Category;
 import com.smartpoke.api.feature.recipe.model.DifficultyEnum;

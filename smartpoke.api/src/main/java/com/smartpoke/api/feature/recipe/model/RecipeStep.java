@@ -1,6 +1,7 @@
 package com.smartpoke.api.feature.recipe.model;
 
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.Data;
 
@@ -16,7 +17,8 @@ public class RecipeStep {
     private Integer time;
     private String picture;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "recipe_id")
+    @JsonBackReference
     private Recipe recipe;
 }

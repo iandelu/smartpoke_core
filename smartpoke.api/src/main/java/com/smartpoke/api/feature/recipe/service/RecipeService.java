@@ -98,20 +98,32 @@ public class RecipeService implements IRecipeService{
 
     @Override
     public Page<RecipeDto> filterRecipes(String name, Integer rating, DifficultyEnum difficulty, Integer time, Set<String> categories, int page, int size) {
+        Specification<Recipe> spec = Specification.where(RecipeSpecification.nameOrDescriptionLike(name));
 
-        Specification<Recipe> spec = Specification.where(
-                RecipeSpecification.nameOrDescriptionLike(name)
-                        .and(RecipeSpecification.ratingGreaterThanOrEqualTo(rating))
-                        .and(RecipeSpecification.difficultyEqual(difficulty))
-                        .and(RecipeSpecification.timeLessThanOrEqualTo(time))
-                        .and(RecipeSpecification.categoryIn(categories))
-        );
+        if (rating != null) {
+            spec = spec.and(RecipeSpecification.ratingGreaterThanOrEqualTo(rating));
+        }
 
+        if (difficulty != null) {
+            spec = spec.and(RecipeSpecification.difficultyEqual(difficulty));
+        }
 
-        Sort sort = Sort.by(Sort.Order.desc("name"));
+        if (time != null) {
+            spec = spec.and(RecipeSpecification.timeLessThanOrEqualTo(time));
+        }
 
-        return recipeRepository.findAll(spec, PageRequest.of(page, size, sort))
-                .map(RecipeMapper::toDto);
+        if (categories != null && !categories.isEmpty()) {
+            spec = spec.and(RecipeSpecification.categoryIn(categories));
+        }
+
+        try{
+            return recipeRepository.findAll(spec, PageRequest.of(page, size))
+                    .map(RecipeMapper::toDto);
+        }catch (Exception e){
+            e.printStackTrace();
+            throw new ResourceNotFoundException("Not possible to find this recipe, try later");
+        }
+
     }
 
 

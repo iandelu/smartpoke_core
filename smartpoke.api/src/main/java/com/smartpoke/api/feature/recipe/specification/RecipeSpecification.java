@@ -6,12 +6,13 @@ import jakarta.persistence.criteria.JoinType;
 import org.springframework.data.jpa.domain.Specification;
 import java.util.Set;
 
+
 public class RecipeSpecification {
 
     public static Specification<Recipe> nameOrDescriptionLike(String value) {
         return (root, query, cb) -> {
-            if (value == null || value.isEmpty()) {
-                return cb.conjunction(); // No filter
+            if (value == null) {
+                return null; // No filter
             } else {
                 String likePattern = "%" + value.toUpperCase() + "%";
                 return cb.or(
@@ -37,7 +38,7 @@ public class RecipeSpecification {
     public static Specification<Recipe> categoryIn(Set<String> categories) {
         return (root, query, cb) -> {
             if (categories == null || categories.isEmpty()) {
-                return cb.conjunction(); // No filter for categories
+                return null;
             } else {
                 return root.join("categories", JoinType.LEFT).get("name").in(categories);
             }
@@ -53,6 +54,4 @@ public class RecipeSpecification {
             }
         };
     }
-
-
 }

@@ -1,5 +1,6 @@
 package com.smartpoke.api.feature.recipe.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.smartpoke.api.feature.product.model.Product;
 import jakarta.persistence.*;
 import lombok.Data;
@@ -23,7 +24,8 @@ public class RecipeProduct {
     @JoinColumn(name = "product_id")
     private Product product;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "recipe_id")
+    @JsonBackReference
     private Recipe recipe;
 }

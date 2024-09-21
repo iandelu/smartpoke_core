@@ -81,8 +81,8 @@ public class RecipeMapper {
         dto.setCategories(entity.getCategories());
         dto.setUser(entity.getUser());
 
-        byte[] pictureBytes = ImageStorageService.dowloadImage(entity.getPicture());
-        dto.setImageFile(pictureBytes);
+        //byte[] pictureBytes = ImageStorageService.dowloadImage(entity.getPicture());
+        //dto.setImageFile(pictureBytes);
 
         return dto;
     }
